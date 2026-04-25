@@ -1,0 +1,28 @@
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-logo" href="index.html" aria-label="Wild Animal — home">
+      <picture>
+        <source type="image/webp"
+                srcset="assets/images/logo-400.webp 400w, assets/images/logo-800.webp 800w, assets/images/logo-1312.webp 1312w"
+                sizes="(max-width: 768px) 44px, 56px">
+        <img src="assets/images/logo-1312.png" alt="Wild Animal" width="1312" height="503">
+      </picture>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation">
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+    </button>
+
+    <nav class="site-nav" id="primary-nav" aria-label="Primary">
+      <ul class="site-nav__list">
+        <li><a class="site-nav__link" href="index.html"{% if page.nav_active == "home" %} aria-current="page"{% endif %}>Home</a></li>
+        <li><a class="site-nav__link" href="about.html"{% if page.nav_active == "about" %} aria-current="page"{% endif %}>About</a></li>
+        <li><a class="site-nav__link" href="music.html"{% if page.nav_active == "music" %} aria-current="page"{% endif %}>Music</a></li>
+        <li><a class="site-nav__link" href="live.html"{% if page.nav_active == "live" %} aria-current="page"{% endif %}>Live</a></li>
+        <li><a class="site-nav__link" href="lyrics.html"{% if page.nav_active == "lyrics" %} aria-current="page"{% endif %}>Lyrics</a></li>
+        <li><a class="site-nav__link" href="musings.html"{% if page.nav_active == "musings" %} aria-current="page"{% endif %}>Musings</a></li>
+        <li><a class="site-nav__link" href="contact.html"{% if page.nav_active == "contact" %} aria-current="page"{% endif %}>Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

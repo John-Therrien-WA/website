@@ -1,0 +1,10 @@
+title: Wild Animal
+description: Wild Animal is an indie pop-rock band based in Berlin, blending poetic depth with positive visions and utopic storytelling.
+
+exclude:
+  - node_modules
+  - package.json
+  - package-lock.json
+  - scripts
+  - _originals
+  - README.md
