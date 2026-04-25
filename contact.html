@@ -1,13 +1,64 @@
 ---
 layout: default
 title: Contact
-description: Contact — Wild Animal.
+description: Contact Wild Animal — get in touch with John Patrick and Marie Therrien.
 nav_active: contact
 ---
 
 <main id="main" class="page">
   <div class="container container--narrow">
-    <h1 class="page__title">Contact</h1>
-    <p class="page__lede">Coming soon — this page is being rebuilt.</p>
+    <h1 class="page__title">Wild Animal</h1>
+    <p class="page__lede">John Patrick and Marie Therrien</p>
+
+    <figure class="contact__photo">
+      <picture>
+        <source type="image/webp"
+                srcset="assets/images/band-photo-contact-400.webp 400w, assets/images/band-photo-contact-800.webp 800w, assets/images/band-photo-contact-1065.webp 1065w"
+                sizes="(max-width: 768px) 90vw, 760px">
+        <img src="assets/images/band-photo-contact-1065.jpg" alt="Wild Animal — John Patrick and Marie Therrien" width="1065" height="1600">
+      </picture>
+      <figcaption class="contact__credit">Foto: www.ejafoto.com</figcaption>
+    </figure>
+
+    <section class="contact-form" aria-labelledby="contact-form-heading">
+      <h2 id="contact-form-heading">Get in touch</h2>
+      <p class="contact-form__hint"><span aria-hidden="true">*</span> Indicates required field</p>
+
+      <form method="POST" action="https://formspree.io/f/xrerdlga" class="form">
+        <input type="hidden" name="_subject" value="Wild Animal — new contact form message">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none">
+
+        <fieldset class="form__group form__group--name">
+          <legend class="form__legend">Name <span class="form__required" aria-hidden="true">*</span></legend>
+          <div class="form__row">
+            <div class="form__field">
+              <label for="firstname">First</label>
+              <input type="text" id="firstname" name="firstname" required autocomplete="given-name">
+            </div>
+            <div class="form__field">
+              <label for="lastname">Last</label>
+              <input type="text" id="lastname" name="lastname" required autocomplete="family-name">
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="form__field">
+          <label for="email">Email <span class="form__required" aria-hidden="true">*</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+
+        <div class="form__field">
+          <label for="message">Message <span class="form__required" aria-hidden="true">*</span></label>
+          <textarea id="message" name="message" rows="6" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary">Send</button>
+      </form>
+    </section>
+
+    <blockquote class="quote">
+      <p><em>Ich denke oft in Musik. Ich lebe meine Tagträume in der Musik. Ich sehe mein Leben in Termini von Musik.</em></p>
+      <cite>— Albert Einstein</cite>
+    </blockquote>
   </div>
 </main>

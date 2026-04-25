@@ -402,6 +402,201 @@ button {
 }
 
 /* --------------------------------------------------------------------------
+   Musings — index listings and essay sub-pages
+   -------------------------------------------------------------------------- */
+.essay-listing {
+  padding: var(--space-7) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+.essay-listing:last-child { border-bottom: 0; }
+
+.essay-listing__date,
+.essay__dateline {
+  margin: 0 0 var(--space-3);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-text);
+  opacity: 0.75;
+}
+
+.essay-listing__title {
+  font-size: var(--fs-2xl);
+  margin-bottom: var(--space-3);
+}
+.essay-listing__title a { color: var(--color-text-strong); }
+.essay-listing__title a:hover,
+.essay-listing__title a:focus-visible { color: var(--color-accent); }
+
+.essay-listing__subtitle {
+  font-size: var(--fs-lg);
+  font-style: italic;
+  margin-bottom: var(--space-4);
+}
+
+.essay-listing__quote,
+.essay__quote {
+  margin: var(--space-5) 0;
+  padding-left: var(--space-5);
+  border-left: 3px solid var(--color-accent);
+  font-style: italic;
+  color: var(--color-text-strong);
+}
+
+.essay-listing__cta {
+  margin-top: var(--space-4);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+.essay { padding: var(--space-6) 0 var(--space-8); }
+.essay__header { margin-bottom: var(--space-6); }
+.essay__title { margin-bottom: var(--space-3); }
+.essay__subtitle {
+  font-size: var(--fs-xl);
+  font-style: italic;
+  margin-bottom: var(--space-5);
+}
+
+.essay-back {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  margin: var(--space-5) 0;
+}
+
+/* --------------------------------------------------------------------------
+   Contact page
+   -------------------------------------------------------------------------- */
+.contact__photo {
+  margin: var(--space-7) auto 0;
+  max-width: 520px;
+  text-align: center;
+}
+.contact__photo img {
+  width: 100%;
+  height: auto;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+.contact__credit {
+  margin-top: var(--space-3);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+  opacity: 0.75;
+}
+
+.contact-form {
+  margin-top: var(--space-8);
+}
+.contact-form h2 {
+  font-size: var(--fs-2xl);
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+.contact-form__hint {
+  text-align: center;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+  opacity: 0.75;
+  margin-bottom: var(--space-6);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 600px;
+  margin: 0 auto;
+}
+.form__group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.form__legend {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-text-strong);
+  margin-bottom: var(--space-3);
+  padding: 0;
+}
+.form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+.form__field {
+  display: flex;
+  flex-direction: column;
+}
+.form__field label {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-text-strong);
+  margin-bottom: var(--space-2);
+}
+.form__required {
+  color: var(--color-accent);
+}
+.form input[type='text'],
+.form input[type='email'],
+.form textarea {
+  font: inherit;
+  color: var(--color-text-strong);
+  background: var(--color-bg);
+  border: 1px solid var(--color-rule);
+  border-radius: 2px;
+  padding: var(--space-3) var(--space-4);
+  width: 100%;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.form input[type='text']:focus,
+.form input[type='email']:focus,
+.form textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(168, 141, 46, 0.18);
+}
+.form textarea {
+  resize: vertical;
+  min-height: 8rem;
+}
+
+.btn {
+  display: inline-block;
+  font: inherit;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  padding: var(--space-3) var(--space-6);
+  border-radius: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+.btn--primary {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  justify-self: center;
+}
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 540px) {
+  .form__row { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
    Site footer
    -------------------------------------------------------------------------- */
 .site-footer {
@@ -454,6 +649,111 @@ button {
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   opacity: 0.7;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Lyrics
+   -------------------------------------------------------------------------- */
+.lyric-back {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  margin-bottom: var(--space-6);
+}
+
+.lyric-album-header {
+  margin-bottom: var(--space-7);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-rule);
+}
+.lyric-album-header__year {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-accent);
+  margin: 0;
+}
+
+.lyric-album-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-9);
+  display: grid;
+  gap: var(--space-4);
+}
+.lyric-album-link {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: var(--space-3) var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid var(--color-rule);
+  color: var(--color-text-strong);
+  transition: transform 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+.lyric-album-link:hover,
+.lyric-album-link:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  text-decoration: none;
+}
+.lyric-album-link__title {
+  font-size: var(--fs-xl);
+  font-weight: 500;
+  letter-spacing: var(--tracking-head);
+}
+.lyric-album-link__year {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-accent);
+}
+.lyric-album-link__cta {
+  grid-column: 1 / -1;
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+.lyric-other__heading {
+  font-size: var(--fs-2xl);
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-6);
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--color-rule);
+}
+
+.lyric {
+  margin-bottom: var(--space-7);
+}
+.lyric__title {
+  font-size: var(--fs-xl);
+  line-height: var(--lh-tight);
+  margin-bottom: var(--space-2);
+}
+.lyric__source {
+  font-size: var(--fs-sm);
+  font-style: italic;
+  margin: 0 0 var(--space-1);
+  opacity: 0.8;
+}
+.lyric__credit {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  opacity: 0.7;
+  margin-bottom: var(--space-4);
+}
+.lyric__body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+  white-space: pre-wrap;
+  background: none;
+  border: 0;
+  padding: 0;
   margin: 0;
 }
 
