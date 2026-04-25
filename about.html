@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — Wild Animal</title>
+  <meta name="description" content="About Wild Animal — indie pop-rock for philosophical souls.">
+  <link rel="preload" href="assets/fonts/oswald-variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <a class="visually-hidden" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="site-logo" href="index.html" aria-label="Wild Animal — home">
+        <picture>
+          <source type="image/webp"
+                  srcset="assets/images/logo-400.webp 400w, assets/images/logo-800.webp 800w, assets/images/logo-1312.webp 1312w"
+                  sizes="(max-width: 768px) 44px, 56px">
+          <img src="assets/images/logo-1312.png" alt="Wild Animal" width="1312" height="auto">
+        </picture>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation">
+        <span class="nav-toggle__bars" aria-hidden="true"></span>
+      </button>
+
+      <nav class="site-nav" id="primary-nav" aria-label="Primary">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="index.html">Home</a></li>
+          <li><a class="site-nav__link" href="about.html"   aria-current="page">About</a></li>
+          <li><a class="site-nav__link" href="music.html">Music</a></li>
+          <li><a class="site-nav__link" href="live.html">Live</a></li>
+          <li><a class="site-nav__link" href="lyrics.html">Lyrics</a></li>
+          <li><a class="site-nav__link" href="musings.html">Musings</a></li>
+          <li><a class="site-nav__link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="container container--narrow">
+      <h1 class="page__title">About</h1>
+      <p class="page__lede">Coming soon — this page is being rebuilt.</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <ul class="social-row" aria-label="Follow Wild Animal">
+        <li><a href="https://www.instagram.com/wildanimal.music" target="_blank" rel="noopener" aria-label="Instagram">
+          <picture>
+            <source type="image/webp" srcset="assets/images/social-instagram-400.webp 400w, assets/images/social-instagram-800.webp 800w" sizes="44px">
+            <img src="assets/images/social-instagram-800.png" alt="" width="800" height="800">
+          </picture>
+        </a></li>
+        <li><a href="https://www.youtube.com/@wildanimal3635" target="_blank" rel="noopener" aria-label="YouTube">
+          <picture>
+            <source type="image/webp" srcset="assets/images/social-youtube-400.webp 400w, assets/images/social-youtube-800.webp 800w" sizes="44px">
+            <img src="assets/images/social-youtube-800.png" alt="" width="800" height="800">
+          </picture>
+        </a></li>
+        <li><a href="https://open.spotify.com/artist/2kVACIduG5b2cXVDEPmaPs" target="_blank" rel="noopener" aria-label="Spotify">
+          <picture>
+            <source type="image/webp" srcset="assets/images/social-spotify-400.webp 400w, assets/images/social-spotify-800.webp 800w" sizes="44px">
+            <img src="assets/images/social-spotify-800.png" alt="" width="800" height="800">
+          </picture>
+        </a></li>
+        <li><a href="https://soundcloud.com/wildanimalmusic" target="_blank" rel="noopener" aria-label="SoundCloud">
+          <picture>
+            <source type="image/webp" srcset="assets/images/social-soundcloud-400.webp 400w, assets/images/social-soundcloud-800.webp 800w" sizes="44px">
+            <img src="assets/images/social-soundcloud-800.png" alt="" width="800" height="800">
+          </picture>
+        </a></li>
+        <li><a href="https://wildanimal.bandcamp.com" target="_blank" rel="noopener" aria-label="Bandcamp">
+          <picture>
+            <source type="image/webp" srcset="assets/images/social-bandcamp-400.webp 400w, assets/images/social-bandcamp-800.webp 800w" sizes="44px">
+            <img src="assets/images/social-bandcamp-800.png" alt="" width="800" height="800">
+          </picture>
+        </a></li>
+        <li><a href="https://www.facebook.com/wildanimalband" target="_blank" rel="noopener" aria-label="Facebook">
+          <picture>
+            <source type="image/webp" srcset="assets/images/social-facebook-400.webp 400w, assets/images/social-facebook-800.webp 800w" sizes="44px">
+            <img src="assets/images/social-facebook-800.png" alt="" width="800" height="800">
+          </picture>
+        </a></li>
+      </ul>
+
+      <ul class="footer-nav" aria-label="Footer">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="music.html">Music</a></li>
+        <li><a href="live.html">Live</a></li>
+        <li><a href="lyrics.html">Lyrics</a></li>
+        <li><a href="musings.html">Musings</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="impressum.html">Impressum</a></li>
+      </ul>
+
+      <p class="site-footer__legal">&copy; Wild Animal. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var btn = document.querySelector('.nav-toggle');
+      var nav = document.getElementById('primary-nav');
+      if (!btn || !nav) return;
+      btn.addEventListener('click', function () {
+        var open = nav.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</body>
+</html>

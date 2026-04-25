@@ -20,7 +20,6 @@ Notes:
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/mu_orig.png | `_originals/heading-music.png` | `heading-music-400.webp`, `heading-music-800.webp`, `heading-music-800.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/4_orig.png | `_originals/heading-live.png` | `heading-live-400.webp`, `heading-live-800.webp`, `heading-live-800.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/ly_orig.png | `_originals/heading-lyrics.png` | `heading-lyrics-400.webp`, `heading-lyrics-800.webp`, `heading-lyrics-800.png` |
-| https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/dein-abschnittstext_orig.png | `_originals/heading-musings.png` | `heading-musings-400.webp`, `heading-musings-800.webp`, `heading-musings-1100.webp`, `heading-musings-1100.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/5_orig.png | `_originals/heading-contact.png` | `heading-contact-400.webp`, `heading-contact-800.webp`, `heading-contact-800.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/44-eja-4716-ejafoto-com-marie-john-30-11-2025_orig.jpg | `_originals/band-photo-01.jpg` | `band-photo-01-400.webp`, `band-photo-01-800.webp`, `band-photo-01-1100.webp`, `band-photo-01-1100.jpg` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/335-eja-5323-ejafoto-com-marie-john-30-11-2025_orig.jpg | `_originals/band-photo-02.jpg` | `band-photo-02-400.webp`, `band-photo-02-800.webp`, `band-photo-02-1100.webp`, `band-photo-02-1100.jpg` |
@@ -36,7 +35,6 @@ Notes:
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/wa-child-cover-final_orig.jpg | `_originals/album-cover-2025.jpg` | `album-cover-2025-400.webp`, `album-cover-2025-800.webp`, `album-cover-2025-800.jpg` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/20_orig.png | `_originals/self-titled-photo-20.png` | `self-titled-photo-20-400.webp`, `self-titled-photo-20-800.webp`, `self-titled-photo-20-1080.webp`, `self-titled-photo-20-1080.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/18_orig.png | `_originals/self-titled-photo-18.png` | `self-titled-photo-18-400.webp`, `self-titled-photo-18-800.webp`, `self-titled-photo-18-1080.webp`, `self-titled-photo-18-1080.png` |
-| https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/wa-konzert-anku-ndigung-flyer_orig.jpg | `_originals/concert-flyer.jpg` | `concert-flyer-400.webp`, `concert-flyer-572.webp`, `concert-flyer-572.jpg` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/insa_3.png | `_originals/social-instagram.png` | `social-instagram-400.webp`, `social-instagram-800.webp`, `social-instagram-800.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/spoti_3.png | `_originals/social-spotify.png` | `social-spotify-400.webp`, `social-spotify-800.webp`, `social-spotify-800.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/bc_3.png | `_originals/social-bandcamp.png` | `social-bandcamp-400.webp`, `social-bandcamp-800.webp`, `social-bandcamp-800.png` |
