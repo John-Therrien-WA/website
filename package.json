@@ -1,0 +1,13 @@
+{
+  "name": "wildanimalmusic-website",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "wildanimalmusic.com — static site",
+  "scripts": {
+    "build:images": "node scripts/build-images.js"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}
