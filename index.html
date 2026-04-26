@@ -16,24 +16,26 @@ nav_active: home
       </div>
 
       <div class="hero__text">
-        <picture class="hero__wordmark">
-          <source type="image/webp"
-                  srcset="{{ '/assets/images/wordmark-home-400.webp' | relative_url }} 400w, {{ '/assets/images/wordmark-home-800.webp' | relative_url }} 800w, {{ '/assets/images/wordmark-home-1312.webp' | relative_url }} 1312w"
-                  sizes="(max-width: 768px) 90vw, 720px">
-          <img src="{{ '/assets/images/wordmark-home-1312.png' | relative_url }}" alt="Wild Animal" width="1312" height="669">
-        </picture>
+        <div class="hero__text-inner">
+          <picture class="hero__wordmark">
+            <source type="image/webp"
+                    srcset="{{ '/assets/images/wordmark-home-400.webp' | relative_url }} 400w, {{ '/assets/images/wordmark-home-800.webp' | relative_url }} 800w, {{ '/assets/images/wordmark-home-1312.webp' | relative_url }} 1312w"
+                    sizes="(max-width: 768px) 90vw, 720px">
+            <img src="{{ '/assets/images/wordmark-home-1312.png' | relative_url }}" alt="Wild Animal" width="1312" height="669">
+          </picture>
 
-        <p class="hero__tagline">Indie-Pop-Rock for Philosophical Souls</p>
+          <p class="hero__tagline">Indie-Pop-Rock for Philosophical Souls</p>
 
-        <div class="hero__intro">
-          <p>Welcome to Wild Animal, the destination for music lovers in search of a unique pop-rock blend, with accessible yet philosophically inclined content.</p>
-          <p>Do you crave poetic depth and a connection to your inner wilderness and spirit? Join us for positive visions and utopic storytelling.</p>
+          <div class="hero__intro">
+            <p>Welcome to Wild Animal, the destination for music lovers in search of a unique pop-rock blend, with accessible yet philosophically inclined content.</p>
+            <p>Do you crave poetic depth and a connection to your inner wilderness and spirit? Join us for positive visions and utopic storytelling.</p>
+          </div>
+
+          <blockquote class="quote">
+            <p><em>Die Musik ist ein Vermittler zwischen dem Leben des Geistes und dem Leben der Sinne.</em></p>
+            <cite>— Ludwig van Beethoven</cite>
+          </blockquote>
         </div>
-
-        <blockquote class="quote">
-          <p><em>Die Musik ist ein Vermittler zwischen dem Leben des Geistes und dem Leben der Sinne.</em></p>
-          <cite>— Ludwig van Beethoven</cite>
-        </blockquote>
       </div>
     </div>
   </section>

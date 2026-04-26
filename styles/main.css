@@ -285,7 +285,7 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   Hero — two-column layout (photo left, text right)
+   Hero — sticky-scroll parallax (photo sticks, text scrolls past)
    -------------------------------------------------------------------------- */
 .hero {
   padding: 0;
@@ -293,12 +293,14 @@ button {
 
 .hero__layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 100vh;
+  grid-template-columns: 1.15fr 1fr;
 }
 
 .hero__photo {
-  position: relative;
+  position: sticky;
+  top: var(--header-height);
+  align-self: start;
+  height: calc(100vh - var(--header-height));
   overflow: hidden;
 }
 .hero__photo img {
@@ -309,23 +311,29 @@ button {
 }
 
 .hero__text {
+  min-height: 150vh;
+  padding: 0 var(--space-7);
+}
+
+.hero__text-inner {
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  padding: var(--space-9) var(--space-7);
+  min-height: calc(100vh - var(--header-height));
+  padding: var(--space-6) 0;
 }
 
 .hero__wordmark {
-  margin: 0 auto var(--space-5);
-  max-width: 720px;
+  margin: 0 auto var(--space-4);
+  max-width: 560px;
 }
 .hero__tagline {
   font-size: var(--fs-xl);
   font-weight: 500;
   letter-spacing: var(--tracking-head);
   color: var(--color-text-strong);
-  margin: 0 0 var(--space-7);
+  margin: 0 0 var(--space-6);
   text-transform: uppercase;
 }
 .hero__intro {
@@ -334,6 +342,11 @@ button {
   font-size: var(--fs-lg);
 }
 .hero__intro p + p { margin-top: var(--space-5); }
+
+.hero .quote {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+}
 
 .quote {
   max-width: var(--container-narrow);
@@ -354,17 +367,23 @@ button {
   color: var(--color-text-strong);
 }
 
-/* Tablet / small desktop: stacked, 400px photo banner */
+/* Tablet / small desktop: stacked, 400px photo banner — sticky disabled */
 @media (max-width: 1099px) {
   .hero__layout {
     grid-template-columns: 1fr;
-    min-height: auto;
   }
   .hero__photo {
+    position: static;
+    top: auto;
     height: 400px;
   }
   .hero__text {
-    padding: var(--space-8) var(--space-5);
+    min-height: auto;
+    padding: 0 var(--space-5);
+  }
+  .hero__text-inner {
+    min-height: auto;
+    padding: var(--space-8) 0;
   }
 }
 
@@ -374,7 +393,10 @@ button {
     height: 220px;
   }
   .hero__text {
-    padding: var(--space-7) var(--space-5) var(--space-6);
+    padding: 0 var(--space-5);
+  }
+  .hero__text-inner {
+    padding: var(--space-7) 0 var(--space-6);
   }
   .hero__tagline { font-size: var(--fs-lg); }
   .hero__intro { font-size: var(--fs-md); }
