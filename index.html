@@ -8,9 +8,9 @@ nav_active: home
     <div class="container">
       <picture class="hero__wordmark">
         <source type="image/webp"
-                srcset="assets/images/wordmark-home-400.webp 400w, assets/images/wordmark-home-800.webp 800w, assets/images/wordmark-home-1312.webp 1312w"
+                srcset="{{ '/assets/images/wordmark-home-400.webp' | relative_url }} 400w, {{ '/assets/images/wordmark-home-800.webp' | relative_url }} 800w, {{ '/assets/images/wordmark-home-1312.webp' | relative_url }} 1312w"
                 sizes="(max-width: 768px) 90vw, 720px">
-        <img src="assets/images/wordmark-home-1312.png" alt="Wild Animal" width="1312" height="669">
+        <img src="{{ '/assets/images/wordmark-home-1312.png' | relative_url }}" alt="Wild Animal" width="1312" height="669">
       </picture>
 
       <p class="hero__tagline">Indie-Pop-Rock for Philosophical Souls</p>
@@ -38,12 +38,12 @@ nav_active: home
           <p>If you're enjoying our music, give the new Album a listen, share it with your friends, and drop a like. Your support helps us spread the sounds and bring this music to more ears.</p>
         </div>
         <div class="news__media">
-          <a href="self-titled2025.html" aria-label="Read more about the self-titled 2025 album">
+          <a href="{{ '/self-titled2025.html' | relative_url }}" aria-label="Read more about the self-titled 2025 album">
             <picture>
               <source type="image/webp"
-                      srcset="assets/images/album-cover-2025-400.webp 400w, assets/images/album-cover-2025-800.webp 800w"
+                      srcset="{{ '/assets/images/album-cover-2025-400.webp' | relative_url }} 400w, {{ '/assets/images/album-cover-2025-800.webp' | relative_url }} 800w"
                       sizes="(max-width: 768px) 90vw, 480px">
-              <img class="news__cover" src="assets/images/album-cover-2025-800.jpg" alt="Wild Animal — self-titled album cover (2025)" width="800" height="800">
+              <img class="news__cover" src="{{ '/assets/images/album-cover-2025-800.jpg' | relative_url }}" alt="Wild Animal — self-titled album cover (2025)" width="800" height="800">
             </picture>
           </a>
         </div>
