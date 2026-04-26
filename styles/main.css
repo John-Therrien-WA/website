@@ -541,6 +541,58 @@ button {
 .single { margin-top: var(--space-8); }
 .single:first-of-type { margin-top: var(--space-7); }
 
+/* Magazine variant: alternating photo / text columns at desktop widths.
+   Markup contract per single:
+     <article class="single single--magazine">
+       <div class="single__media">…cover or placeholder…</div>
+       <div class="single__text">…h3 + bandcamp link + prose…</div>
+     </article>
+   Default stack puts media above text (mobile-first); at >=1024px the grid
+   activates and odd-indexed singles flip media to the right column. */
+.single--magazine {
+  display: grid;
+  gap: var(--space-5);
+  align-items: center;
+  margin-top: var(--space-9);
+}
+.single--magazine:first-of-type { margin-top: var(--space-7); }
+
+.single__media {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.single__text > :first-child { margin-top: 0; }
+
+.single-placeholder {
+  aspect-ratio: 1 / 1;
+  background: var(--color-bg-alt);
+  border: 2px dashed var(--color-rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-5);
+  color: var(--color-text-strong);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  line-height: var(--lh-snug);
+}
+.single-placeholder__caption { display: block; }
+
+@media (min-width: 1024px) {
+  .single--magazine {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    gap: var(--space-8);
+    margin-top: var(--space-10);
+  }
+  .single--magazine:first-of-type { margin-top: var(--space-8); }
+  .single--magazine:nth-of-type(odd) .single__media { order: 2; }
+  .single__media { max-width: none; }
+}
+
 /* --------------------------------------------------------------------------
    Contact page
    -------------------------------------------------------------------------- */
