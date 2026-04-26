@@ -17,6 +17,13 @@ nav_active: about
 
       <picture>
         <source type="image/webp"
+                srcset="{{ '/assets/images/band-photo-10-400.webp' | relative_url }} 400w, {{ '/assets/images/band-photo-10-800.webp' | relative_url }} 800w, {{ '/assets/images/band-photo-10-1065.webp' | relative_url }} 1065w"
+                sizes="(min-width: 1024px) 480px, 90vw">
+        <img src="{{ '/assets/images/band-photo-10-1065.jpg' | relative_url }}" alt="Wild Animal — Marie and John Therrien" width="1065" height="1065">
+      </picture>
+
+      <picture>
+        <source type="image/webp"
                 srcset="{{ '/assets/images/band-photo-01-400.webp' | relative_url }} 400w, {{ '/assets/images/band-photo-01-800.webp' | relative_url }} 800w, {{ '/assets/images/band-photo-01-1100.webp' | relative_url }} 1100w"
                 sizes="(min-width: 1024px) 480px, 90vw">
         <img src="{{ '/assets/images/band-photo-01-1100.jpg' | relative_url }}" alt="Wild Animal — Marie and John Therrien" width="1100" height="1100">
@@ -87,13 +94,6 @@ nav_active: about
       <div class="parallax-text">
         <p><small>Fotos: <a href="https://www.ejafoto.com">www.ejafoto.com</a></small></p>
       </div>
-
-      <picture>
-        <source type="image/webp"
-                srcset="{{ '/assets/images/band-photo-10-400.webp' | relative_url }} 400w, {{ '/assets/images/band-photo-10-800.webp' | relative_url }} 800w, {{ '/assets/images/band-photo-10-1065.webp' | relative_url }} 1065w"
-                sizes="(min-width: 1024px) 480px, 90vw">
-        <img src="{{ '/assets/images/band-photo-10-1065.jpg' | relative_url }}" alt="Wild Animal — Marie and John Therrien" width="1065" height="1065">
-      </picture>
 
     </parallax-layout>
   </div>
