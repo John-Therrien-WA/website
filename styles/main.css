@@ -285,43 +285,56 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   Hero — sticky-scroll parallax (photo sticks, text scrolls past)
+   Hero — cinematic stage (scroll-driven; static fallback below 1024px or
+   when @supports(animation-timeline) fails)
+
+   Pattern: photo fills the viewport on landing; on scroll, the text content
+   rises into view from below, overlays the photo centered, then the entire
+   hero exits up to reveal the news section beneath. Pure CSS — no JS.
+
+   Layout: <section class="hero"> wraps a sticky <.hero__viewport> that pins
+   to the top of the scrollport for one viewport's worth of scroll. Inside,
+   the photo is an absolutely-positioned <.hero__stage> and the text is a
+   sibling <.hero__overlay>. Animation runs against a view-timeline named
+   on the .hero section using the `contain` range, which is the period the
+   200vh hero fully covers the viewport (i.e. the sticky duration).
    -------------------------------------------------------------------------- */
 .hero {
   padding: 0;
+  position: relative;
+  background: var(--color-text-strong);
 }
 
-.hero__layout {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
+.hero__viewport {
+  position: relative;
 }
 
-.hero__photo {
-  position: sticky;
-  top: var(--header-height);
-  align-self: start;
-  height: calc(100vh - var(--header-height));
+/* --- Static fallback layout (mobile + browsers without scroll-timeline) -- */
+.hero__stage {
+  position: relative;
+  height: 60vh;
   overflow: hidden;
 }
-.hero__photo img {
+.hero__stage .hero__photo,
+.hero__stage .hero__photo img {
+  display: block;
   width: 100%;
   height: 100%;
+}
+.hero__stage .hero__photo img {
   object-fit: cover;
   object-position: center;
 }
 
-.hero__text {
-  min-height: 150vh;
-  padding: 0 var(--space-7);
+.hero__overlay {
+  background: var(--color-bg);
+  padding: var(--space-8) var(--space-5);
 }
 
-.hero__text-inner {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.hero__overlay-inner {
+  max-width: var(--container-narrow);
+  margin: 0 auto;
   text-align: center;
-  min-height: calc(100vh - var(--header-height));
-  padding: var(--space-6) 0;
 }
 
 .hero__wordmark {
@@ -367,39 +380,99 @@ button {
   color: var(--color-text-strong);
 }
 
-/* Tablet / small desktop: stacked, 400px photo banner — sticky disabled */
-@media (max-width: 1099px) {
-  .hero__layout {
-    grid-template-columns: 1fr;
-  }
-  .hero__photo {
-    position: static;
-    top: auto;
-    height: 400px;
-  }
-  .hero__text {
-    min-height: auto;
-    padding: 0 var(--space-5);
-  }
-  .hero__text-inner {
-    min-height: auto;
-    padding: var(--space-8) 0;
+@media (max-width: 767px) {
+  .hero__stage { height: 50vh; }
+  .hero__overlay { padding: var(--space-7) var(--space-5); }
+  .hero__tagline { font-size: var(--fs-lg); }
+  .hero__intro { font-size: var(--fs-md); }
+}
+
+/* --- Cinematic stage: desktop + scroll-timeline support only ------------ */
+@supports (animation-timeline: scroll()) {
+  @media (min-width: 1024px) {
+    .hero {
+      min-height: 200vh;
+      view-timeline-name: --hero-stage;
+      view-timeline-axis: block;
+    }
+
+    .hero__viewport {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero__stage {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+    }
+
+    .hero__overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-7);
+      background: transparent;
+      pointer-events: none;
+      animation-name: hero-text-rise;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --hero-stage;
+      animation-range: contain 0% contain 100%;
+    }
+
+    .hero__overlay-inner {
+      position: relative;
+      max-width: 720px;
+      padding: var(--space-7) var(--space-6);
+      color: var(--color-bg);
+    }
+
+    /* Local scrim — radial vignette behind the text only, not full-screen. */
+    .hero__overlay-inner::before {
+      content: '';
+      position: absolute;
+      inset: -25% -15%;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.62) 0%,
+        rgba(0, 0, 0, 0.42) 45%,
+        rgba(0, 0, 0, 0) 80%
+      );
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Light-on-photo overrides for overlay content */
+    .hero__overlay .hero__wordmark img { filter: invert(1) brightness(1.15); }
+    .hero__overlay .hero__tagline,
+    .hero__overlay .hero__intro p,
+    .hero__overlay .quote,
+    .hero__overlay .quote cite {
+      color: var(--color-bg);
+    }
+    .hero__overlay .quote {
+      border-top-color: rgba(252, 252, 252, 0.35);
+    }
   }
 }
 
-/* Small mobile: stacked, 220px photo banner */
-@media (max-width: 767px) {
-  .hero__photo {
-    height: 220px;
+@keyframes hero-text-rise {
+    0% { transform: translateY(100%); opacity: 0; }
+   25% { transform: translateY(100%); opacity: 0; }
+   55% { transform: translateY(0);    opacity: 1; }
+   80% { transform: translateY(0);    opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__overlay {
+    animation: none !important;
   }
-  .hero__text {
-    padding: 0 var(--space-5);
-  }
-  .hero__text-inner {
-    padding: var(--space-7) 0 var(--space-6);
-  }
-  .hero__tagline { font-size: var(--fs-lg); }
-  .hero__intro { font-size: var(--fs-md); }
 }
 
 /* --------------------------------------------------------------------------
