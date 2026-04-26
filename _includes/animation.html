@@ -1,0 +1,162 @@
+<script type="module">
+  /* <parallax-layout>
+     Differential-speed parallax in two columns. Author the DOM
+     interleaved (text and pictures as direct siblings, in mobile reading
+     order); on desktop the component sorts children into two virtual
+     columns and translates the photo column faster than the text column
+     on scroll. Below 1024px the component no-ops and natural single-
+     column flow takes over. Honors prefers-reduced-motion: reduce.
+
+     Visual model: the layout's effective height matches the (shorter)
+     text column. The photo column is a fixed-height clipping window of
+     that same height, with an inner flex stack of pictures translating
+     within. As the section scrolls through the viewport, the photo
+     stack sweeps from its top to its bottom — so photos appear to move
+     faster than text and both columns finish together. */
+  class ParallaxLayout extends HTMLElement {
+    constructor() {
+      super();
+      this._mql = window.matchMedia('(min-width: 1024px)');
+      this._reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      this._active = false;
+      this._cols = null;
+      this._inner = null;
+      this._origChildren = null;
+      this._textH = 0;
+      this._photoH = 0;
+      this._rafPending = false;
+      this._onScroll = this._onScroll.bind(this);
+      this._onResize = this._onResize.bind(this);
+      this._onMediaChange = this._onMediaChange.bind(this);
+      this._onLoad = this._onLoad.bind(this);
+    }
+
+    connectedCallback() {
+      this._origChildren = Array.from(this.children);
+      this._mql.addEventListener('change', this._onMediaChange);
+      this._reduced.addEventListener('change', this._onMediaChange);
+      this._evaluate();
+    }
+
+    disconnectedCallback() {
+      this._teardown();
+      this._mql.removeEventListener('change', this._onMediaChange);
+      this._reduced.removeEventListener('change', this._onMediaChange);
+    }
+
+    _onMediaChange() { this._evaluate(); }
+
+    _evaluate() {
+      const should = this._mql.matches && !this._reduced.matches;
+      if (should && !this._active) this._setup();
+      else if (!should && this._active) this._teardown();
+    }
+
+    _isPhoto(el) {
+      return el.tagName === 'PICTURE' || el.tagName === 'IMG' ||
+             (el.classList && el.classList.contains('parallax-photo'));
+    }
+
+    _setup() {
+      const textItems = [];
+      const photoItems = [];
+      for (const c of this._origChildren) {
+        (this._isPhoto(c) ? photoItems : textItems).push(c);
+      }
+      if (!photoItems.length || !textItems.length) return;
+
+      while (this.firstChild) this.removeChild(this.firstChild);
+
+      const textCol = document.createElement('div');
+      textCol.className = 'parallax-layout__col parallax-layout__col--text';
+      textItems.forEach(el => textCol.appendChild(el));
+
+      const photoCol = document.createElement('div');
+      photoCol.className = 'parallax-layout__col parallax-layout__col--photos';
+      const inner = document.createElement('div');
+      inner.className = 'parallax-layout__inner';
+      photoItems.forEach(el => inner.appendChild(el));
+      photoCol.appendChild(inner);
+
+      this.appendChild(textCol);
+      this.appendChild(photoCol);
+
+      this._cols = { text: textCol, photo: photoCol };
+      this._inner = inner;
+      this.classList.add('parallax-layout--active');
+
+      this._measure();
+      this._active = true;
+
+      window.addEventListener('scroll', this._onScroll, { passive: true });
+      window.addEventListener('resize', this._onResize);
+      window.addEventListener('load', this._onLoad);
+      const imgs = this.querySelectorAll('img');
+      imgs.forEach(img => {
+        if (!img.complete) img.addEventListener('load', this._onLoad, { once: true });
+      });
+
+      this._update();
+    }
+
+    _teardown() {
+      window.removeEventListener('scroll', this._onScroll);
+      window.removeEventListener('resize', this._onResize);
+      window.removeEventListener('load', this._onLoad);
+      this.classList.remove('parallax-layout--active');
+      while (this.firstChild) this.removeChild(this.firstChild);
+      this._origChildren.forEach(c => {
+        c.style.transform = '';
+        this.appendChild(c);
+      });
+      this._cols = null;
+      this._inner = null;
+      this._active = false;
+    }
+
+    _measure() {
+      if (!this._cols || !this._inner) return;
+      this._cols.photo.style.height = '';
+      this._textH = this._cols.text.offsetHeight;
+      this._photoH = this._inner.scrollHeight;
+      this._cols.photo.style.height = this._textH + 'px';
+    }
+
+    _onLoad() {
+      this._measure();
+      this._update();
+    }
+
+    _onResize() {
+      this._measure();
+      this._update();
+    }
+
+    _onScroll() {
+      if (this._rafPending) return;
+      this._rafPending = true;
+      window.requestAnimationFrame(() => {
+        this._rafPending = false;
+        this._update();
+      });
+    }
+
+    _update() {
+      if (!this._active || !this._inner) return;
+      const rect = this.getBoundingClientRect();
+      const vh = window.innerHeight;
+      if (rect.bottom < 0 || rect.top > vh) return;
+
+      const layoutH = this.offsetHeight;
+      const scrolledIn = -rect.top;
+      const range = Math.max(1, layoutH - vh);
+      const progress = Math.max(0, Math.min(1, scrolledIn / range));
+      const maxOffset = Math.max(0, this._photoH - this._textH);
+      this._inner.style.transform = `translate3d(0, ${-progress * maxOffset}px, 0)`;
+    }
+  }
+
+  if (!customElements.get('parallax-layout')) {
+    customElements.define('parallax-layout', ParallaxLayout);
+  }
+</script>
