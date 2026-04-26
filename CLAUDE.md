@@ -109,8 +109,14 @@ When verifying visual changes, screenshot for layout but extract the
 actual DOM text (`page.evaluate(() => document.body.innerText)` or
 similar) to verify content. Visually paraphrasing a screenshot can
 fabricate text — Claude has previously transcribed "It's Chaos, Drop
-me Off" as "It's Chaos Drop No One." Two checks: layout from PNG,
-content from DOM.
+me Off" as "It's Chaos Drop No One."
+
+Same trap for position claims (sticky, anchored, frozen): a screenshot
+can look right while the element is shifted behind a header or other
+overlay. Extract `getBoundingClientRect()` at each scroll position you
+assert and verify the number — three iterations of "photo glued to
+top" shipped before this caught an 88px offset. Three checks: layout
+from PNG, content from DOM, position from rects.
 
 ## Git and PRs
 
