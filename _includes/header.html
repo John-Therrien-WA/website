@@ -1,11 +1,11 @@
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="site-logo" href="/index.html" aria-label="Wild Animal — home">
+    <a class="site-logo" href="{{ '/index.html' | relative_url }}" aria-label="Wild Animal — home">
       <picture>
         <source type="image/webp"
-                srcset="/assets/images/logo-400.webp 400w, /assets/images/logo-800.webp 800w, /assets/images/logo-1312.webp 1312w"
+                srcset="{{ '/assets/images/logo-400.webp' | relative_url }} 400w, {{ '/assets/images/logo-800.webp' | relative_url }} 800w, {{ '/assets/images/logo-1312.webp' | relative_url }} 1312w"
                 sizes="(max-width: 768px) 44px, 56px">
-        <img src="/assets/images/logo-1312.png" alt="Wild Animal" width="1312" height="503">
+        <img src="{{ '/assets/images/logo-1312.png' | relative_url }}" alt="Wild Animal" width="1312" height="503">
       </picture>
     </a>
 
@@ -16,7 +16,7 @@
     <nav class="site-nav" id="primary-nav" aria-label="Primary">
       <ul class="site-nav__list">
         {%- for item in site.data.nav %}
-        <li><a class="site-nav__link" href="{{ item.href }}"{% if page.nav_active == item.key %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
+        <li><a class="site-nav__link" href="{{ item.href | relative_url }}"{% if page.nav_active == item.key %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
         {%- endfor %}
       </ul>
     </nav>
