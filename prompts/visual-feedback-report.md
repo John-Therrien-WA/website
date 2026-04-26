@@ -37,7 +37,7 @@ are not flying blind.
 - `/tmp/wa-mt.png` — 1280×6110, 739 KB.
   `magisches-theater.html` as expected: title, embedded player widget, Tracks
   list, Credits, Thank You note, then the per-single entries (Green Fields,
-  Jungle, Silence, It's Chaos Drop No One, Sturm) with descriptive blurbs.
+  Jungle, Silence, It's Chaos, Drop me Off, Shuree) with descriptive blurbs.
   Full page is long; `fullPage:true` captured the whole column.
 
 ## Recipe for future batch steps
