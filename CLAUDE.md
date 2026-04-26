@@ -104,6 +104,13 @@ that actually sticks. If you can't render the site (Jekyll fails, no
 headless browser available, image viewer blocked), stop and report which
 step is blocked rather than shipping markup-only changes.
 
+When verifying visual changes, screenshot for layout but extract the
+actual DOM text (`page.evaluate(() => document.body.innerText)` or
+similar) to verify content. Visually paraphrasing a screenshot can
+fabricate text — Claude has previously transcribed "It's Chaos, Drop
+me Off" as "It's Chaos Drop No One." Two checks: layout from PNG,
+content from DOM.
+
 ## Git and PRs
 
 - One commit per logical content change. Subject line: what changed and why, not how.
