@@ -40,13 +40,9 @@
     </ul>
 
     <ul class="footer-nav" aria-label="Footer">
-      <li><a href="/index.html">Home</a></li>
-      <li><a href="/about.html">About</a></li>
-      <li><a href="/music.html">Music</a></li>
-      <li><a href="/live.html">Live</a></li>
-      <li><a href="/lyrics.html">Lyrics</a></li>
-      <li><a href="/musings.html">Musings</a></li>
-      <li><a href="/contact.html">Contact</a></li>
+      {%- for item in site.data.nav %}
+      <li><a href="{{ item.href }}">{{ item.label }}</a></li>
+      {%- endfor %}
       <li><a href="/impressum.html">Impressum</a></li>
     </ul>
 

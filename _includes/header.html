@@ -15,13 +15,9 @@
 
     <nav class="site-nav" id="primary-nav" aria-label="Primary">
       <ul class="site-nav__list">
-        <li><a class="site-nav__link" href="/index.html"{% if page.nav_active == "home" %} aria-current="page"{% endif %}>Home</a></li>
-        <li><a class="site-nav__link" href="/about.html"{% if page.nav_active == "about" %} aria-current="page"{% endif %}>About</a></li>
-        <li><a class="site-nav__link" href="/music.html"{% if page.nav_active == "music" %} aria-current="page"{% endif %}>Music</a></li>
-        <li><a class="site-nav__link" href="/live.html"{% if page.nav_active == "live" %} aria-current="page"{% endif %}>Live</a></li>
-        <li><a class="site-nav__link" href="/lyrics.html"{% if page.nav_active == "lyrics" %} aria-current="page"{% endif %}>Lyrics</a></li>
-        <li><a class="site-nav__link" href="/musings.html"{% if page.nav_active == "musings" %} aria-current="page"{% endif %}>Musings</a></li>
-        <li><a class="site-nav__link" href="/contact.html"{% if page.nav_active == "contact" %} aria-current="page"{% endif %}>Contact</a></li>
+        {%- for item in site.data.nav %}
+        <li><a class="site-nav__link" href="{{ item.href }}"{% if page.nav_active == item.key %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
+        {%- endfor %}
       </ul>
     </nav>
   </div>
