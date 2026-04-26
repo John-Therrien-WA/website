@@ -293,11 +293,14 @@ button {
    hero exits up to reveal the news section beneath. Pure CSS — no JS.
 
    Layout: <section class="hero"> wraps a sticky <.hero__viewport> that pins
-   to the top of the scrollport for one viewport's worth of scroll. Inside,
+   to the top of the scrollport for half a viewport's worth of scroll. Inside,
    the photo is an absolutely-positioned <.hero__stage> and the text is a
    sibling <.hero__overlay>. Animation runs against a view-timeline named
    on the .hero section using the `contain` range, which is the period the
-   200vh hero fully covers the viewport (i.e. the sticky duration).
+   150vh hero fully covers the viewport (i.e. the sticky duration). Linear
+   keyframes drive the text continuously: it rises from below, crosses the
+   center, and exits above without pause. Hero ends as text exits, so the
+   news section emerges in the same scroll moment.
    -------------------------------------------------------------------------- */
 .hero {
   padding: 0;
@@ -391,7 +394,7 @@ button {
 @supports (animation-timeline: scroll()) {
   @media (min-width: 1024px) {
     .hero {
-      min-height: 200vh;
+      min-height: 150vh;
       view-timeline-name: --hero-stage;
       view-timeline-axis: block;
     }
@@ -422,7 +425,10 @@ button {
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: --hero-stage;
-      animation-range: contain 0% contain 100%;
+      /* End extends past the contain range by the news section's top padding,
+         so the text finishes its exit at the same scroll moment the news
+         emerges at the viewport bottom. */
+      animation-range: contain 0% contain calc(100% + var(--space-9));
     }
 
     .hero__overlay-inner {
@@ -462,10 +468,8 @@ button {
 }
 
 @keyframes hero-text-rise {
-    0% { transform: translateY(100%); opacity: 0; }
-   25% { transform: translateY(100%); opacity: 0; }
-   55% { transform: translateY(0);    opacity: 1; }
-   80% { transform: translateY(0);    opacity: 1; }
+    0% { transform: translateY(100%);  opacity: 0; }
+   50% { transform: translateY(0);     opacity: 1; }
   100% { transform: translateY(-100%); opacity: 0; }
 }
 
