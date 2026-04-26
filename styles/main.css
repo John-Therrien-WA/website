@@ -680,6 +680,11 @@ button {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    /* Both columns share row 1. Without this, sparse auto-placement
+       drops the second column (whose explicit grid-column points back
+       to col 1) into row 2, doubling the layout height and breaking
+       the parallax math. */
+    grid-row: 1;
   }
 
   .parallax-layout__col--text {
