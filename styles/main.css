@@ -410,6 +410,17 @@ button {
       position: absolute;
       inset: 0;
       height: 100%;
+      /* Counter the sticky's upward drift so the photo's framing stays
+         intact while the text exits and the news rises in. The peak
+         counter at mid-exit equals the sticky shift at that point
+         (50vh), keeping the photo pinned through the readable phase;
+         it then releases back to 0 by exit end so the photo clears
+         cleanly as the news takes over. */
+      animation-name: hero-photo-freeze;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --hero-stage;
+      animation-range: contain 0% exit 100%;
     }
 
     .hero__overlay {
@@ -473,8 +484,16 @@ button {
   100% { transform: translateY(-100%); opacity: 0; }
 }
 
+@keyframes hero-photo-freeze {
+    0%    { transform: translateY(0); }
+   33.3%  { transform: translateY(0); }
+   66.6%  { transform: translateY(50vh); }
+  100%    { transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero__overlay {
+  .hero__overlay,
+  .hero__stage {
     animation: none !important;
   }
 }
