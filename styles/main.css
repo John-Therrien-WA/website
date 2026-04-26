@@ -534,27 +534,70 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   About page — photo gallery
-   -------------------------------------------------------------------------- */
-.about-gallery {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-4);
-  margin: var(--space-7) 0;
+   About page — sticky-text + scrolling-images parallax
+   Markup contract:
+     .about__layout  > .about__photos  (left, scrolls in normal flow)
+                     > .about__text    (right, sticky at >=1024px)
+   Mobile: single column, photos and text stack in normal flow, no stickiness. */
+.about {
+  padding: var(--space-7) 0 var(--space-9);
 }
-.about-gallery img {
+
+.about__layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.about__photos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.about__photos picture { display: block; }
+.about__photos img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  aspect-ratio: 1 / 1;
+  height: auto;
 }
 
-@media (max-width: 768px) {
-  .about-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
+.about__title { text-align: left; }
 
-.about-closing {
-  margin: var(--space-8) 0 var(--space-6);
+.about__text-inner > :first-child { margin-top: 0; }
+.about__text-inner h2 { margin-top: var(--space-7); }
+
+@media (min-width: 1024px) {
+  .about {
+    padding: var(--space-8) 0 var(--space-9);
+  }
+
+  .about__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  /* DOM order is text-then-photos so mobile reads naturally; at desktop,
+     swap into photos-left, text-right via explicit grid-column. */
+  .about__photos {
+    grid-column: 1;
+    grid-row: 1;
+    gap: var(--space-7);
+  }
+
+  /* Sticky text: top of text parks below the site header. If text is taller
+     than the viewport, sticky releases when the photo column ends and the
+     bottom of the text comes into view in normal flow — so the full prose is
+     reachable by page scroll alone (no internal scrollbar). */
+  .about__text {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: var(--header-height);
+    align-self: start;
+    padding: var(--space-6) 0;
+  }
 }
 
 /* --------------------------------------------------------------------------
