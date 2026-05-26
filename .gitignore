@@ -46,5 +46,6 @@ _site/
 .bundle/
 vendor/
 
-# CC prompts at repo root (kept in prompts/ instead)
+# CC prompts — root-level batch files and local working folder, not tracked
 /*-batch.md
+prompts/
