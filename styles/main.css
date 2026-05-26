@@ -24,6 +24,7 @@
   --color-text-strong: #2a2a2a;
   --color-accent: #a88d2e;
   --color-accent-hover: #8d7824;
+  --color-accent-sage: #5e7355;  /* deepened from --color-bg-alt for legible text */
   --color-rule: rgba(42, 42, 42, 0.12);
 
   /* Type */
@@ -663,10 +664,9 @@ button {
   padding-left: var(--space-6);
   text-indent: calc(-1 * var(--space-6));
 }
-.dialogue__speaker {
-  font-weight: 700;
-  color: var(--color-accent);
-}
+.dialogue__speaker { font-weight: 700; }
+.dialogue__speaker--campbell { color: var(--color-accent); }
+.dialogue__speaker--jung { color: var(--color-accent-sage); }
 
 /* --------------------------------------------------------------------------
    parallax-layout — differential-speed two-column parallax
