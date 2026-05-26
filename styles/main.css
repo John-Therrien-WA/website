@@ -648,6 +648,27 @@ button {
   margin: var(--space-5) 0;
 }
 
+/* Editorial intro note set off above an essay body. */
+.essay__intro {
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-rule);
+  font-style: italic;
+  color: var(--color-text);
+}
+
+/* Two-voice dialogue: speaker label hangs, wrapped lines indent under it. */
+.dialogue__turn {
+  margin: 0 0 var(--space-4);
+  padding-left: var(--space-6);
+  text-indent: calc(-1 * var(--space-6));
+}
+.dialogue__speaker {
+  margin-right: var(--space-2);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
 /* --------------------------------------------------------------------------
    parallax-layout — differential-speed two-column parallax
    Markup contract: <parallax-layout> with interleaved children (text blocks
