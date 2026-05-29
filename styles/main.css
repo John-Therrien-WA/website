@@ -603,6 +603,11 @@ button {
   opacity: 0.75;
 }
 
+.essay__read-time,
+.essay-listing__read-time {
+  color: var(--color-accent-sage);
+}
+
 .essay-listing__title {
   font-size: var(--fs-2xl);
   margin-bottom: var(--space-3);
