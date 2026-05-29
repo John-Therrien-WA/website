@@ -454,6 +454,21 @@ button {
       padding: var(--space-7);
       background: transparent;
       pointer-events: none;
+    }
+
+    .hero__overlay-inner {
+      position: relative;
+      max-width: 720px;
+      padding: var(--space-7) var(--space-6);
+      color: var(--color-bg);
+      /* Animation runs on the inner block (content-sized) rather than the
+         viewport-sized overlay so the start/end positions normalize across
+         browser heights. translateY mixes 50vh (half viewport) with 50%
+         (half the block's own height), so at 0% the block's top edge
+         lands at the viewport bottom regardless of how tall the viewport
+         is. Subtracting --space-7 (the inner's top padding) puts the
+         wordmark itself — not the padding above it — at the very edge,
+         so the script enters the screen on the first pixel of scroll. */
       animation-name: hero-text-rise;
       animation-timing-function: linear;
       animation-fill-mode: both;
@@ -462,13 +477,6 @@ button {
          so the text finishes its exit at the same scroll moment the news
          emerges at the viewport bottom. */
       animation-range: contain 0% contain calc(100% + var(--space-9));
-    }
-
-    .hero__overlay-inner {
-      position: relative;
-      max-width: 720px;
-      padding: var(--space-7) var(--space-6);
-      color: var(--color-bg);
     }
 
     /* Local scrim — radial vignette behind the text only, not full-screen. */
@@ -501,9 +509,9 @@ button {
 }
 
 @keyframes hero-text-rise {
-    0% { transform: translateY(100%);  opacity: 0; }
-   50% { transform: translateY(0);     opacity: 1; }
-  100% { transform: translateY(-100%); opacity: 0; }
+    0% { transform: translateY(calc(50vh + 50% - var(--space-7)));  opacity: 0; }
+   50% { transform: translateY(0);                                   opacity: 1; }
+  100% { transform: translateY(calc(-50vh - 50%));                   opacity: 0; }
 }
 
 @keyframes hero-photo-anchor {
@@ -512,7 +520,7 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__overlay,
+  .hero__overlay-inner,
   .hero__stage {
     animation: none !important;
   }
