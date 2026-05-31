@@ -42,3 +42,8 @@ Notes:
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/fb_3.png | `_originals/social-facebook.png` | `social-facebook-400.webp`, `social-facebook-800.webp`, `social-facebook-800.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/5_3.png | `_originals/social-youtube.png` | `social-youtube-400.webp`, `social-youtube-800.webp`, `social-youtube-800.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/9_3.png | `_originals/social-soundcloud.png` | `social-soundcloud-400.webp`, `social-soundcloud-800.webp`, `social-soundcloud-800.png` |
+| Marie 2025 | `_originals/mt-single-green-fields.png` | `mt-single-green-fields-400.webp`, `mt-single-green-fields-800.webp`, `mt-single-green-fields-1600.webp`, `mt-single-green-fields-1600.png` |
+| Marie 2025 | `_originals/mt-single-jungle.png` | `mt-single-jungle-400.webp`, `mt-single-jungle-800.webp`, `mt-single-jungle-1600.webp`, `mt-single-jungle-1600.png` |
+| Marie 2025 | `_originals/mt-single-silence.png` | `mt-single-silence-400.webp`, `mt-single-silence-800.webp`, `mt-single-silence-1600.webp`, `mt-single-silence-1600.png` |
+| Marie 2025 | `_originals/mt-single-its-chaos.png` | `mt-single-its-chaos-400.webp`, `mt-single-its-chaos-800.webp`, `mt-single-its-chaos-1600.webp`, `mt-single-its-chaos-1600.png` |
+| Marie 2025 | `_originals/mt-single-shuree.png` | `mt-single-shuree-400.webp`, `mt-single-shuree-800.webp`, `mt-single-shuree-1600.webp`, `mt-single-shuree-1600.png` |
