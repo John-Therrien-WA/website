@@ -20,6 +20,7 @@
     var prevBtn = carousel.querySelector('[data-carousel-prev]');
     var nextBtn = carousel.querySelector('[data-carousel-next]');
     var thumb = carousel.querySelector('[data-carousel-thumb]');
+    var status = carousel.querySelector('[data-carousel-status]');
     var items = track ? track.children : [];
     if (!track || !controls || !prevBtn || !nextBtn || !thumb || !items.length) return;
 
@@ -58,6 +59,7 @@
 
     // Reflect continuous scroll position: thumb width = visible fraction of
     // the track (~one panel of five), offset = progress across the rest.
+    var lastIndex = -1;
     function update() {
       var max = track.scrollWidth - track.clientWidth;
       var progress = max > 0 ? track.scrollLeft / max : 0;
@@ -70,6 +72,14 @@
       var i = currentIndex();
       prevBtn.disabled = i <= 0;
       nextBtn.disabled = i >= items.length - 1;
+
+      // The slider is aria-hidden, so this visually-hidden live region is the
+      // position signal for screen-reader and keyboard users. Announce only
+      // when the album actually changes, not every rAF scroll tick.
+      if (status && i !== lastIndex) {
+        lastIndex = i;
+        status.textContent = 'Album ' + (i + 1) + ' of ' + items.length;
+      }
     }
 
     var rafPending = false;

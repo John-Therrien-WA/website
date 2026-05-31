@@ -83,17 +83,22 @@ nav_active: about       # optional; must match a _data/nav.yml key
 
 ## JS posture
 
-JS today is the mobile-menu toggle in `_includes/script.html` and the
-animation web components in `_includes/animation.html`. CSS-only is
-the default for layout, transitions, and sticky-scroll effects
-(alternating columns, hover states). JS lands when CSS can't carry the
-weight — page-load animations, audio playback, scroll-driven sequencing.
-New JS arrives as HTML web components that upgrade working static markup
-on `connectedCallback`. The default animation primitive is Motion
-(motion.dev); GSAP + ScrollTrigger is reserved for true scroll-sequenced
-work. Audio uses Howler. CDN imports via `<script type="module">`; no
-build step. No SPA frameworks (React, Vue, Svelte), no Tailwind, no
-Jekyll plugins.
+JS today is the mobile-menu toggle in `_includes/script.html`, the
+animation web components in `_includes/animation.html`, and the
+discography carousel in `_includes/discography-carousel.html` (pulled in
+only by `music.html`, not the global layout). CSS-only is the default
+for layout, transitions, and sticky-scroll effects (alternating columns,
+hover states). JS lands when CSS can't carry the weight — page-load
+animations, audio playback, scroll-driven sequencing. Interactive JS
+ships as a page-scoped vanilla enhancement in `_includes/`, included only
+by the page that needs it and upgrading working static markup (the
+carousel is the first such component); folding these into reusable HTML
+web components on `connectedCallback`, the way `animation.html` does, is
+deferred until a second interactive instance justifies the abstraction.
+The default animation primitive is Motion (motion.dev); GSAP +
+ScrollTrigger is reserved for true scroll-sequenced work. Audio uses
+Howler. CDN imports via `<script type="module">`; no build step. No
+SPA frameworks (React, Vue, Svelte), no Tailwind, no Jekyll plugins.
 
 ## Visual work — don't fly blind
 
