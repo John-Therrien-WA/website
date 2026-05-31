@@ -1238,6 +1238,9 @@ button {
 .album__title {
   font-size: var(--fs-2xl);
   margin: 0;
+  /* Keep the title clear of the floated controls cluster (two 44px arrows
+     + their gap + breathing room) at the panel's top-right. */
+  padding-right: calc(88px + var(--space-2) + var(--space-4));
 }
 .album__title a { color: var(--color-text-strong); }
 .album__title a:hover,
@@ -1274,20 +1277,34 @@ button {
   text-decoration: underline;
 }
 
-/* Carousel controls — slider indicator + grouped prev/next arrows, sitting
-   together below the track. Ship hidden (they do nothing without JS); the
-   script reveals them. */
+/* Carousel controls — grouped prev/next arrows with a small position slider
+   stacked beneath, floated into the top-right of the current panel (over the
+   empty space beside the year/title) so they sit in view without scrolling
+   past the tall Bandcamp embed. The cluster takes only the vertical space the
+   left-aligned text already occupies. Ship hidden (they do nothing without
+   JS); the script reveals them. The cluster passes pointer events through
+   except on the buttons, so swiping the panel still scrolls. */
 .carousel__controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
   display: flex;
-  align-items: center;
-  gap: var(--space-5);
-  margin-top: var(--space-6);
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+  pointer-events: none;
 }
 .carousel__controls[hidden] { display: none; }
 
+.carousel__arrows {
+  display: flex;
+  gap: var(--space-2);
+}
+
 .carousel__indicator {
   position: relative;
-  flex: 1 1 auto;
+  align-self: stretch;   /* match the arrow pair's width */
   height: 4px;
   background: var(--color-rule);
   border-radius: 2px;
@@ -1304,12 +1321,6 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .carousel__indicator-thumb { transition: none; }
 }
-
-.carousel__arrows {
-  display: flex;
-  flex: 0 0 auto;
-  gap: var(--space-2);
-}
 .carousel__arrow {
   display: inline-flex;
   align-items: center;
@@ -1320,6 +1331,7 @@ button {
   border-radius: 2px;
   background: var(--color-bg);
   color: var(--color-text-strong);
+  pointer-events: auto;
   transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
 }
 .carousel__arrow:hover,
