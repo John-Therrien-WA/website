@@ -1212,6 +1212,18 @@ button {
   font-size: var(--fs-sm);
   opacity: 0.75;
 }
+.album__cta {
+  justify-self: start;
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  font-weight: 600;
+  color: var(--color-accent);
+}
+.album__cta:hover,
+.album__cta:focus-visible {
+  text-decoration: underline;
+}
 
 .video-grid {
   display: grid;
