@@ -25,7 +25,8 @@ nav_active: music
     <div class="container container--narrow">
       <h2 class="section__title">Discography</h2>
 
-      <ol class="discography" reversed>
+      <div class="carousel" data-carousel>
+      <ol class="discography" reversed tabindex="0" aria-label="Wild Animal discography — scroll horizontally to browse releases" data-carousel-track>
         <li class="album">
           <p class="album__year">2025</p>
           <h3 class="album__title"><a href="{{ '/self-titled2025.html' | relative_url }}">Self-Titled</a></h3>
@@ -88,6 +89,21 @@ nav_active: music
           <p class="album__fallback"><a href="https://wildanimal.bandcamp.com/album/neither-predator-nor-prey-demos">Neither Predator Nor Prey by Wild Animal</a></p>
         </li>
       </ol>
+
+      <div class="carousel__controls" data-carousel-controls hidden>
+        <div class="carousel__indicator" aria-hidden="true">
+          <span class="carousel__indicator-thumb" data-carousel-thumb></span>
+        </div>
+        <div class="carousel__arrows">
+          <button type="button" class="carousel__arrow carousel__arrow--prev" data-carousel-prev aria-label="Previous album">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="15 5 8 12 15 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" class="carousel__arrow carousel__arrow--next" data-carousel-next aria-label="Next album">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="9 5 16 12 9 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+      </div>
     </div>
   </section>
 
@@ -128,3 +144,5 @@ nav_active: music
     </div>
   </section>
 </main>
+
+{%- include discography-carousel.html -%}

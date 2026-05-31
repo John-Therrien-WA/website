@@ -1192,17 +1192,40 @@ button {
   margin-bottom: var(--space-7);
 }
 
+/* Discography is a horizontal snap carousel: the <ol> is the scroll track,
+   each .album is one full-width panel. Native scroll + snap work without
+   JS; _includes/discography-carousel.html adds grouped prev/next arrows and
+   a slider position indicator (revealed only when JS is active) and hides
+   the native scrollbar in favour of that slider. */
+.carousel { position: relative; }
+
 .discography {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: var(--space-8);
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
 }
+@media (prefers-reduced-motion: reduce) {
+  .discography { scroll-behavior: auto; }
+}
+/* The native scrollbar is the affordance without JS; once the script takes
+   over and provides the slider indicator, hide it. */
+.carousel--ready .discography { scrollbar-width: none; }
+.carousel--ready .discography::-webkit-scrollbar { display: none; }
 
 .album {
   display: grid;
   gap: var(--space-3);
+  align-content: start;
+  flex: 0 0 100%;
+  min-width: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 .album__year {
   margin: 0;
@@ -1249,6 +1272,71 @@ button {
 .album__cta:hover,
 .album__cta:focus-visible {
   text-decoration: underline;
+}
+
+/* Carousel controls — slider indicator + grouped prev/next arrows, sitting
+   together below the track. Ship hidden (they do nothing without JS); the
+   script reveals them. */
+.carousel__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+.carousel__controls[hidden] { display: none; }
+
+.carousel__indicator {
+  position: relative;
+  flex: 1 1 auto;
+  height: 4px;
+  background: var(--color-rule);
+  border-radius: 2px;
+}
+.carousel__indicator-thumb {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 20%;
+  background: var(--color-accent);
+  border-radius: 2px;
+  transition: left 200ms ease, width 200ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .carousel__indicator-thumb { transition: none; }
+}
+
+.carousel__arrows {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--space-2);
+}
+.carousel__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-rule);
+  border-radius: 2px;
+  background: var(--color-bg);
+  color: var(--color-text-strong);
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+.carousel__arrow:hover,
+.carousel__arrow:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.carousel__arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+  border-color: var(--color-rule);
+  color: var(--color-text-strong);
+}
+.carousel__arrow svg {
+  display: block;
+  width: 18px;
+  height: 18px;
 }
 
 .video-grid {

@@ -1,0 +1,93 @@
+<script>
+  /* Discography carousel — music page only. Pulled in by music.html, NOT
+     the global layout, so it never loads on other pages. Plain vanilla
+     enhancement in the house IIFE style (see _includes/script.html):
+     defensive null-checks bail early if the markup is absent. Mirrors
+     _includes/animation.html for prefers-reduced-motion handling and
+     requestAnimationFrame-batched scroll work. NOT a web component — a
+     single scoped script for this one carousel.
+
+     Progressive enhancement: the <ol> is natively scrollable + snap via
+     CSS with no JS. This script adds the grouped prev/next arrows and the
+     slider position indicator (both ship hidden, revealed here) and hands
+     scrollbar duty to that slider. */
+  (function () {
+    var carousel = document.querySelector('[data-carousel]');
+    if (!carousel) return;
+
+    var track = carousel.querySelector('[data-carousel-track]');
+    var controls = carousel.querySelector('[data-carousel-controls]');
+    var prevBtn = carousel.querySelector('[data-carousel-prev]');
+    var nextBtn = carousel.querySelector('[data-carousel-next]');
+    var thumb = carousel.querySelector('[data-carousel-thumb]');
+    var items = track ? track.children : [];
+    if (!track || !controls || !prevBtn || !nextBtn || !thumb || !items.length) return;
+
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // Reveal the chrome now that JS drives it, and let the slider stand in
+    // for the native scrollbar.
+    controls.hidden = false;
+    carousel.classList.add('carousel--ready');
+
+    // scrollLeft that brings panel i flush to the track's start edge.
+    // Read from the DOM so any gap/padding is accounted for; the shared
+    // offsetParent origin cancels in the subtraction.
+    function offsetFor(i) {
+      return items[i].offsetLeft - items[0].offsetLeft;
+    }
+
+    function currentIndex() {
+      var x = track.scrollLeft;
+      var best = 0;
+      var bestDist = Infinity;
+      for (var i = 0; i < items.length; i++) {
+        var d = Math.abs(offsetFor(i) - x);
+        if (d < bestDist) { bestDist = d; best = i; }
+      }
+      return best;
+    }
+
+    function scrollToIndex(i) {
+      i = Math.max(0, Math.min(items.length - 1, i));
+      track.scrollTo({
+        left: offsetFor(i),
+        behavior: reduced.matches ? 'auto' : 'smooth'
+      });
+    }
+
+    // Reflect continuous scroll position: thumb width = visible fraction of
+    // the track (~one panel of five), offset = progress across the rest.
+    function update() {
+      var max = track.scrollWidth - track.clientWidth;
+      var progress = max > 0 ? track.scrollLeft / max : 0;
+      progress = Math.max(0, Math.min(1, progress));
+      var frac = track.scrollWidth > 0 ? track.clientWidth / track.scrollWidth : 1;
+      frac = Math.max(0, Math.min(1, frac));
+      thumb.style.width = (frac * 100) + '%';
+      thumb.style.left = (progress * (1 - frac) * 100) + '%';
+
+      var i = currentIndex();
+      prevBtn.disabled = i <= 0;
+      nextBtn.disabled = i >= items.length - 1;
+    }
+
+    var rafPending = false;
+    function onScroll() {
+      if (rafPending) return;
+      rafPending = true;
+      window.requestAnimationFrame(function () {
+        rafPending = false;
+        update();
+      });
+    }
+
+    prevBtn.addEventListener('click', function () { scrollToIndex(currentIndex() - 1); });
+    nextBtn.addEventListener('click', function () { scrollToIndex(currentIndex() + 1); });
+    track.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('load', update);
+
+    update();
+  })();
+</script>
