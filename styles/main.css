@@ -20,6 +20,7 @@
   /* Color */
   --color-bg: #fcfcfc;
   --color-bg-alt: #cfd9ca;
+  --color-bg-lyric: #f4f7f2;  /* faint sage wash for alternating lyric panels — a fraction of --color-bg-alt */
   --color-text: #3f3f3f;
   --color-text-strong: #2a2a2a;
   --color-accent: #a88d2e;
@@ -1091,8 +1092,41 @@ button {
   border-top: 1px solid var(--color-rule);
 }
 
+/* Each song is a panel narrower than the container so it can sit left or
+   right; consecutive songs alternate side and a faint sage background.
+   CSS-only and class-free — :nth-of-type applies to every .lyric
+   automatically, so no markup or lyric text is touched. The verse <pre>
+   stays left-aligned on every song (pre-wrap right-aligned reads ragged);
+   only the block placement and the heading alignment alternate. */
 .lyric {
+  max-width: 88%;
   margin-bottom: var(--space-7);
+  padding: var(--space-5) var(--space-6);
+  border-radius: 2px;
+}
+/* Odd songs sit left, plain background. */
+.lyric:nth-of-type(odd) {
+  margin-right: auto;
+}
+/* Even songs sit right, faint sage panel, heading flush right. */
+.lyric:nth-of-type(even) {
+  margin-left: auto;
+  background: var(--color-bg-lyric);
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  /* Single full-width column on small screens; background still alternates,
+     headings reset to left — no off-center narrow blocks. */
+  .lyric {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding: var(--space-4) var(--space-5);
+  }
+  .lyric:nth-of-type(even) {
+    text-align: left;
+  }
 }
 .lyric__title {
   font-size: var(--fs-xl);
@@ -1117,6 +1151,7 @@ button {
   font-size: var(--fs-md);
   line-height: var(--lh-snug);
   white-space: pre-wrap;
+  text-align: left;  /* verse stays left-aligned even inside a right-side panel */
   background: none;
   border: 0;
   padding: 0;
