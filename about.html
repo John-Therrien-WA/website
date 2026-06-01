@@ -6,8 +6,14 @@ nav_active: about
 ---
 
 <main id="main" class="page about">
+  <picture class="about-wallpaper" aria-hidden="true">
+    <source type="image/webp"
+            srcset="{{ '/assets/images/about-wallpaper-400.webp' | relative_url }} 400w, {{ '/assets/images/about-wallpaper-800.webp' | relative_url }} 800w, {{ '/assets/images/about-wallpaper-906.webp' | relative_url }} 906w"
+            sizes="100vw">
+    <img src="{{ '/assets/images/about-wallpaper-906.jpg' | relative_url }}" alt="" width="906" height="1280">
+  </picture>
   <div class="container">
-    <parallax-layout class="parallax-layout about__layout">
+    <parallax-layout class="parallax-layout about__layout" data-wallpaper=".about-wallpaper">
 
       <div class="parallax-text">
         <h1 class="page__title about__title">

@@ -794,8 +794,41 @@ button {
   }
 }
 
+/* About wallpaper (first-look experiment) — a fixed, full-bleed photo layer
+   driven by <parallax-layout data-wallpaper>. The body paints the paper colour
+   behind it (z-index:-1), transparent content gutters let it show through, and
+   the text blocks below get their own opaque box. Oversized + clipped so the
+   parallax pan never reveals an edge; static below 768px (no transform). */
+.about-wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.about-wallpaper img {
+  display: block;
+  width: 100%;
+  height: 130vh;
+  object-fit: cover;
+  object-position: center;
+}
+@media (min-width: 768px) {
+  .about-wallpaper img { will-change: transform; }
+}
+
+/* Readability comes from the content, not from dimming the photo: every text
+   block sits on a flat, opaque paper box so the wallpaper only shows in the
+   gutters between blocks. Scoped to About — this is a trial, not global. */
+.about .parallax-text {
+  background: var(--color-bg);
+  padding: var(--space-5);
+  border-radius: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .parallax-layout__inner {
+  .parallax-layout__inner,
+  .about-wallpaper img {
     transform: none !important;
     will-change: auto;
   }

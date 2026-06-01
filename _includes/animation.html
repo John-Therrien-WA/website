@@ -4,7 +4,7 @@
      interleaved (text and pictures as direct siblings, in mobile reading
      order); on desktop the component sorts children into two virtual
      columns and translates the photo column faster than the text column
-     on scroll. Below 1024px the component no-ops and natural single-
+     on scroll. Below 1024px the column parallax no-ops and natural single-
      column flow takes over. Honors prefers-reduced-motion: reduce.
 
      Visual model: the layout's effective height matches the (shorter)
@@ -12,16 +12,29 @@
      that same height, with an inner flex stack of pictures translating
      within. As the section scrolls through the viewport, the photo
      stack sweeps from its top to its bottom — so photos appear to move
-     faster than text and both columns finish together. */
+     faster than text and both columns finish together.
+
+     Optional background wallpaper: set data-wallpaper="<selector>" to a
+     fixed, full-bleed, oversized-and-clipped <picture>/<img> elsewhere on
+     the page. The SAME single rAF/scroll loop pans that image slower than
+     the page so content slides over it — no second scroll system. The
+     wallpaper drift is active >=768px and freezes to a static background
+     below it; it also honors prefers-reduced-motion: reduce. The column
+     parallax (>=1024px) and the wallpaper drift (>=768px) are independent
+     states sharing one set of scroll/resize listeners. */
   class ParallaxLayout extends HTMLElement {
     constructor() {
       super();
       this._mql = window.matchMedia('(min-width: 1024px)');
+      this._wallMql = window.matchMedia('(min-width: 768px)');
       this._reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-      this._active = false;
+      this._active = false;       // column parallax active
+      this._wallActive = false;   // wallpaper drift active
+      this._listening = false;    // scroll/resize/load attached
       this._cols = null;
       this._inner = null;
       this._origChildren = null;
+      this._wallpaper = null;     // the <img> to translate
       this._textH = 0;
       this._photoH = 0;
       this._rafPending = false;
@@ -33,23 +46,38 @@
 
     connectedCallback() {
       this._origChildren = Array.from(this.children);
+      const sel = this.dataset.wallpaper;
+      if (sel) {
+        const host = document.querySelector(sel);
+        if (host) this._wallpaper = host.tagName === 'IMG' ? host : host.querySelector('img');
+      }
       this._mql.addEventListener('change', this._onMediaChange);
+      this._wallMql.addEventListener('change', this._onMediaChange);
       this._reduced.addEventListener('change', this._onMediaChange);
       this._evaluate();
     }
 
     disconnectedCallback() {
-      this._teardown();
+      if (this._active) this._teardownCols();
+      if (this._wallActive) this._deactivateWall();
+      this._syncListeners();
       this._mql.removeEventListener('change', this._onMediaChange);
+      this._wallMql.removeEventListener('change', this._onMediaChange);
       this._reduced.removeEventListener('change', this._onMediaChange);
     }
 
     _onMediaChange() { this._evaluate(); }
 
     _evaluate() {
-      const should = this._mql.matches && !this._reduced.matches;
-      if (should && !this._active) this._setup();
-      else if (!should && this._active) this._teardown();
+      const reduced = this._reduced.matches;
+      const colsShould = this._mql.matches && !reduced;
+      const wallShould = !!this._wallpaper && this._wallMql.matches && !reduced;
+      if (colsShould && !this._active) this._setupCols();
+      else if (!colsShould && this._active) this._teardownCols();
+      if (wallShould && !this._wallActive) this._activateWall();
+      else if (!wallShould && this._wallActive) this._deactivateWall();
+      this._syncListeners();
+      this._update();
     }
 
     _isPhoto(el) {
@@ -57,7 +85,7 @@
              (el.classList && el.classList.contains('parallax-photo'));
     }
 
-    _setup() {
+    _setupCols() {
       const textItems = [];
       const photoItems = [];
       for (const c of this._origChildren) {
@@ -88,21 +116,12 @@
       this._measure();
       this._active = true;
 
-      window.addEventListener('scroll', this._onScroll, { passive: true });
-      window.addEventListener('resize', this._onResize);
-      window.addEventListener('load', this._onLoad);
-      const imgs = this.querySelectorAll('img');
-      imgs.forEach(img => {
+      this.querySelectorAll('img').forEach(img => {
         if (!img.complete) img.addEventListener('load', this._onLoad, { once: true });
       });
-
-      this._update();
     }
 
-    _teardown() {
-      window.removeEventListener('scroll', this._onScroll);
-      window.removeEventListener('resize', this._onResize);
-      window.removeEventListener('load', this._onLoad);
+    _teardownCols() {
       this.classList.remove('parallax-layout--active');
       while (this.firstChild) this.removeChild(this.firstChild);
       this._origChildren.forEach(c => {
@@ -112,6 +131,33 @@
       this._cols = null;
       this._inner = null;
       this._active = false;
+    }
+
+    _activateWall() {
+      this._wallActive = true;
+      if (this._wallpaper && !this._wallpaper.complete) {
+        this._wallpaper.addEventListener('load', this._onLoad, { once: true });
+      }
+    }
+
+    _deactivateWall() {
+      this._wallActive = false;
+      if (this._wallpaper) this._wallpaper.style.transform = '';
+    }
+
+    _syncListeners() {
+      const need = this._active || this._wallActive;
+      if (need && !this._listening) {
+        window.addEventListener('scroll', this._onScroll, { passive: true });
+        window.addEventListener('resize', this._onResize);
+        window.addEventListener('load', this._onLoad);
+        this._listening = true;
+      } else if (!need && this._listening) {
+        window.removeEventListener('scroll', this._onScroll);
+        window.removeEventListener('resize', this._onResize);
+        window.removeEventListener('load', this._onLoad);
+        this._listening = false;
+      }
     }
 
     _measure() {
@@ -142,17 +188,30 @@
     }
 
     _update() {
-      if (!this._active || !this._inner) return;
-      const rect = this.getBoundingClientRect();
-      const vh = window.innerHeight;
-      if (rect.bottom < 0 || rect.top > vh) return;
+      // Column parallax — only while the section is on screen.
+      if (this._active && this._inner) {
+        const rect = this.getBoundingClientRect();
+        const vh = window.innerHeight;
+        if (!(rect.bottom < 0 || rect.top > vh)) {
+          const layoutH = this.offsetHeight;
+          const scrolledIn = -rect.top;
+          const range = Math.max(1, layoutH - vh);
+          const progress = Math.max(0, Math.min(1, scrolledIn / range));
+          const maxOffset = Math.max(0, this._photoH - this._textH);
+          this._inner.style.transform = `translate3d(0, ${-progress * maxOffset}px, 0)`;
+        }
+      }
 
-      const layoutH = this.offsetHeight;
-      const scrolledIn = -rect.top;
-      const range = Math.max(1, layoutH - vh);
-      const progress = Math.max(0, Math.min(1, scrolledIn / range));
-      const maxOffset = Math.max(0, this._photoH - this._textH);
-      this._inner.style.transform = `translate3d(0, ${-progress * maxOffset}px, 0)`;
+      // Wallpaper drift — driven by whole-page scroll progress, panning the
+      // oversized fixed image within its clip so edges never show. Slower
+      // than the scroll, so page content slides over it.
+      if (this._wallActive && this._wallpaper) {
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const y = window.scrollY || window.pageYOffset || 0;
+        const progress = Math.max(0, Math.min(1, y / maxScroll));
+        const slack = Math.max(0, this._wallpaper.offsetHeight - window.innerHeight);
+        this._wallpaper.style.transform = `translate3d(0, ${-progress * slack}px, 0)`;
+      }
     }
   }
 
