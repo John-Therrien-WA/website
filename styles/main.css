@@ -1140,6 +1140,14 @@ button {
   background: var(--color-bg-lyric);
   text-align: right;
 }
+/* Even songs sit in the right-side panel: align the verse body right too,
+   so the text edge follows the panel. (Overrides the earlier left-only
+   choice — kept under review pending John + Marie's read of the result.)
+   Kept above the mobile media query so that block's reset, which has equal
+   specificity, wins below 768px — don't move this below the media query. */
+.lyric:nth-of-type(even) .lyric__body {
+  text-align: right;
+}
 
 @media (max-width: 768px) {
   /* Single full-width column on small screens; background still alternates,
@@ -1151,6 +1159,9 @@ button {
     padding: var(--space-4) var(--space-5);
   }
   .lyric:nth-of-type(even) {
+    text-align: left;
+  }
+  .lyric:nth-of-type(even) .lyric__body {
     text-align: left;
   }
 }
@@ -1177,7 +1188,7 @@ button {
   font-size: var(--fs-md);
   line-height: var(--lh-snug);
   white-space: pre-wrap;
-  text-align: left;  /* verse stays left-aligned even inside a right-side panel */
+  text-align: left;  /* default; even (right-side) songs override to right above */
   background: none;
   border: 0;
   padding: 0;
