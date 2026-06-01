@@ -480,16 +480,20 @@ button {
       animation-range: contain 0% contain calc(100% + var(--space-9));
     }
 
-    /* Local scrim — radial vignette behind the text only, not full-screen. */
+    /* Local scrim — soft radial glow behind the text only, not full-screen.
+       Sized explicitly (88% x 62% of the box) and faded fully to transparent at
+       its own edge rather than via farthest-corner, so it reads as a fully
+       rounded soft oval — no flat top/bottom where the old ellipse ran past the
+       viewport and got clipped into hard edges. */
     .hero__overlay-inner::before {
       content: '';
       position: absolute;
-      inset: -25% -15%;
+      inset: -2% -8%;
       background: radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0.62) 0%,
-        rgba(0, 0, 0, 0.42) 45%,
-        rgba(0, 0, 0, 0) 80%
+        88% 62% at center,
+        rgba(0, 0, 0, 0.6) 0%,
+        rgba(0, 0, 0, 0.4) 52%,
+        rgba(0, 0, 0, 0) 100%
       );
       z-index: -1;
       pointer-events: none;
