@@ -1,0 +1,53 @@
+# Musings listing — single source of truth for the index at /musings.html.
+# Each record is one text. `category` drives BOTH the displayed label and the
+# "Read the full <CATEGORY>" CTA, so the two can never diverge — the copy-paste
+# bug where the CTA said the wrong type is now structurally impossible.
+#
+# To add a musing: create the page under musings/, then add a record here
+# (newest first). Optional fields: subtitle, quote. Body/subtitle/quote may
+# contain inline HTML entities (e.g. &rsquo;) — they are emitted as-is.
+#
+# Categories in use: Advertisement, Koan, Essay, Dialogue.
+
+- category: Advertisement
+  title: "Sponsored Product Offerings"
+  url: /musings/sponsored-product-offerings.html
+  place: Berlin
+  date: May 2026
+  read_time: 3 min read
+  body: "Two product announcements. Authentique™, the AI writing platform whose proprietary Voice-Graph™ technology gives you back the voice it is currently taking. And the GridSink™ Pro, the smart appliance that converts surplus grid electricity into heat at an industry-leading efficiency of 0%."
+
+- category: Koan
+  title: "Category Error"
+  url: /musings/category-error.html
+  place: Berlin
+  date: March 2026
+  read_time: 1 min read
+  body: "A philosopher who has solved the nature of being takes her insight to a physicist who meditates. A koan about the answers and the questions being equally confused."
+
+- category: Essay
+  title: "The Coherence of Craft and Taste"
+  url: /musings/the-coherence-of-craft-and-taste.html
+  place: Berlin
+  date: February 2026
+  read_time: 3 min read
+  subtitle: "On craft, perception, and the prompt genius"
+  body: "Refined musical judgment doesn&rsquo;t emerge from detached curation alone, but from long, immersive engagement with making music. The deeper concern with generative AI isn&rsquo;t derivative slop; it&rsquo;s that the tool may let people bypass the slow formation of perceptual sensitivity altogether."
+
+- category: Dialogue
+  title: "The Myth of Patience"
+  url: /musings/the-myth-of-patience.html
+  place: Berlin
+  date: February 2026
+  read_time: 7 min read
+  body: "An imagined dialogue between Carl Jung and Joseph Campbell, encoding a set of carefully crafted ideas. Written by Claude."
+
+- category: Essay
+  title: "The Great Peace Filter"
+  url: /musings/the-great-peace-filter.html
+  place: Berlin
+  date: January 2026
+  read_time: 8 min read
+  subtitle: "Where is Everybody?"
+  body: "Scientific culture has given a name and structure to the age-old question of whether or not we are cosmically alone in the universe. The Fermi Paradox may read as follows:"
+  quote: "Given the age and size of the universe, why do we see no evidence of extraterrestrial civilizations?"

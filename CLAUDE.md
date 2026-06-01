@@ -23,6 +23,7 @@ against the verb-to-file map below — that map is the contract.
 _layouts/default.html      Page scaffolding (head, header, footer, script)
 _includes/                 head, header, footer, script — iterate _data/nav.yml
 _data/nav.yml              Primary nav (label, href, key) — single source of truth
+_data/musings.yml          Musings index records — category drives the label + CTA
 *.html                     One file per page: front matter + <main> body
 lyrics/, musings/          Per-album lyric pages and per-essay pages
 styles/main.css            Design system; :root token block at top, then page styles
@@ -53,7 +54,7 @@ one of these files. If a request doesn't fit, ask which entry to extend.
 | Edit about-page bio | `about.html` |
 | Edit contact text or photo credit | `contact.html` |
 | Add or edit lyrics | `lyrics/<album>.html` |
-| Add a musing | new `musings/<slug>.html`; link from `musings.html` |
+| Add a musing | new `musings/<slug>.html`; add a record to `_data/musings.yml` (the listing iterates it) |
 | Add a release page | new `<slug>.html` at root; link from `music.html` |
 | Change site title or description | `_config.yml` |
 | Change a color, font size, spacing, layout token | `styles/main.css` `:root` block |
