@@ -7,7 +7,7 @@
 # (newest first). Optional fields: subtitle, quote. Body/subtitle/quote may
 # contain inline HTML entities (e.g. &rsquo;) — they are emitted as-is.
 #
-# Categories in use: Advertisement, Koan, Essay, Dialogue.
+# Categories in use: Advertisement, Zen Story, Essay, Dialogue.
 
 - category: Advertisement
   title: "Sponsored Product Offerings"
@@ -17,13 +17,13 @@
   read_time: 3 min read
   body: "Two product announcements. Authentique™, the AI writing platform whose proprietary Voice-Graph™ technology gives you back the voice it is currently taking. And the GridSink™ Pro, the smart appliance that converts surplus grid electricity into heat at an industry-leading efficiency of 0%."
 
-- category: Koan
+- category: Zen Story
   title: "Category Error"
   url: /musings/category-error.html
   place: Berlin
   date: March 2026
   read_time: 1 min read
-  body: "A philosopher who has solved the nature of being takes her insight to a physicist who meditates. A koan about the answers and the questions being equally confused."
+  body: "A philosopher who has solved the nature of being takes her insight to a physicist who meditates. A zen story about the answers and the questions being equally confused."
 
 - category: Essay
   title: "The Coherence of Craft and Taste"

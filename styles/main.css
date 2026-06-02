@@ -684,7 +684,7 @@ button {
   letter-spacing: var(--tracking-caps);
 }
 
-/* Small caps category kicker (e.g. "Koan") above a title, in the index and on the essay page. */
+/* Small caps category kicker (e.g. "Zen Story") above a title, in the index and on the essay page. */
 .essay-listing__category,
 .essay__category {
   margin: 0 0 var(--space-2);
