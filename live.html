@@ -6,28 +6,41 @@ nav_active: live
 ---
 
 <main id="main">
-  <section class="section">
-    <div class="container container--narrow">
-      <h1 class="page__title">
-        <picture>
-          <source type="image/webp"
-                  srcset="{{ '/assets/images/heading-live-400.webp' | relative_url }} 400w, {{ '/assets/images/heading-live-800.webp' | relative_url }} 800w, {{ '/assets/images/heading-live-1280.webp' | relative_url }} 1280w"
-                  sizes="(max-width: 768px) 88vw, 420px">
-          <img src="{{ '/assets/images/heading-live-1280.png' | relative_url }}" alt="" width="1280" height="720">
-        </picture>
-        <span class="visually-hidden">Live</span>
-      </h1>
-      <p class="page__lede">We go live in dream land most every night. To make the connection, one can listen their way in, particularly through the last three albums. To see us play in the waking world, shows will be listed here, and feel free to send a booking inquiry to our <a href="{{ '/contact.html' | relative_url }}">contact form</a>.</p>
-    </div>
-  </section>
+  <picture class="wallpaper live-wallpaper" aria-hidden="true">
+    <source type="image/webp"
+            srcset="{{ '/assets/images/live-wallpaper-400.webp' | relative_url }} 400w, {{ '/assets/images/live-wallpaper-800.webp' | relative_url }} 800w, {{ '/assets/images/live-wallpaper-1414.webp' | relative_url }} 1414w"
+            sizes="100vw">
+    <img src="{{ '/assets/images/live-wallpaper-1414.jpg' | relative_url }}" alt="" width="1414" height="2000">
+  </picture>
 
-  <section class="section section--alt">
-    <div class="container">
-      <div class="video-grid">
-        <div class="video-embed">
-          <iframe loading="lazy" src="https://www.youtube.com/embed/S1INPlWgwvE" title="Wild Animal — Lost Map (YouTube video)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <parallax-layout class="wallpaper-host" data-wallpaper=".live-wallpaper">
+
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
+          <h1 class="page__title">
+            <picture>
+              <source type="image/webp"
+                      srcset="{{ '/assets/images/heading-live-400.webp' | relative_url }} 400w, {{ '/assets/images/heading-live-800.webp' | relative_url }} 800w, {{ '/assets/images/heading-live-1280.webp' | relative_url }} 1280w"
+                      sizes="(max-width: 768px) 88vw, 420px">
+              <img src="{{ '/assets/images/heading-live-1280.png' | relative_url }}" alt="" width="1280" height="720">
+            </picture>
+            <span class="visually-hidden">Live</span>
+          </h1>
+          <p class="page__lede">We go live in dream land most every night. To make the connection, one can listen their way in, particularly through the last three albums. To see us play in the waking world, shows will be listed here, and feel free to send a booking inquiry to our <a href="{{ '/contact.html' | relative_url }}">contact form</a>.</p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="section section--alt">
+      <div class="container">
+        <div class="video-grid">
+          <div class="video-embed">
+            <iframe loading="lazy" src="https://www.youtube.com/embed/S1INPlWgwvE" title="Wild Animal — Lost Map (YouTube video)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </parallax-layout>
 </main>
