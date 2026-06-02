@@ -791,7 +791,7 @@ button {
   .parallax-layout__inner > picture { display: block; }
 }
 
-/* About page — uses parallax-layout */
+/* About page — uses parallax-layout for its two-column content */
 .about {
   padding: var(--space-7) 0 var(--space-9);
 }
@@ -803,19 +803,23 @@ button {
   }
 }
 
-/* About wallpaper (first-look experiment) — a fixed, full-bleed photo layer
-   driven by <parallax-layout data-wallpaper>. The body paints the paper colour
-   behind it (z-index:-1), transparent content gutters let it show through, and
-   the text blocks below get their own opaque box. Oversized + clipped so the
-   parallax pan never reveals an edge; static below 768px (no transform). */
-.about-wallpaper {
+/* ==========================================================================
+   Wallpaper pages — shared by About, Music, Live
+   A fixed, full-bleed photo layer driven by <parallax-layout data-wallpaper>.
+   The body paints the paper colour behind it (z-index:-1); transparent content
+   gutters let it show through; text sits on frosted cards and media (photos,
+   embeds) get rounded corners so everything reads as one family. The image is
+   oversized + clipped so the parallax pan never reveals an edge; the pan runs
+   >=768px and freezes to a static background below it.
+   ========================================================================== */
+.wallpaper {
   position: fixed;
   inset: 0;
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
 }
-.about-wallpaper img {
+.wallpaper img {
   display: block;
   width: 100%;
   height: 130vh;
@@ -823,39 +827,58 @@ button {
   object-position: center;
 }
 @media (min-width: 768px) {
-  .about-wallpaper img { will-change: transform; }
+  .wallpaper img { will-change: transform; }
 }
 
-/* Readability comes from the content, not from dimming the photo: every text
-   block sits on a rounded paper card lifted off the wallpaper with a soft
-   shadow. Where supported the card is frosted glass — slightly translucent over
-   a blurred backdrop so the wallpaper softly bleeds through while text stays
-   legible; otherwise it falls back to a solid paper fill. Scoped to About. */
-.about .parallax-text {
+/* Readability comes from the content, not from dimming the photo: text sits on
+   a rounded paper card lifted off the wallpaper with a soft shadow. Where
+   supported the card is frosted glass — slightly translucent over a blurred
+   backdrop so the wallpaper softly bleeds through while text stays legible;
+   otherwise it falls back to a solid paper fill. */
+.wallpaper-card {
   background: var(--color-bg);
   padding: var(--space-6);
   border-radius: 12px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
 }
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .about .parallax-text {
+  .wallpaper-card {
     background: color-mix(in srgb, var(--color-bg) 50%, transparent);
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
   }
 }
+.wallpaper-card > :first-child { margin-top: 0; }
+.wallpaper-card > :last-child { margin-bottom: 0; }
 
-/* Photos get the same rounded corners so cards and imagery read as one family
-   (opaque — only the text cards are frosted). Covers both the single-column
-   DOM and the desktop two-column split. */
+/* Label variant — a section heading sitting on its own centred pill over the
+   wallpaper (Music's "Originals"/"Covers"), with the video embeds left bare in
+   the transparent gutters below. Keeps the heading's gap to the grid. */
+.wallpaper-card--label {
+  width: fit-content;
+  margin-inline: auto;
+  padding: var(--space-3) var(--space-5);
+}
+
+/* Media islands over the wallpaper (About's photos, Music/Live's video embeds)
+   share the cards' rounded corners — opaque content, only the text cards frost.
+   Covers About's single-column DOM and its desktop two-column split. */
 .about__layout > picture img,
-.about__layout .parallax-layout__inner > picture img {
+.about__layout .parallax-layout__inner > picture img,
+.wallpaper-host .video-embed {
   border-radius: 12px;
 }
 
+/* Music + Live wrap their normal section flow in a <parallax-layout> that only
+   drives the wallpaper drift (no column parallax), so it stays a plain block.
+   Its sections go transparent to reveal the wallpaper; legibility lives on the
+   frosted cards above. */
+.wallpaper-host { display: block; }
+.wallpaper-host .section { background: transparent; }
+
 @media (prefers-reduced-motion: reduce) {
   .parallax-layout__inner,
-  .about-wallpaper img {
+  .wallpaper img {
     transform: none !important;
     will-change: auto;
   }

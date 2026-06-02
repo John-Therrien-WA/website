@@ -39,6 +39,7 @@ Notes:
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/wa-child-cover-final_orig.jpg | `_originals/album-cover-2025.jpg` | `album-cover-2025-400.webp`, `album-cover-2025-800.webp`, `album-cover-2025-800.jpg` |
 | Marie 2025 | `_originals/album-cover-2024.png` | `album-cover-2024-400.webp`, `album-cover-2024-800.webp`, `album-cover-2024-1215.webp`, `album-cover-2024-1215.png` |
 | John 2025 (About page wallpaper) | `_originals/about-wallpaper.jpg` | `about-wallpaper-400.webp`, `about-wallpaper-800.webp`, `about-wallpaper-906.webp`, `about-wallpaper-906.jpg` |
+| Marie 2025 (Music page wallpaper) | `_originals/music-wallpaper.jpg` | `music-wallpaper-400.webp`, `music-wallpaper-800.webp`, `music-wallpaper-1414.webp`, `music-wallpaper-1414.jpg` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/20_orig.png | `_originals/self-titled-photo-20.png` | `self-titled-photo-20-400.webp`, `self-titled-photo-20-800.webp`, `self-titled-photo-20-1080.webp`, `self-titled-photo-20-1080.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/18_orig.png | `_originals/self-titled-photo-18.png` | `self-titled-photo-18-400.webp`, `self-titled-photo-18-800.webp`, `self-titled-photo-18-1080.webp`, `self-titled-photo-18-1080.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/insa_3.png | `_originals/social-instagram.png` | `social-instagram-400.webp`, `social-instagram-800.webp`, `social-instagram-800.png` |
