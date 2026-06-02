@@ -1467,6 +1467,35 @@ button {
   border: 0;
 }
 
+/* Originals & Covers — two side-by-side columns on wide screens, each a centred
+   heading pill over its two videos stacked vertically. Below 1024px it collapses
+   to a single stacked column (heading, its videos, next heading, its videos),
+   which is the mobile flow unchanged. */
+.video-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  max-width: var(--container-narrow);
+  margin-inline: auto;
+}
+.video-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+/* The flex gap sets the spacing to the first video; drop the heading's own
+   bottom margin so it doesn't double up. */
+.video-column .section__title { margin-bottom: 0; }
+
+@media (min-width: 1024px) {
+  .video-columns {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-7);
+    max-width: var(--container);
+    align-items: start;
+  }
+}
+
 /* --------------------------------------------------------------------------
    Utilities
    -------------------------------------------------------------------------- */
