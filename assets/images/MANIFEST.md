@@ -38,6 +38,9 @@ Notes:
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/background-images/445896950.jpg | `_originals/band-photo-home.jpg` | `band-photo-home-400.webp`, `band-photo-home-800.webp`, `band-photo-home-1600.webp`, `band-photo-home-1600.jpg` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/wa-child-cover-final_orig.jpg | `_originals/album-cover-2025.jpg` | `album-cover-2025-400.webp`, `album-cover-2025-800.webp`, `album-cover-2025-800.jpg` |
 | Marie 2025 | `_originals/album-cover-2024.png` | `album-cover-2024-400.webp`, `album-cover-2024-800.webp`, `album-cover-2024-1215.webp`, `album-cover-2024-1215.png` |
+| Wild Animal — Acoustic cover (2020) | `_originals/album-cover-2020.jpg` | `album-cover-2020-400.webp`, `album-cover-2020-800.webp`, `album-cover-2020-1600.webp`, `album-cover-2020-1600.jpg` |
+| Wild Animal — Self-Titled cover (2019) | `_originals/album-cover-2019.jpg` | `album-cover-2019-400.webp`, `album-cover-2019-800.webp`, `album-cover-2019-1600.webp`, `album-cover-2019-1600.jpg` |
+| Wild Animal — Neither Predator Nor Prey cover (2016) | `_originals/album-cover-2016.jpg` | `album-cover-2016-400.webp`, `album-cover-2016-800.webp`, `album-cover-2016-1600.webp`, `album-cover-2016-1600.jpg` |
 | John 2025 (About page wallpaper) | `_originals/about-wallpaper.jpg` | `about-wallpaper-400.webp`, `about-wallpaper-800.webp`, `about-wallpaper-906.webp`, `about-wallpaper-906.jpg` |
 | Marie 2025 (Music page wallpaper) | `_originals/music-wallpaper.jpg` | `music-wallpaper-400.webp`, `music-wallpaper-800.webp`, `music-wallpaper-1414.webp`, `music-wallpaper-1414.jpg` |
 | Marie 2025 (Live page wallpaper) | `_originals/live-wallpaper.jpg` | `live-wallpaper-400.webp`, `live-wallpaper-800.webp`, `live-wallpaper-1414.webp`, `live-wallpaper-1414.jpg` |

@@ -21,6 +21,8 @@
     var nextBtn = carousel.querySelector('[data-carousel-next]');
     var thumb = carousel.querySelector('[data-carousel-thumb]');
     var status = carousel.querySelector('[data-carousel-status]');
+    var prevCover = prevBtn && prevBtn.querySelector('[data-carousel-cover]');
+    var nextCover = nextBtn && nextBtn.querySelector('[data-carousel-cover]');
     var items = track ? track.children : [];
     if (!track || !controls || !prevBtn || !nextBtn || !thumb || !items.length) return;
 
@@ -57,6 +59,38 @@
       });
     }
 
+    // Dress a nav button as the album it points to: that album's cover art
+    // with the chevron floated over it, and an aria-label naming the
+    // destination. The ends of the carousel (out of range) and any album
+    // without cover art fall back to the plain chevron on the paper fill.
+    function dressButton(btn, cover, idx, verb) {
+      var inRange = idx >= 0 && idx < items.length;
+      var src = inRange ? items[idx].getAttribute('data-cover') : null;
+      if (cover && src) {
+        cover.onerror = function () {
+          cover.onerror = null;
+          cover.removeAttribute('src');
+          btn.classList.remove('carousel__arrow--has-cover');
+        };
+        cover.src = src;
+        btn.classList.add('carousel__arrow--has-cover');
+      } else if (cover) {
+        cover.onerror = null;
+        cover.removeAttribute('src');
+        btn.classList.remove('carousel__arrow--has-cover');
+      }
+      var label = verb + ' album';
+      if (inRange) {
+        var title = items[idx].querySelector('.album__title');
+        var year = items[idx].querySelector('.album__year');
+        if (title) {
+          label += ': ' + title.textContent.trim();
+          if (year) label += ' (' + year.textContent.trim() + ')';
+        }
+      }
+      btn.setAttribute('aria-label', label);
+    }
+
     // Reflect continuous scroll position: thumb width = visible fraction of
     // the track (~one panel of five), offset = progress across the rest.
     var lastIndex = -1;
@@ -73,12 +107,15 @@
       prevBtn.disabled = i <= 0;
       nextBtn.disabled = i >= items.length - 1;
 
-      // The slider is aria-hidden, so this visually-hidden live region is the
-      // position signal for screen-reader and keyboard users. Announce only
-      // when the album actually changes, not every rAF scroll tick.
-      if (status && i !== lastIndex) {
+      // Swap the button covers and the live-region announcement only when the
+      // album actually changes, not every rAF scroll tick. The slider is
+      // aria-hidden, so this visually-hidden live region is the position
+      // signal for screen-reader and keyboard users.
+      if (i !== lastIndex) {
         lastIndex = i;
-        status.textContent = 'Album ' + (i + 1) + ' of ' + items.length;
+        dressButton(prevBtn, prevCover, i - 1, 'Previous');
+        dressButton(nextBtn, nextCover, i + 1, 'Next');
+        if (status) status.textContent = 'Album ' + (i + 1) + ' of ' + items.length;
       }
     }
 

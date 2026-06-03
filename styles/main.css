@@ -1332,9 +1332,9 @@ button {
 .album__title {
   font-size: var(--fs-2xl);
   margin: 0;
-  /* Keep the title clear of the floated controls cluster (two 44px arrows
-     + their gap + breathing room) at the panel's top-right. */
-  padding-right: calc(88px + var(--space-2) + var(--space-4));
+  /* Keep the title clear of the floated controls cluster (two 56px cover
+     buttons + their gap + breathing room) at the panel's top-right. */
+  padding-right: calc(112px + var(--space-2) + var(--space-4));
 }
 .album__title a { color: var(--color-text-strong); }
 .album__title a:hover,
@@ -1416,15 +1416,17 @@ button {
   .carousel__indicator-thumb { transition: none; }
 }
 .carousel__arrow {
+  position: relative;   /* cover art is positioned within; chevron sits above */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
   border: 1px solid var(--color-rule);
-  border-radius: 2px;
+  border-radius: 6px;
   background: var(--color-bg);
   color: var(--color-text-strong);
+  overflow: hidden;     /* clip the cover art to the rounded tile */
   pointer-events: auto;
   transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
 }
@@ -1438,6 +1440,35 @@ button {
   cursor: default;
   border-color: var(--color-rule);
   color: var(--color-text-strong);
+}
+
+/* The button wears the cover art of the album it points to. JS adds
+   --has-cover once an album with art is the target; ends of the carousel and
+   albums without art yet keep the plain chevron on the paper fill. */
+.carousel__arrow__cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.carousel__arrow--has-cover .carousel__arrow__cover { display: block; }
+
+.carousel__arrow__chevron {
+  position: relative;   /* above the cover art */
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Over art, the chevron rides a dark scrim disc so it reads on any cover. */
+.carousel__arrow--has-cover .carousel__arrow__chevron {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-bg);
 }
 .carousel__arrow svg {
   display: block;

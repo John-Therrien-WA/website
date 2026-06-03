@@ -39,7 +39,7 @@ nav_active: music
 
           <div class="carousel" data-carousel>
           <ol class="discography" reversed tabindex="0" aria-label="Wild Animal discography — scroll horizontally to browse releases" data-carousel-track>
-            <li class="album">
+            <li class="album" data-cover="{{ '/assets/images/album-cover-2025-400.webp' | relative_url }}">
               <p class="album__year">2025</p>
               <h3 class="album__title"><a href="{{ '/self-titled2025.html' | relative_url }}">Self-Titled</a></h3>
               <p class="album__format">Album</p>
@@ -52,7 +52,7 @@ nav_active: music
               <a class="album__cta" href="{{ '/self-titled2025.html' | relative_url }}">Explore the album &rarr;</a>
             </li>
 
-            <li class="album">
+            <li class="album" data-cover="{{ '/assets/images/album-cover-2024-400.webp' | relative_url }}">
               <p class="album__year">2024</p>
               <h3 class="album__title"><a href="{{ '/magisches-theater.html' | relative_url }}">Magisches Theater</a></h3>
               <p class="album__format">Album</p>
@@ -65,7 +65,7 @@ nav_active: music
               <a class="album__cta" href="{{ '/magisches-theater.html' | relative_url }}">Explore the album &rarr;</a>
             </li>
 
-            <li class="album">
+            <li class="album" data-cover="{{ '/assets/images/album-cover-2020-400.webp' | relative_url }}">
               <p class="album__year">2020</p>
               <h3 class="album__title"><a href="https://wildanimal.bandcamp.com/album/acoustic">Acoustic</a></h3>
               <p class="album__format">Album</p>
@@ -77,7 +77,7 @@ nav_active: music
               <p class="album__fallback"><a href="https://wildanimal.bandcamp.com/album/acoustic">Acoustic by Wild Animal</a></p>
             </li>
 
-            <li class="album">
+            <li class="album" data-cover="{{ '/assets/images/album-cover-2019-400.webp' | relative_url }}">
               <p class="album__year">2019</p>
               <h3 class="album__title"><a href="https://wildanimal.bandcamp.com/album/wild-animal">Self-Titled</a></h3>
               <p class="album__format">Album</p>
@@ -89,7 +89,7 @@ nav_active: music
               <p class="album__fallback"><a href="https://wildanimal.bandcamp.com/album/wild-animal">Wild Animal by Wild Animal</a></p>
             </li>
 
-            <li class="album">
+            <li class="album" data-cover="{{ '/assets/images/album-cover-2016-400.webp' | relative_url }}">
               <p class="album__year">2016</p>
               <h3 class="album__title"><a href="https://wildanimal.bandcamp.com/album/neither-predator-nor-prey-demos">Neither Predator Nor Prey</a></h3>
               <p class="album__format">Demos</p>
@@ -105,10 +105,16 @@ nav_active: music
           <div class="carousel__controls" data-carousel-controls hidden>
             <div class="carousel__arrows">
               <button type="button" class="carousel__arrow carousel__arrow--prev" data-carousel-prev aria-label="Previous album">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="15 5 8 12 15 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <img class="carousel__arrow__cover" data-carousel-cover alt="" aria-hidden="true" width="56" height="56">
+                <span class="carousel__arrow__chevron">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="15 5 8 12 15 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
               </button>
               <button type="button" class="carousel__arrow carousel__arrow--next" data-carousel-next aria-label="Next album">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="9 5 16 12 9 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <img class="carousel__arrow__cover" data-carousel-cover alt="" aria-hidden="true" width="56" height="56">
+                <span class="carousel__arrow__chevron">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="9 5 16 12 9 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
               </button>
             </div>
             <div class="carousel__indicator" aria-hidden="true">
