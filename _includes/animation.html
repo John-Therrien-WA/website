@@ -15,9 +15,10 @@
      faster than text and both columns finish together.
 
      Optional background wallpaper: set data-wallpaper="<selector>" to a
-     fixed, full-bleed, oversized-and-clipped <picture>/<img> elsewhere on
-     the page. The SAME single rAF/scroll loop pans that image slower than
-     the page so content slides over it — no second scroll system. The
+     fixed, full-bleed <picture>/<img> (laid out full-width, so taller than
+     the viewport) elsewhere on the page. The SAME single rAF/scroll loop pans
+     that image so a full scroll reveals it top to bottom — no second scroll
+     system. The
      wallpaper drift is active >=768px and freezes to a static background
      below it; it also honors prefers-reduced-motion: reduce. The column
      parallax (>=1024px) and the wallpaper drift (>=768px) are independent
@@ -202,9 +203,14 @@
         }
       }
 
-      // Wallpaper drift — driven by whole-page scroll progress, panning the
-      // oversized fixed image within its clip so edges never show. Slower
-      // than the scroll, so page content slides over it.
+      // Wallpaper drift — driven by whole-page scroll progress. The image is
+      // laid out at full width (height:auto), so offsetHeight is its real
+      // rendered height; slack is everything past the viewport. We translate
+      // from 0 (image top flush with page top) to -slack (image bottom flush
+      // with page foot), so a full scroll reveals the whole image top to
+      // bottom. slack is 0 when the image is shorter than the viewport (very
+      // tall/narrow screens) — then it sits static and full-bleed. Recomputed
+      // here every frame, so it self-corrects on resize.
       if (this._wallActive && this._wallpaper) {
         const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
         const y = window.scrollY || window.pageYOffset || 0;

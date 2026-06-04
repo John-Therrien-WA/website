@@ -804,13 +804,19 @@ button {
 }
 
 /* ==========================================================================
-   Wallpaper pages — shared by About, Music, Live
+   Wallpaper pages — shared by About, Music, Live, Lyrics, Musings, and the
+   album release + lyrics pages.
    A fixed, full-bleed photo layer driven by <parallax-layout data-wallpaper>.
    The body paints the paper colour behind it (z-index:-1); transparent content
    gutters let it show through; text sits on frosted cards and media (photos,
    embeds) get rounded corners so everything reads as one family. The image is
-   oversized + clipped so the parallax pan never reveals an edge; the pan runs
-   >=768px and freezes to a static background below it.
+   laid out at full width (height:auto) so its whole height is in flow; the
+   parallax then pans it from its top edge (page top) to its bottom edge (page
+   foot), so a full scroll traverses the entire image at any viewport size —
+   the JS reads the rendered height and recomputes the travel on resize.
+   min-height + object-fit:cover keep it full-bleed (cropping, not stretching)
+   on the rare viewport taller than the image. The pan runs >=768px and freezes
+   to a static background below it.
    ========================================================================== */
 .wallpaper {
   position: fixed;
@@ -822,7 +828,8 @@ button {
 .wallpaper img {
   display: block;
   width: 100%;
-  height: 130vh;
+  height: auto;
+  min-height: 100%;
   object-fit: cover;
   object-position: center;
 }
