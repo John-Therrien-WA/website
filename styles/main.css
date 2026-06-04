@@ -855,6 +855,18 @@ button {
     backdrop-filter: blur(14px);
   }
 }
+
+/* Opaque variant — an exception for wallpapers whose art is dark and busy
+   enough that the default 50% glass muddies the paper-tuned text colours
+   (Musings' starfield + candlelit scene drag the gold kicker and sage
+   read-time down). Leaning the card to ~85% paper lets those accents read
+   true while a sliver of bleed and the frosted edge keep it in the family.
+   Opt in per page by adding this modifier to the .wallpaper-host. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .wallpaper-host--opaque .wallpaper-card {
+    background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+  }
+}
 .wallpaper-card > :first-child { margin-top: 0; }
 .wallpaper-card > :last-child { margin-bottom: 0; }
 
