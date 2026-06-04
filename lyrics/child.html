@@ -6,8 +6,18 @@ permalink: "/lyrics/child.html"
 nav_active: lyrics
 ---
 
-<main id="main" class="page">
-  <div class="container container--narrow">
+<main id="main">
+  <picture class="wallpaper child-wallpaper" aria-hidden="true">
+    <source type="image/webp"
+            srcset="{{ '/assets/images/child-wallpaper-400.webp' | relative_url }} 400w, {{ '/assets/images/child-wallpaper-800.webp' | relative_url }} 800w, {{ '/assets/images/child-wallpaper-1414.webp' | relative_url }} 1414w"
+            sizes="100vw">
+    <img src="{{ '/assets/images/child-wallpaper-1414.jpg' | relative_url }}" alt="" width="1414" height="2000">
+  </picture>
+
+  <parallax-layout class="wallpaper-host" data-wallpaper=".child-wallpaper">
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
     <p class="lyric-back"><a href="{{ '/lyrics.html' | relative_url }}">&larr; Back to Lyrics</a></p>
 
     <header class="lyric-album-header">
@@ -370,5 +380,8 @@ In einem Tanz aus Stille und Ewigkeit​​</pre>
     </article>
 
     <p class="lyric-back"><a href="{{ '/lyrics.html' | relative_url }}">&larr; Back to Lyrics</a></p>
-  </div>
+        </div>
+      </div>
+    </section>
+  </parallax-layout>
 </main>

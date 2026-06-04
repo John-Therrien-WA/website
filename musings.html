@@ -5,8 +5,18 @@ description: Musings — Wild Animal.
 nav_active: musings
 ---
 
-<main id="main" class="page">
-  <div class="container container--narrow">
+<main id="main">
+  <picture class="wallpaper musings-wallpaper" aria-hidden="true">
+    <source type="image/webp"
+            srcset="{{ '/assets/images/musings-wallpaper-400.webp' | relative_url }} 400w, {{ '/assets/images/musings-wallpaper-800.webp' | relative_url }} 800w, {{ '/assets/images/musings-wallpaper-1414.webp' | relative_url }} 1414w"
+            sizes="100vw">
+    <img src="{{ '/assets/images/musings-wallpaper-1414.jpg' | relative_url }}" alt="" width="1414" height="2000">
+  </picture>
+
+  <parallax-layout class="wallpaper-host" data-wallpaper=".musings-wallpaper">
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
     <h1 class="page__title">
       <picture>
         <source type="image/webp"
@@ -17,7 +27,13 @@ nav_active: musings
       <span class="visually-hidden">Musings</span>
     </h1>
     <p class="page__lede">Thoughts, musings, and everything in between by John Patrick Therrien</p>
+        </div>
+      </div>
+    </section>
 
+    <section class="section section--alt">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
     {% for m in site.data.musings %}
     <article class="essay-listing">
       <p class="essay-listing__category">{{ m.category }}</p>
@@ -33,5 +49,8 @@ nav_active: musings
       <p class="essay-listing__cta"><a href="{{ m.url | relative_url }}">Read the full {{ m.category | upcase }}</a></p>
     </article>
     {% endfor %}
-  </div>
+        </div>
+      </div>
+    </section>
+  </parallax-layout>
 </main>

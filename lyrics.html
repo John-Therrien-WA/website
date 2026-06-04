@@ -5,8 +5,18 @@ description: Lyrics — Wild Animal.
 nav_active: lyrics
 ---
 
-<main id="main" class="page">
-  <div class="container container--narrow">
+<main id="main">
+  <picture class="wallpaper lyrics-wallpaper" aria-hidden="true">
+    <source type="image/webp"
+            srcset="{{ '/assets/images/lyrics-wallpaper-400.webp' | relative_url }} 400w, {{ '/assets/images/lyrics-wallpaper-800.webp' | relative_url }} 800w, {{ '/assets/images/lyrics-wallpaper-1414.webp' | relative_url }} 1414w"
+            sizes="100vw">
+    <img src="{{ '/assets/images/lyrics-wallpaper-1414.jpg' | relative_url }}" alt="" width="1414" height="2000">
+  </picture>
+
+  <parallax-layout class="wallpaper-host" data-wallpaper=".lyrics-wallpaper">
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
     <h1 class="page__title">
       <picture>
         <source type="image/webp"
@@ -42,7 +52,13 @@ nav_active: lyrics
         </li>
       </ul>
     </section>
+        </div>
+      </div>
+    </section>
 
+    <section class="section section--alt">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
     <section class="lyric-other">
       <h2 class="lyric-other__heading">Other songs</h2>
 
@@ -159,5 +175,8 @@ But I can't fix it
 No, not with any song</pre>
       </article>
     </section>
-  </div>
+        </div>
+      </div>
+    </section>
+  </parallax-layout>
 </main>

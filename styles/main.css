@@ -865,7 +865,10 @@ button {
    Covers About's single-column DOM and its desktop two-column split. */
 .about__layout > picture img,
 .about__layout .parallax-layout__inner > picture img,
-.wallpaper-host .video-embed {
+.wallpaper-host .video-embed,
+.wallpaper-host .news__cover,
+.wallpaper-host .single__media img,
+.wallpaper-host .single__media .single-placeholder {
   border-radius: 12px;
 }
 
