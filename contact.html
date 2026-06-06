@@ -5,68 +5,97 @@ description: Contact Wild Animal — get in touch with John Patrick and Marie Th
 nav_active: contact
 ---
 
-<main id="main" class="page">
-  <div class="container container--narrow">
-    <h1 class="page__title">
-      <picture>
-        <source type="image/webp"
-                srcset="{{ '/assets/images/heading-contact-400.webp' | relative_url }} 400w, {{ '/assets/images/heading-contact-800.webp' | relative_url }} 800w, {{ '/assets/images/heading-contact-1280.webp' | relative_url }} 1280w"
-                sizes="(max-width: 768px) 88vw, 420px">
-        <img src="{{ '/assets/images/heading-contact-1280.png' | relative_url }}" alt="" width="1280" height="720">
-      </picture>
-      <span class="visually-hidden">Contact</span>
-    </h1>
-    <p class="page__lede">John Patrick and Marie Therrien</p>
+<main id="main">
+  <picture class="wallpaper contact-wallpaper" aria-hidden="true">
+    <source type="image/webp"
+            srcset="{{ '/assets/images/contact-wallpaper-400.webp' | relative_url }} 400w, {{ '/assets/images/contact-wallpaper-800.webp' | relative_url }} 800w, {{ '/assets/images/contact-wallpaper-1414.webp' | relative_url }} 1414w"
+            sizes="100vw">
+    <img src="{{ '/assets/images/contact-wallpaper-1414.jpg' | relative_url }}" alt="" width="1414" height="2000">
+  </picture>
 
-    <figure class="contact__photo">
-      <picture>
-        <source type="image/webp"
-                srcset="{{ '/assets/images/band-photo-contact-400.webp' | relative_url }} 400w, {{ '/assets/images/band-photo-contact-800.webp' | relative_url }} 800w, {{ '/assets/images/band-photo-contact-1065.webp' | relative_url }} 1065w"
-                sizes="(max-width: 768px) 90vw, 760px">
-        <img src="{{ '/assets/images/band-photo-contact-1065.jpg' | relative_url }}" alt="Wild Animal — John Patrick and Marie Therrien" width="1065" height="1600">
-      </picture>
-      <figcaption class="contact__credit">Foto: www.ejafoto.com</figcaption>
-    </figure>
-
-    <section class="contact-form" aria-labelledby="contact-form-heading">
-      <h2 id="contact-form-heading">Get in touch</h2>
-      <p class="contact-form__hint"><span aria-hidden="true">*</span> Indicates required field</p>
-
-      <form method="POST" action="https://formspree.io/f/xrerdlga" class="form">
-        <input type="hidden" name="_subject" value="Wild Animal — new contact form message">
-        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none">
-
-        <fieldset class="form__group form__group--name">
-          <legend class="form__legend">Name <span class="form__required" aria-hidden="true">*</span></legend>
-          <div class="form__row">
-            <div class="form__field">
-              <label for="firstname">First</label>
-              <input type="text" id="firstname" name="firstname" required autocomplete="given-name">
-            </div>
-            <div class="form__field">
-              <label for="lastname">Last</label>
-              <input type="text" id="lastname" name="lastname" required autocomplete="family-name">
-            </div>
-          </div>
-        </fieldset>
-
-        <div class="form__field">
-          <label for="email">Email <span class="form__required" aria-hidden="true">*</span></label>
-          <input type="email" id="email" name="email" required autocomplete="email">
+  <parallax-layout class="wallpaper-host" data-wallpaper=".contact-wallpaper">
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
+          <h1 class="page__title">
+            <picture>
+              <source type="image/webp"
+                      srcset="{{ '/assets/images/heading-contact-400.webp' | relative_url }} 400w, {{ '/assets/images/heading-contact-800.webp' | relative_url }} 800w, {{ '/assets/images/heading-contact-1280.webp' | relative_url }} 1280w"
+                      sizes="(max-width: 768px) 88vw, 420px">
+              <img src="{{ '/assets/images/heading-contact-1280.png' | relative_url }}" alt="" width="1280" height="720">
+            </picture>
+            <span class="visually-hidden">Contact</span>
+          </h1>
+          <p class="page__lede">John Patrick and Marie Therrien</p>
         </div>
-
-        <div class="form__field">
-          <label for="message">Message <span class="form__required" aria-hidden="true">*</span></label>
-          <textarea id="message" name="message" rows="6" required placeholder="Schreib uns was… wir beißen nicht."></textarea>
-        </div>
-
-        <button type="submit" class="btn btn--primary">Send</button>
-      </form>
+      </div>
     </section>
 
-    <blockquote class="quote">
-      <p><em>Ich denke oft in Musik. Ich lebe meine Tagträume in der Musik. Ich sehe mein Leben in Termini von Musik.</em></p>
-      <cite>— Albert Einstein</cite>
-    </blockquote>
-  </div>
+    <section class="section">
+      <div class="container container--narrow">
+        <figure class="contact__photo">
+          <picture>
+            <source type="image/webp"
+                    srcset="{{ '/assets/images/band-photo-contact-400.webp' | relative_url }} 400w, {{ '/assets/images/band-photo-contact-800.webp' | relative_url }} 800w, {{ '/assets/images/band-photo-contact-1065.webp' | relative_url }} 1065w"
+                    sizes="(max-width: 768px) 90vw, 760px">
+            <img src="{{ '/assets/images/band-photo-contact-1065.jpg' | relative_url }}" alt="Wild Animal — John Patrick and Marie Therrien" width="1065" height="1600">
+          </picture>
+          <figcaption class="contact__credit">Foto: www.ejafoto.com</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
+          <section class="contact-form" aria-labelledby="contact-form-heading">
+            <h2 id="contact-form-heading">Get in touch</h2>
+            <p class="contact-form__hint"><span aria-hidden="true">*</span> Indicates required field</p>
+
+            <form method="POST" action="https://formspree.io/f/xrerdlga" class="form">
+              <input type="hidden" name="_subject" value="Wild Animal — new contact form message">
+              <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none">
+
+              <fieldset class="form__group form__group--name">
+                <legend class="form__legend">Name <span class="form__required" aria-hidden="true">*</span></legend>
+                <div class="form__row">
+                  <div class="form__field">
+                    <label for="firstname">First</label>
+                    <input type="text" id="firstname" name="firstname" required autocomplete="given-name">
+                  </div>
+                  <div class="form__field">
+                    <label for="lastname">Last</label>
+                    <input type="text" id="lastname" name="lastname" required autocomplete="family-name">
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="form__field">
+                <label for="email">Email <span class="form__required" aria-hidden="true">*</span></label>
+                <input type="email" id="email" name="email" required autocomplete="email">
+              </div>
+
+              <div class="form__field">
+                <label for="message">Message <span class="form__required" aria-hidden="true">*</span></label>
+                <textarea id="message" name="message" rows="6" required placeholder="Schreib uns was… wir beißen nicht."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn--primary">Send</button>
+            </form>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
+          <blockquote class="quote">
+            <p><em>Ich denke oft in Musik. Ich lebe meine Tagträume in der Musik. Ich sehe mein Leben in Termini von Musik.</em></p>
+            <cite>— Albert Einstein</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+  </parallax-layout>
 </main>

@@ -968,13 +968,14 @@ button {
    Contact page
    -------------------------------------------------------------------------- */
 .contact__photo {
-  margin: var(--space-7) auto 0;
+  margin: 0 auto;
   max-width: 520px;
   text-align: center;
 }
 .contact__photo img {
   width: 100%;
   height: auto;
+  border-radius: 12px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
 }
 .contact__credit {
