@@ -638,7 +638,8 @@ button {
 .essay-listing:last-child { border-bottom: 0; }
 
 .essay-listing__date,
-.essay__dateline {
+.essay__dateline,
+.poem__dateline {
   margin: 0 0 var(--space-3);
   font-size: var(--fs-xs);
   text-transform: uppercase;
@@ -650,7 +651,8 @@ button {
 }
 
 .essay__read-time,
-.essay-listing__read-time {
+.essay-listing__read-time,
+.poem__read-time {
   color: var(--color-accent-sage);
 }
 
@@ -728,6 +730,52 @@ button {
 .dialogue__speaker { font-weight: 700; }
 .dialogue__speaker--campbell { color: var(--color-accent); }
 .dialogue__speaker--jung { color: var(--color-accent-sage); }
+
+/* Trip-Tea-Chron — a three-panel poem (triptych) exposed inline on the
+   musings index rather than linked as a sub-page. The panels cascade in a
+   staircase: each column starts one step lower than the last, so the eye
+   travels top-left to bottom-right through the three stanzas. Below the
+   three-up breakpoint the staircase resets and the panels stack into a
+   single reading column. */
+.poem { padding: var(--space-4) 0; --poem-step: var(--space-8); }
+.poem__kicker {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-accent);
+}
+.poem__title {
+  font-size: var(--fs-2xl);
+  margin-bottom: var(--space-7);
+}
+.poem__panels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+@media (min-width: 720px) {
+  .poem__panels {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+  /* Staircase: Warten drops one step below Vergangen; Zu, the short stanza,
+     bottom-aligns to the row (whose depth Warten sets) so its foot lands on
+     Warten's, anchoring the bottom-right corner. */
+  .poem__panel:nth-child(2) { margin-top: var(--poem-step); }
+  .poem__panel:nth-child(3) { align-self: end; }
+}
+.poem__panel-title {
+  font-size: var(--fs-lg);
+  font-style: italic;
+  margin-bottom: var(--space-3);
+  color: var(--color-accent-sage);
+}
+.poem__verse {
+  margin: 0;
+  line-height: var(--lh-snug);
+}
 
 /* --------------------------------------------------------------------------
    parallax-layout — differential-speed two-column parallax
