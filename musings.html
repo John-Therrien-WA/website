@@ -3,17 +3,13 @@ layout: default
 title: Musings
 description: Musings — Wild Animal.
 nav_active: musings
+wallpaper: musings
 ---
 
 <main id="main">
-  <picture class="wallpaper musings-wallpaper" aria-hidden="true">
-    <source type="image/webp"
-            srcset="{{ '/assets/images/musings-wallpaper-400.webp' | relative_url }} 400w, {{ '/assets/images/musings-wallpaper-800.webp' | relative_url }} 800w, {{ '/assets/images/musings-wallpaper-1414.webp' | relative_url }} 1414w"
-            sizes="100vw">
-    <img src="{{ '/assets/images/musings-wallpaper-1414.jpg' | relative_url }}" alt="" width="1414" height="2000">
-  </picture>
+  {% include wallpaper.html name=page.wallpaper %}
 
-  <parallax-layout class="wallpaper-host wallpaper-host--opaque" data-wallpaper=".musings-wallpaper">
+  <parallax-layout class="wallpaper-host wallpaper-host--opaque" data-wallpaper=".{{ page.wallpaper }}-wallpaper">
     <section class="section">
       <div class="container container--narrow">
         <div class="wallpaper-card">

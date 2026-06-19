@@ -1,0 +1,25 @@
+{%- comment -%}
+  Fixed, full-bleed wallpaper <picture> for a wallpaper-host page. See the
+  "Wallpaper pages" block in styles/main.css and <parallax-layout> in
+  _includes/animation.html for the mechanism. Pair this with a wallpaper-host
+  whose data-wallpaper selector is ".{name}-wallpaper" — both derive from the
+  same name, so they can't drift.
+
+  Params:
+    name   — image basename in assets/images/. e.g. "musings" pulls
+             musings-wallpaper-{400,800,1414}.webp + musings-wallpaper-1414.jpg
+             (the standard variant set produced by scripts/build-images.js).
+    width  — intrinsic width  of the fallback img (default 1414).
+    height — intrinsic height of the fallback img (default 2000).
+
+  A page gets its own background by pointing its `wallpaper` front matter at a
+  different basename and adding that image set — no markup change here.
+{%- endcomment -%}
+{%- assign wp = include.name -%}
+{%- assign base = '/assets/images/' | append: wp | append: '-wallpaper-' -%}
+<picture class="wallpaper {{ wp }}-wallpaper" aria-hidden="true">
+  <source type="image/webp"
+          srcset="{{ base | append: '400.webp' | relative_url }} 400w, {{ base | append: '800.webp' | relative_url }} 800w, {{ base | append: '1414.webp' | relative_url }} 1414w"
+          sizes="100vw">
+  <img src="{{ base | append: '1414.jpg' | relative_url }}" alt="" width="{{ include.width | default: 1414 }}" height="{{ include.height | default: 2000 }}">
+</picture>

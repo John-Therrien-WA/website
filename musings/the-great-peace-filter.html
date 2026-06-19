@@ -4,10 +4,16 @@ title: "Musings — The Great Peace Filter"
 description: "Wild Animal musings: The Great Peace Filter — Where is Everybody?"
 permalink: "/musings/the-great-peace-filter.html"
 nav_active: musings
+wallpaper: musings
 ---
 
-<main id="main" class="page">
-  <div class="container container--narrow">
+<main id="main">
+  {% include wallpaper.html name=page.wallpaper %}
+
+  <parallax-layout class="wallpaper-host wallpaper-host--opaque" data-wallpaper=".{{ page.wallpaper }}-wallpaper">
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
     <p class="essay-back"><a href="{{ '/musings.html' | relative_url }}">&larr; Back to Musings</a></p>
 
     <article class="essay">
@@ -107,5 +113,8 @@ nav_active: musings
     </article>
 
     <p class="essay-back"><a href="{{ '/musings.html' | relative_url }}">&larr; Back to Musings</a></p>
-  </div>
+        </div>
+      </div>
+    </section>
+  </parallax-layout>
 </main>
