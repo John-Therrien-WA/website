@@ -1035,6 +1035,14 @@ button {
   opacity: 0.75;
 }
 
+/* Photo-credit link keeps the caption's own colour rather than the accent. */
+.contact__credit a,
+.contact__credit a:hover,
+.contact__credit a:focus-visible {
+  color: inherit;
+  text-decoration: underline;
+}
+
 .contact-form {
   margin-top: var(--space-8);
 }
