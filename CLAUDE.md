@@ -6,6 +6,20 @@ John (technical, runs Claude Code) and Marie (writes copy via the Claude Code
 desktop app; not a coder). `README.md` is the human-facing setup doc; this file
 is the LLM-facing operating contract.
 
+## On entering this repo: sync `main` first
+
+**Before anything else (before edits, a preview server, or branching), bring
+local `main` up to date.** Marie's merges advance `origin/main` independently, so
+working from a stale base risks silently reverting her changes.
+
+```
+git fetch origin && git merge --ff-only origin/main
+```
+
+If it can't fast-forward (local has diverged or carries unpushed commits) or the
+working tree is dirty, stop and surface that rather than forcing anything. Then
+identify the operator:
+
 ## First: who is this — John or Marie?
 
 **Before anything else in a session, establish who you're working with.** If it
