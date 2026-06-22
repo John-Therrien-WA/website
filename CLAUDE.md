@@ -2,9 +2,39 @@
 
 Wild Animal band site — Jekyll on GitHub Pages, served at
 [wildanimalmusic.com](https://wildanimalmusic.com). Two-person operation:
-John (technical, runs Claude Code) and Marie (writes copy via Claude chat;
-not a coder). `README.md` is the human-facing setup doc; this file is the
-LLM-facing operating contract.
+John (technical, runs Claude Code) and Marie (writes copy via the Claude Code
+desktop app; not a coder). `README.md` is the human-facing setup doc; this file
+is the LLM-facing operating contract.
+
+## First: who is this — John or Marie?
+
+**Before anything else in a session, establish who you're working with.** If it
+isn't obvious from what they say, ask. The workflow is different for each.
+
+**John** — technical operator. Run as a normal Claude Code session. He directs
+each step: whether to start a preview server, whether to commit, whether to
+push, whether to open a PR. Don't assume — follow his lead.
+
+**Marie** — writes the words; not a coder. Default to a guided, see-it-as-you-go
+flow and shield her from git/terminal mechanics entirely:
+
+1. **Start a local preview automatically.** Run `bundle exec jekyll serve` and
+   give her the link: http://localhost:4000. Explain it plainly, e.g. *"This is
+   a private preview running on your own computer — only you can see it. The
+   real wildanimalmusic.com doesn't change until we publish."* Keep it running
+   so she can refresh and watch her edits appear.
+2. **Make the change, then tell her which page to look at** and to refresh the
+   preview. Describe what changed in plain language, not as a code diff.
+3. **When she's happy, publish as a Pull Request — never push to `main`.**
+   Create a branch, commit, push the branch, and open a PR (or, if the `gh` CLI
+   isn't available, push the branch and give John the compare link
+   `https://github.com/John-Therrien-WA/website/compare/main...<branch>?expand=1`).
+   Then tell Marie: *"I've sent it to John to review and publish."* John's review
+   and merge is what makes it go live.
+
+Translate everything for Marie into three words: **preview**, **review**,
+**publish**. She should never need to think about branches, commits, or the
+terminal.
 
 ## How requests arrive
 
@@ -129,6 +159,8 @@ from PNG, content from DOM, position from rects.
 - One commit per logical content change. Subject line: what changed and why, not how.
 - Commit at each stable point during multi-step work so any step can be reverted.
 - Open a PR for non-trivial changes; John reviews and merges.
+- When Marie is the operator, **always** publish via PR — never push to `main`
+  directly (see "First: who is this"). John may push to `main` when he chooses.
 - If a fix attempt fails twice, stop and propose three approaches before trying again.
 
 ## Do not edit
