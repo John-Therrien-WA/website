@@ -161,6 +161,11 @@ from PNG, content from DOM, position from rects.
 - Open a PR for non-trivial changes; John reviews and merges.
 - When Marie is the operator, **always** publish via PR — never push to `main`
   directly (see "First: who is this"). John may push to `main` when he chooses.
+- On contributor PRs, request John as reviewer: if `gh api user --jq .login` is
+  not `John-Therrien-WA`, add `--reviewer John-Therrien-WA` to `gh pr create` so
+  the PR lands in John's "Review requests" tab and notifies him. (John authors no
+  PRs of his own; if he ever does, skip the flag, since GitHub rejects a
+  self-review request.)
 - If a fix attempt fails twice, stop and propose three approaches before trying again.
 
 ## Do not edit
