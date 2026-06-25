@@ -1399,6 +1399,10 @@ button {
 
 .album {
   display: grid;
+  /* Cap the single column to the panel width so a long title can't widen the
+     grid track and push the Bandcamp player past the panel edge (its right
+     rim — the "bc" logo — would otherwise bleed into the neighbouring slide). */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   align-content: start;
   flex: 0 0 100%;
@@ -1420,6 +1424,12 @@ button {
   /* Keep the title clear of the floated controls cluster (two 56px cover
      buttons + their gap + breathing room) at the panel's top-right. */
   padding-right: calc(112px + var(--space-2) + var(--space-4));
+}
+/* On the narrow phone panel the large title leaves too little room beside the
+   controls, forcing a long word to break mid-way; step it down so it wraps at
+   word boundaries. Tablet/desktop keep the larger size. */
+@media (max-width: 480px) {
+  .album__title { font-size: var(--fs-lg); }
 }
 .album__title a { color: var(--color-text-strong); }
 .album__title a:hover,

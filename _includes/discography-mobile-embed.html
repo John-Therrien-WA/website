@@ -1,0 +1,20 @@
+<!-- The Bandcamp "large" player (with artwork=small) drops the cover and crops
+     the tracklist once it gets too narrow (phones), so the carousel looks
+     broken there. When a player renders below ~430px wide, switch it to the
+     cover-forward layout (drop artwork=small) at a taller height so the album
+     art shows and nothing is cut. Wider players (tablet/desktop) keep the
+     compact tracklist layout untouched. Decided per rendered width, not by a
+     viewport breakpoint, so it adapts to the actual player size. -->
+<script>
+  (function () {
+    var frames = document.querySelectorAll('.album__embed iframe');
+    for (var i = 0; i < frames.length; i++) {
+      var f = frames[i];
+      var src = f.getAttribute('src') || '';
+      if (src.indexOf('artwork=small') === -1) continue;
+      if (f.offsetWidth === 0 || f.offsetWidth >= 430) continue;  // wide enough: keep compact
+      f.setAttribute('src', src.replace('/artwork=small', ''));
+      f.style.height = '470px';
+    }
+  })();
+</script>
