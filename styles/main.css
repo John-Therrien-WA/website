@@ -628,6 +628,22 @@ button {
   .page { padding: var(--space-7) 0; }
 }
 
+/* Legal pages (Impressum + Datenschutz only use .page): headings that scale
+   with the viewport and wrap instead of overflowing, and justified body copy
+   with German hyphenation (the pages set lang="de") to avoid ugly gaps. */
+.page .page__title {
+  font-size: clamp(1.8rem, 7vw, 3rem);
+  overflow-wrap: break-word;
+}
+.page h2 {
+  font-size: clamp(1.35rem, 4.8vw, 2.25rem);
+  overflow-wrap: break-word;
+}
+.page p {
+  text-align: justify;
+  hyphens: auto;
+}
+
 /* --------------------------------------------------------------------------
    Musings — index listings and essay sub-pages
    -------------------------------------------------------------------------- */
