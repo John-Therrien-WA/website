@@ -45,7 +45,7 @@
 </audio>
 
 <button id="wa-sound-toggle" class="sound-toggle" type="button"
-        aria-pressed="false" aria-label="Musik einschalten">
+        aria-pressed="false" aria-label="Musik einschalten" title="„Hey“ — Wild Animal">
   <!-- speaker + sound waves (playing) -->
   <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor"
        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -119,6 +119,17 @@
     audio.addEventListener('pause', reflect);
     setInterval(savePos, 1000);
     window.addEventListener('pagehide', savePos);
+
+    // Don't talk over an embedded player. Clicking into a Bandcamp/YouTube
+    // iframe moves focus there and blurs the window; if that happens while
+    // "Hey" is playing, pause it so the two don't overlap. (Cross-origin
+    // iframes don't expose their own play events, so focus is the signal.)
+    window.addEventListener('blur', function () {
+      if (audio.paused) return;
+      var el = document.activeElement;
+      if (el && el.tagName === 'IFRAME') { audio.pause(); savePos(); }
+    });
+
     reflect();
   })();
 </script>
