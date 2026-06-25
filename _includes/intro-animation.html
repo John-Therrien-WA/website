@@ -1,0 +1,333 @@
+<!-- Fullscreen intro: gold animal tracks walk to centre on a dark overlay,
+     then the wordmark fades in and the overlay lifts to reveal the page.
+     Self-contained (markup + style + script); plays once per visit. -->
+<style>
+  .wa-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-text-strong);
+    opacity: 1;
+    transition: opacity 800ms ease;
+  }
+  .wa-intro.is-hidden { opacity: 0; pointer-events: none; }
+  .wa-intro__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .wa-intro__title {
+    position: relative;
+    text-align: center;
+    padding: 0 6vw;
+    opacity: 0;
+    transition: opacity 900ms ease;
+  }
+  .wa-intro.is-titled .wa-intro__title { opacity: 1; }
+  /* The wordmark art is dark ink (built to sit on light pages); force it to
+     white so it reads on the dark intro overlay. Shape/alpha are preserved. */
+  .wa-intro__wordmark {
+    display: block;
+    width: min(680px, 78vw);
+    height: auto;
+    margin: 0 auto;
+    filter: brightness(0) invert(1);
+  }
+  .wa-intro__tagline {
+    margin: var(--space-4) 0 0;
+    color: var(--color-accent);
+    font-family: var(--font-sans);
+    font-size: var(--fs-lg);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+  /* Honour reduced-motion at the CSS level too, as a belt-and-braces skip. */
+  @media (prefers-reduced-motion: reduce) {
+    .wa-intro { display: none; }
+  }
+</style>
+
+<div class="wa-intro" id="wa-intro" role="presentation" aria-hidden="true">
+  <canvas class="wa-intro__canvas" id="wa-intro-canvas"></canvas>
+  <div class="wa-intro__title">
+    <img class="wa-intro__wordmark"
+         src="{{ '/assets/images/wordmark-home-1312.png' | relative_url }}"
+         alt="Wild Animal" width="1312" height="669">
+    <p class="wa-intro__tagline">Indie-Pop-Rock for Philosophical Souls</p>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var overlay = document.getElementById('wa-intro');
+    if (!overlay) return;
+
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var played = false;
+    try { played = sessionStorage.getItem('waIntroPlayed') === '1'; } catch (e) {}
+
+    // Already seen this visit (or reduced motion): remove synchronously, before
+    // the first paint, so the page shows immediately with no dark flash.
+    if (reduce || played) {
+      if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      return;
+    }
+    try { sessionStorage.setItem('waIntroPlayed', '1'); } catch (e) {}
+
+    var canvas = document.getElementById('wa-intro-canvas');
+    var ctx = canvas.getContext('2d');
+    var W, H, dpr;
+    var GOLD = (getComputedStyle(document.documentElement)
+                  .getPropertyValue('--color-accent') || '#a88d2e').trim();
+
+    function size() {
+      dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    size();
+
+    // --- paw prints, drawn centred at (0,0) with "forward" pointing up ---
+    function ellipse(cx, cy, rx, ry) {
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    function drawWolf(s) {                 // canine: heel pad + four toes
+      ellipse(0, 0.45 * s, 0.50 * s, 0.58 * s);
+      ellipse(-0.46 * s, -0.22 * s, 0.17 * s, 0.27 * s);
+      ellipse(-0.16 * s, -0.50 * s, 0.17 * s, 0.29 * s);
+      ellipse(0.16 * s, -0.50 * s, 0.17 * s, 0.29 * s);
+      ellipse(0.46 * s, -0.22 * s, 0.17 * s, 0.27 * s);
+    }
+    function drawBear(s) {                 // broad plantar pad + five clawed toes
+      ellipse(0, 0.50 * s, 0.72 * s, 0.46 * s);
+      var tx = [-0.62, -0.32, 0, 0.32, 0.62];
+      var ty = [-0.18, -0.42, -0.52, -0.42, -0.18];
+      for (var i = 0; i < 5; i++) {
+        ellipse(tx[i] * s, ty[i] * s, 0.15 * s, 0.20 * s);
+        ctx.beginPath();
+        ctx.moveTo((tx[i] - 0.06) * s, (ty[i] - 0.16) * s);
+        ctx.lineTo((tx[i] + 0.06) * s, (ty[i] - 0.16) * s);
+        ctx.lineTo(tx[i] * s, (ty[i] - 0.34) * s);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+    function drawDino(s) {                 // theropod: three long clawed toes
+      var toes = [-0.62, 0, 0.62];
+      for (var i = 0; i < 3; i++) {
+        ctx.save();
+        ctx.rotate(toes[i]);
+        ctx.beginPath();
+        ctx.moveTo(-0.13 * s, 0.35 * s);
+        ctx.quadraticCurveTo(-0.16 * s, -0.50 * s, 0, -0.95 * s);
+        ctx.quadraticCurveTo(0.16 * s, -0.50 * s, 0.13 * s, 0.35 * s);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+      ellipse(0, 0.40 * s, 0.20 * s, 0.20 * s);
+    }
+    var drawers = { wolf: drawWolf, bear: drawBear, dino: drawDino };
+
+    // draw one paw: a soft dark shadow (depth) beneath a gold top, plus a slight
+    // press-in scale as it appears — so it reads as stepping into the surface
+    function drawPaw(animal, x, y, angle, s, alpha, dim) {
+      var a = Math.min(1, alpha);
+      var sc = 1.18 - 0.18 * a;                          // stamp down as it lands
+      ctx.save();                                        // shadow (light from top-left)
+      ctx.translate(x + 2, y + 3);
+      ctx.rotate(angle + Math.PI / 2);
+      ctx.scale(sc, sc);
+      ctx.globalAlpha = a * 0.45 * dim;
+      ctx.fillStyle = '#000';
+      drawers[animal](s);
+      ctx.restore();
+      ctx.save();                                        // gold top
+      ctx.translate(x, y);
+      ctx.rotate(angle + Math.PI / 2);
+      ctx.scale(sc, sc);
+      ctx.globalAlpha = a * dim;
+      ctx.fillStyle = GOLD;
+      drawers[animal](s);
+      ctx.restore();
+    }
+    function drawPrint(p) { drawPaw(p.animal, p.x, p.y, p.angle, p.s, p.alpha, 1); }
+
+    // --- three trails, each entering from a different direction ---
+    function rand(a, b) { return a + Math.random() * (b - a); }
+    var cx = W / 2, cy = H / 2;
+    var prints = [];
+    function edgeDist(theta) {                            // centre -> screen edge
+      var ux = Math.abs(Math.cos(theta)), uy = Math.abs(Math.sin(theta));
+      var tx = ux > 1e-6 ? (W / 2) / ux : Infinity;
+      var ty = uy > 1e-6 ? (H / 2) / uy : Infinity;
+      return Math.min(tx, ty);
+    }
+    // everything scales with the smaller screen dimension, so trails never
+    // crowd or overlap on small screens
+    var u = Math.min(W, H);
+    var pawSize = Math.max(15, Math.min(28, u * 0.034));   // per-print size
+    var stride = Math.max(6, u * 0.018);                   // lateral paw offset
+    var stopR = Math.max(34, Math.min(90, u * 0.12));      // trails stop this far
+                                                           // short of centre
+    function buildTrail(animal, theta) {
+      var ux = Math.cos(theta), uy = Math.sin(theta);
+      var px = -uy, py = ux;                               // perpendicular
+      var start = edgeDist(theta) * 0.92;                  // just inside the edge
+      var ang = theta + Math.PI;                           // walking toward centre
+      var span = Math.max(1, start - stopR);
+      var steps = Math.max(3, Math.min(6, Math.round(span / (u * 0.13))));
+      for (var i = 0; i < steps; i++) {
+        var t = steps > 1 ? i / (steps - 1) : 1;           // 0 = edge .. 1 = stop
+        var d = start - span * t;                          // edge -> stopR
+        var lat = (i % 2 ? 1 : -1) * stride;               // alternate paw
+        prints.push({
+          animal: animal,
+          x: cx + ux * d + px * lat + rand(-4, 4),
+          y: cy + uy * d + py * lat + rand(-4, 4),
+          angle: ang + rand(-0.12, 0.12),
+          s: pawSize + rand(-3, 3),
+          alpha: 0
+        });
+      }
+    }
+    // three directions ~120 degrees apart, with a random overall rotation. each
+    // trail keeps to its own sector and stops short of the centre, so they fan
+    // out without crossing at any screen size.
+    var base = rand(0, Math.PI * 2);
+    buildTrail('wolf', base);
+    buildTrail('bear', base + 2 * Math.PI / 3);
+    buildTrail('dino', base + 4 * Math.PI / 3);
+    // a final dino paw steps into dead centre — the convergence point the
+    // curtain opens from
+    prints.push({
+      animal: 'dino', x: cx, y: cy,
+      angle: base + 4 * Math.PI / 3 + Math.PI + rand(-0.1, 0.1),
+      s: pawSize + rand(-3, 3), alpha: 0     // same size as the other prints
+    });
+
+    // --- paw prints that follow the cursor (desktop pointers only) ---
+    var cursorPrints = [];
+    var canHover = !window.matchMedia ||
+                   window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var lastCursor = null, cursorTick = 0;
+    var cursorAnimals = ['wolf', 'bear', 'dino'];
+    function onMove(e) {
+      if (revealed) return;
+      var x = e.clientX, y = e.clientY;
+      if (lastCursor) {
+        var ddx = x - lastCursor.x, ddy = y - lastCursor.y;
+        if (ddx * ddx + ddy * ddy < 46 * 46) return;     // ~one print per 46px
+        var ang = Math.atan2(ddy, ddx);
+        var lat = (cursorTick % 2 ? 1 : -1) * 9;         // alternate paw
+        cursorPrints.push({
+          animal: cursorAnimals[cursorTick % 3],
+          x: x - Math.sin(ang) * lat,
+          y: y + Math.cos(ang) * lat,
+          angle: ang + rand(-0.1, 0.1),
+          s: rand(16, 20), alpha: 0, age: 0
+        });
+        if (cursorPrints.length > 40) cursorPrints.shift();
+        cursorTick++;
+      }
+      lastCursor = { x: x, y: y };
+    }
+    if (canHover) window.addEventListener('mousemove', onMove);
+
+    // --- play ---
+    var revealed = false, timers = [], shown = 0;
+    function later(fn, ms) { var id = setTimeout(fn, ms); timers.push(id); return id; }
+
+    function drawCursorPrint(p) { drawPaw(p.animal, p.x, p.y, p.angle, p.s, p.alpha, 0.85); }
+    function redraw() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < shown; i++) drawPrint(prints[i]);
+      for (var j = 0; j < cursorPrints.length; j++) drawCursorPrint(cursorPrints[j]);
+    }
+    function frame() {                                   // one continuous loop
+      if (revealed) return;
+      for (var i = 0; i < shown; i++) {
+        if (prints[i].alpha < 1) prints[i].alpha = Math.min(1, prints[i].alpha + 1 / 8);
+      }
+      for (var j = cursorPrints.length - 1; j >= 0; j--) {
+        var c = cursorPrints[j];
+        c.age++;
+        if (c.age <= 6) c.alpha = c.age / 6;             // fade in
+        else if (c.age > 36) c.alpha = Math.max(0, 1 - (c.age - 36) / 30);  // fade out
+        if (c.age > 66) cursorPrints.splice(j, 1);
+      }
+      redraw();
+      requestAnimationFrame(frame);
+    }
+    function step() {
+      if (revealed) return;
+      if (shown < prints.length - 1) {                   // hold back the centre print
+        shown++;
+        var next = prints[shown];
+        var slow = next && next.animal === 'dino';       // the dino walks slower
+        later(step, slow ? 320 : 200);
+      } else {
+        later(showTitle, 800);                           // pause, then wordmark
+      }
+    }
+    function showTitle() {
+      if (revealed) return;
+      overlay.classList.add('is-titled');                // wordmark + tagline fade in
+      later(hideTitle, 1700);
+    }
+    function hideTitle() {
+      if (revealed) return;
+      overlay.classList.remove('is-titled');             // fade the text back out (900ms)
+      later(centreStep, 950);                            // once the text is gone...
+    }
+    function centreStep() {
+      if (revealed) return;
+      shown++;                                           // ...the final paw lands dead centre
+      later(openCurtain, 750);                           // a beat, then the curtain opens
+    }
+    function openCurtain() {
+      if (revealed) return;
+      revealed = true;                                   // stop the cursor trail + main loop
+      window.removeEventListener('mousemove', onMove);
+      for (var i = 0; i < timers.length; i++) clearTimeout(timers[i]);
+      var maxR = Math.sqrt(W * W + H * H) / 2 + 40;      // centre -> far corner
+      var t0 = performance.now(), dur = 1400;            // curtain opens gently
+      (function anim(now) {
+        var t = Math.min(1, (now - t0) / dur);
+        var e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;  // ease in-out
+        var r = e * maxR;
+        var g = 'radial-gradient(circle at ' + cx + 'px ' + cy + 'px, transparent ' +
+                r + 'px, #000 ' + (r + 1) + 'px)';       // growing hole = page showing
+        overlay.style.webkitMaskImage = g;
+        overlay.style.maskImage = g;
+        if (t < 1) requestAnimationFrame(anim);
+        else if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      })(t0);
+    }
+    function reveal() {
+      if (revealed) return;
+      revealed = true;
+      window.removeEventListener('mousemove', onMove);
+      for (var i = 0; i < timers.length; i++) clearTimeout(timers[i]);
+      overlay.classList.add('is-hidden');                // fade overlay out, 800ms
+      setTimeout(function () {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      }, 850);
+    }
+
+    overlay.addEventListener('click', reveal);           // click anywhere = skip
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') reveal();
+    });
+    window.addEventListener('resize', function () {
+      if (!revealed) { size(); redraw(); }
+    });
+    setTimeout(reveal, 15000);                            // failsafe: never stay covered
+
+    try { requestAnimationFrame(frame); step(); } catch (e) { reveal(); }
+  })();
+</script>
