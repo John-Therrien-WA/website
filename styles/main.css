@@ -868,7 +868,13 @@ button {
    ========================================================================== */
 .wallpaper {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;        /* fallback for browsers without large-viewport units */
+  height: 100lvh;       /* size to the largest viewport, so the mobile URL bar
+                           showing/hiding never exposes a gap (white bar) or
+                           re-crops the image as the visible height changes */
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
