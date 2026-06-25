@@ -1,0 +1,124 @@
+<!-- Site background music: the song "Hey", played quietly. Browsers block autoplay with
+     sound, so playback starts on the visitor's first interaction (pointer /
+     key / scroll). A visible toggle lets them mute; the choice and the play
+     position are remembered across page loads (sessionStorage) so the loop
+     stays continuous as they navigate. Native HTML5 audio — no library, no
+     third-party request (consistent with the site's self-hosting / GDPR
+     stance). -->
+<style>
+  .sound-toggle {
+    position: fixed;
+    right: var(--space-5);
+    bottom: var(--space-5);
+    z-index: 60;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--color-accent);
+    border-radius: 50%;
+    background: var(--color-bg);
+    color: var(--color-accent);
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(42, 42, 42, 0.18);
+    transition: background 150ms ease, color 150ms ease;
+  }
+  .sound-toggle:hover,
+  .sound-toggle:focus-visible {
+    background: var(--color-accent);
+    color: var(--color-bg);
+  }
+  .sound-toggle svg { width: 22px; height: 22px; display: block; }
+  .sound-toggle .icon-on { display: none; }
+  .sound-toggle .icon-off { display: block; }
+  .sound-toggle.is-on .icon-on { display: block; }
+  .sound-toggle.is-on .icon-off { display: none; }
+  @media (max-width: 768px) {
+    .sound-toggle { right: var(--space-4); bottom: var(--space-4); }
+  }
+</style>
+
+<audio id="wa-audio" loop preload="none">
+  <source src="{{ '/assets/audio/hey.mp3' | relative_url }}" type="audio/mpeg">
+</audio>
+
+<button id="wa-sound-toggle" class="sound-toggle" type="button"
+        aria-pressed="false" aria-label="Musik einschalten">
+  <!-- speaker + sound waves (playing) -->
+  <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none"/>
+    <path d="M16.5 8.5a5 5 0 0 1 0 7"/>
+    <path d="M19 6a8.5 8.5 0 0 1 0 12"/>
+  </svg>
+  <!-- speaker + cross (muted) -->
+  <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none"/>
+    <line x1="16" y1="9" x2="21" y2="14"/>
+    <line x1="21" y1="9" x2="16" y2="14"/>
+  </svg>
+</button>
+
+<script>
+  (function () {
+    var audio = document.getElementById('wa-audio');
+    var btn = document.getElementById('wa-sound-toggle');
+    if (!audio || !btn) return;
+
+    var KEY = 'waSound';      // 'on' | 'off'  (default on)
+    var POS = 'waSoundPos';   // saved playback position, for seamless resume
+    audio.volume = 0.3;       // gentle background level
+
+    function get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+    function set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+
+    function reflect() {
+      var on = !audio.paused;
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.setAttribute('aria-label', on ? 'Musik ausschalten' : 'Musik einschalten');
+    }
+    function savePos() { if (!audio.paused) set(POS, String(audio.currentTime || 0)); }
+    function resume() {
+      var p = parseFloat(get(POS));
+      if (p > 0 && isFinite(audio.duration) && p < audio.duration) audio.currentTime = p;
+    }
+    function ensureStarted() {
+      if (audio.readyState >= 1) resume();
+      else audio.addEventListener('loadedmetadata', resume, { once: true });
+      var pr = audio.play();
+      if (pr && pr.catch) pr.catch(function () { /* still blocked; a later gesture retries */ });
+    }
+
+    // Start on the first user interaction (autoplay-policy compliant), unless
+    // the visitor has chosen to keep it off this visit.
+    function onGesture() {
+      detach();
+      if (get(KEY) !== 'off') ensureStarted();
+    }
+    function detach() {
+      window.removeEventListener('pointerdown', onGesture, true);
+      window.removeEventListener('keydown', onGesture, true);
+      window.removeEventListener('scroll', onGesture, true);
+    }
+    if (get(KEY) !== 'off') {
+      window.addEventListener('pointerdown', onGesture, true);
+      window.addEventListener('keydown', onGesture, true);
+      window.addEventListener('scroll', onGesture, { capture: true, passive: true });
+    }
+
+    btn.addEventListener('click', function () {
+      if (audio.paused) { set(KEY, 'on'); ensureStarted(); }
+      else { audio.pause(); set(KEY, 'off'); savePos(); }
+    });
+
+    audio.addEventListener('play', reflect);
+    audio.addEventListener('pause', reflect);
+    setInterval(savePos, 1000);
+    window.addEventListener('pagehide', savePos);
+    reflect();
+  })();
+</script>
