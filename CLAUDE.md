@@ -68,8 +68,10 @@ _layouts/default.html      Page scaffolding (head, header, footer, script)
 _includes/                 head, header, footer, script — iterate _data/nav.yml
 _data/nav.yml              Primary nav (label, href, key) — single source of truth
 _data/musings.yml          Musings index records — category drives the label + CTA
-*.html                     One file per page: front matter + <main> body
-lyrics/, musings/          Per-album lyric pages and per-essay pages
+*.html                     EN page: front matter + <main> body, or a thin {% include %} wrapper
+lyrics/, musings/          EN lyric/essay pages — bodies live in _includes/content/ (see Bilingual content)
+_includes/content/         Shared lyric/essay bodies, included by the EN and de/ wrappers alike
+de/                        German site: lyric/musing wrappers + standalone twins of every other page
 styles/main.css            Design system; :root token block at top, then page styles
 assets/images/             Generated responsive variants — do not hand-edit
 _originals/                Source images, committed; never linked from HTML
@@ -94,15 +96,37 @@ one of these files. If a request doesn't fit, ask which entry to extend.
 | Request | File(s) |
 |---|---|
 | Add or rename a primary nav item | `_data/nav.yml` (header + footer iterate it) |
-| Edit the homepage news block or hero | `index.html` |
-| Edit about-page bio | `about.html` |
-| Edit contact text or photo credit | `contact.html` |
-| Add or edit lyrics | `lyrics/<album>.html` |
-| Add a musing | new `musings/<slug>.html`; add a record to `_data/musings.yml` (the listing iterates it) |
-| Add a release page | new `<slug>.html` at root; link from `music.html` |
+| Edit the homepage news block or hero | `index.html` (+ DE twin `de/index.html`) |
+| Edit about-page bio | `about.html` (+ DE twin `de/about.html`) |
+| Edit contact text or photo credit | `contact.html` (+ DE twin `de/contact.html`) |
+| Add or edit lyrics | `_includes/content/lyrics-<album>.html` (shared body; EN + DE both render it) |
+| Add a musing | new `_includes/content/musings-<slug>.html` (shared body) + EN wrapper `musings/<slug>.html` + DE wrapper `de/musings/<slug>.html`; add a record to `_data/musings.yml` (the listing iterates it) |
+| Add a release page | new `<slug>.html` at root + DE twin `de/<slug>.html`; link from `music.html` and `de/music.html` |
 | Change site title or description | `_config.yml` |
 | Change a color, font size, spacing, layout token | `styles/main.css` `:root` block |
 | Add or replace an image | drop file in `_originals/`, run `node scripts/build-images.js`, update `assets/images/MANIFEST.md`, reference variants from HTML |
+
+## Bilingual content (EN / DE)
+
+The site is mirrored in German under `de/`. There are two patterns, and editing
+the wrong file is how EN and DE silently diverge (and how content edited in
+parallel collides at merge time):
+
+- **Lyrics and musings share one body.** The real content lives in
+  `_includes/content/<page>.html`; the EN page (`musings/<slug>.html`) and the DE
+  page (`de/musings/<slug>.html`) are thin wrappers that `{% include %}` it.
+  **Edit the include, never the wrapper** — one edit updates both languages.
+  Chrome (category, dates, read-time, back-link) localizes through the `i18n-*`
+  includes off `page.lang`; the body prose is shared (English today, translated
+  in place when ready). A DE wrapper carries `lang: de`, a `ref:` matching its
+  EN twin, and a `/de/...` permalink, then includes the shared body.
+- **Every other page has a standalone German twin** at `de/<name>.html` (`index`,
+  `about`, `contact`, `live`, `music`, release pages). No shared source — an EN
+  edit does **not** propagate; change both files together.
+
+Never put body content back into a lyrics/musings wrapper: a change to the wrapper
+while the include is edited elsewhere is precisely the conflict that collides on
+merge.
 
 ## Front matter
 
