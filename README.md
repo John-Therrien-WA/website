@@ -129,8 +129,8 @@ in `_config.yml` to be absolute.
 To change which card a page uses:
 
 - **Pick an existing card** — map the page's `ref` in `_data/og_images.yml`
-  (one entry covers the English page and its German twin), or set
-  `image: /assets/images/<card>.jpg` in the page's front matter.
+  (German pages use the entry's `de` card when present, else the English one),
+  or set `image: /assets/images/<card>.jpg` in the page's front matter.
 - **Add or restyle a card** — edit the `CARDS` list in
   `scripts/build-og-cards.js`, then run:
 
@@ -138,9 +138,11 @@ To change which card a page uses:
   node scripts/build-og-cards.js
   ```
 
-  Cards are built from `_originals/`: band photos and wallpapers get a
-  cropped fill, album covers get centered on a blurred backdrop. Record new
-  cards in `assets/images/MANIFEST.md` and commit them.
+  Two styles: **cinematic** (a darkened band photo or wallpaper under the band's
+  hand-lettered title — the home card uses the "Wild Animal" wordmark, section
+  pages their page heading plus a small signature) and **album** (the square
+  cover floated on a blurred backdrop). German pages get the `-de` lettering
+  variant. Record new cards in `assets/images/MANIFEST.md` and commit them.
 
 ## Deploy
 

@@ -143,12 +143,13 @@ merge.
 Every page emits Open Graph, Twitter Card, and canonical tags via
 `_includes/meta.html` (pulled into the head after `head.html`); no page needs
 setup to get a valid card. The share image resolves in order: a page's own
-`image:` front matter → `_data/og_images.yml` keyed by the page `ref` (one entry
-covers the EN page and its DE twin) → `site.og_image_default`. Cards are fixed
-1200×630 JPEGs built by `scripts/build-og-cards.js` from `_originals/` (photo
-cover-crop or album composite). The tags use absolute URLs, which is why
-`_config.yml` sets `url:`. Optional per-page front matter: `image`, `image_alt`,
-`og_type`.
+`image:` front matter → `_data/og_images.yml` keyed by the page `ref` (German
+pages take the entry's `de` card when present, else `en`) → `site.og_image_default`.
+Cards are fixed 1200×630 JPEGs built by `scripts/build-og-cards.js` from
+`_originals/`: **cinematic** (a darkened band photo/wallpaper under Marie's
+hand-lettered title) or **album** (the cover on a blurred backdrop). The tags use
+absolute URLs, which is why `_config.yml` sets `url:`. Optional per-page front
+matter: `image`, `image_alt`, `og_type`.
 
 ## Front matter
 

@@ -17,7 +17,8 @@
   {%- assign meta_title = 'Wild Animal — Indie-Pop-Rock for Philosophical Souls' -%}
 {%- endif -%}
 {%- assign meta_desc = page.description | default: site.description -%}
-{%- assign ref_image = site.data.og_images[page.ref] -%}
+{%- assign og_entry = site.data.og_images[page.ref] -%}
+{%- if page.lang == 'de' and og_entry.de -%}{%- assign ref_image = og_entry.de -%}{%- else -%}{%- assign ref_image = og_entry.en -%}{%- endif -%}
 {%- assign meta_image = page.image | default: ref_image | default: site.og_image_default | absolute_url -%}
 {%- assign meta_alt = page.image_alt | default: site.title -%}
 {%- assign meta_type = page.og_type | default: 'website' -%}
