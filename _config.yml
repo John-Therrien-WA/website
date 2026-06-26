@@ -8,4 +8,5 @@ exclude:
   - scripts
   - _originals
   - README.md
+  - CLAUDE.md
   - Research
