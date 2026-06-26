@@ -187,6 +187,49 @@ button {
   padding-bottom: var(--space-3);
 }
 
+.site-header__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+.lang-switch__link {
+  color: var(--color-text);
+  font-weight: 500;
+  padding: var(--space-1) 0;
+}
+.lang-switch__link:hover,
+.lang-switch__link:focus-visible {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+.lang-switch__link[aria-current='true'] {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+.lang-switch__sep {
+  color: var(--color-rule);
+}
+
+/* Placeholder marker for not-yet-written German copy. Visible only on the
+   /de/ pages while drafts are filled in; remove the class once real text is in. */
+.lang-todo {
+  display: block;
+  color: var(--color-accent-hover);
+  font-style: italic;
+  border-left: 3px solid var(--color-accent);
+  padding-left: var(--space-3);
+}
+
 .site-logo {
   display: block;
   flex: 0 0 auto;

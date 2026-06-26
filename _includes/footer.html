@@ -39,14 +39,23 @@
       </a></li>
     </ul>
 
+    {%- assign curlang = page.lang | default: 'en' -%}
     <ul class="footer-nav" aria-label="Footer">
       {%- for item in site.data.nav %}
-      <li><a href="{{ item.href | relative_url }}">{{ item.label }}</a></li>
+      {%- assign target_url = item.href -%}
+      {%- assign label = item.label -%}
+      {%- if curlang == 'de' -%}
+        {%- if item.label_de %}{%- assign label = item.label_de -%}{%- endif -%}
+        {%- for p in site.pages -%}
+          {%- if p.ref == item.key and p.lang == 'de' -%}{%- assign target_url = p.url -%}{%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+      <li><a href="{{ target_url | relative_url }}">{{ label }}</a></li>
       {%- endfor %}
-      <li><a href="{{ '/impressum.html' | relative_url }}">Legal Notice</a></li>
-      <li><a href="{{ '/datenschutz.html' | relative_url }}">Privacy</a></li>
+      <li><a href="{{ '/impressum.html' | relative_url }}">{% if curlang == 'de' %}Impressum{% else %}Legal Notice{% endif %}</a></li>
+      <li><a href="{{ '/datenschutz.html' | relative_url }}">{% if curlang == 'de' %}Datenschutz{% else %}Privacy{% endif %}</a></li>
     </ul>
 
-    <p class="site-footer__legal">&copy; Wild Animal. All rights reserved.</p>
+    <p class="site-footer__legal">&copy; Wild Animal. {% if curlang == 'de' %}Alle Rechte vorbehalten.{% else %}All rights reserved.{% endif %}</p>
   </div>
 </footer>

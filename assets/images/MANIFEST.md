@@ -24,6 +24,9 @@ Notes:
 | Marie 2025 | `_originals/heading-musings.png` | `heading-musings-400.webp`, `heading-musings-800.webp`, `heading-musings-1280.webp`, `heading-musings-1280.png` |
 | Marie 2025 | `_originals/heading-magisches-theater.png` | `heading-magisches-theater-400.webp`, `heading-magisches-theater-800.webp`, `heading-magisches-theater-1280.webp`, `heading-magisches-theater-1280.png` |
 | Marie 2025 | `_originals/heading-self-titled2025.png` | `heading-self-titled2025-400.webp`, `heading-self-titled2025-800.webp`, `heading-self-titled2025-1280.webp`, `heading-self-titled2025-1280.png` |
+| Marie 2025 | `_originals/heading-about-de.png` | `heading-about-de-400.webp`, `heading-about-de-800.webp`, `heading-about-de-1280.webp`, `heading-about-de-1280.png` |
+| Marie 2025 | `_originals/heading-music-de.png` | `heading-music-de-400.webp`, `heading-music-de-800.webp`, `heading-music-de-1280.webp`, `heading-music-de-1280.png` |
+| Marie 2025 | `_originals/heading-contact-de.png` | `heading-contact-de-400.webp`, `heading-contact-de-800.webp`, `heading-contact-de-1280.webp`, `heading-contact-de-1280.png` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/44-eja-4716-ejafoto-com-marie-john-30-11-2025_orig.jpg | `_originals/band-photo-01.jpg` | `band-photo-01-400.webp`, `band-photo-01-800.webp`, `band-photo-01-1100.webp`, `band-photo-01-1100.jpg` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/335-eja-5323-ejafoto-com-marie-john-30-11-2025_orig.jpg | `_originals/band-photo-02.jpg` | `band-photo-02-400.webp`, `band-photo-02-800.webp`, `band-photo-02-1100.webp`, `band-photo-02-1100.jpg` |
 | https://www.wildanimalmusic.com/uploads/1/3/0/7/130754475/144-eja-4913-ejafoto-com-marie-john-30-11-2025_orig.jpg | `_originals/band-photo-03.jpg` | `band-photo-03-400.webp`, `band-photo-03-800.webp`, `band-photo-03-1100.webp`, `band-photo-03-1100.jpg` |
