@@ -1,21 +1,28 @@
 - label: Home
+  label_de: Start
   href: /index.html
   key: home
 - label: About
+  label_de: Über uns
   href: /about.html
   key: about
 - label: Music
+  label_de: Musik
   href: /music.html
   key: music
 - label: Live
+  label_de: Live
   href: /live.html
   key: live
 - label: Lyrics
+  label_de: Lyrics
   href: /lyrics.html
   key: lyrics
 - label: Musings
+  label_de: Musings
   href: /musings.html
   key: musings
 - label: Contact
+  label_de: Kontakt
   href: /contact.html
   key: contact

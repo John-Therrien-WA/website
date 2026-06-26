@@ -1,6 +1,10 @@
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="site-logo" href="{{ '/index.html' | relative_url }}" aria-label="Wild Animal — home">
+    {%- assign curlang = page.lang | default: 'en' -%}
+    {%- assign home_href = '/index.html' -%}
+    {%- if curlang == 'de' %}{%- assign home_href = '/de/index.html' -%}{%- endif -%}
+
+    <a class="site-logo" href="{{ home_href | relative_url }}" aria-label="Wild Animal — home">
       <picture>
         <source type="image/webp"
                 srcset="{{ '/assets/images/wordmark-home-400.webp' | relative_url }} 400w, {{ '/assets/images/wordmark-home-800.webp' | relative_url }} 800w, {{ '/assets/images/wordmark-home-1312.webp' | relative_url }} 1312w"
@@ -9,16 +13,28 @@
       </picture>
     </a>
 
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation">
-      <span class="nav-toggle__bars" aria-hidden="true"></span>
-    </button>
+    <div class="site-header__right">
+      <nav class="site-nav" id="primary-nav" aria-label="Primary">
+        <ul class="site-nav__list">
+          {%- for item in site.data.nav %}
+          {%- assign target_url = item.href -%}
+          {%- assign label = item.label -%}
+          {%- if curlang == 'de' -%}
+            {%- if item.label_de %}{%- assign label = item.label_de -%}{%- endif -%}
+            {%- for p in site.pages -%}
+              {%- if p.ref == item.key and p.lang == 'de' -%}{%- assign target_url = p.url -%}{%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+          <li><a class="site-nav__link" href="{{ target_url | relative_url }}"{% if page.nav_active == item.key %} aria-current="page"{% endif %}>{{ label }}</a></li>
+          {%- endfor %}
+        </ul>
+      </nav>
 
-    <nav class="site-nav" id="primary-nav" aria-label="Primary">
-      <ul class="site-nav__list">
-        {%- for item in site.data.nav %}
-        <li><a class="site-nav__link" href="{{ item.href | relative_url }}"{% if page.nav_active == item.key %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
-        {%- endfor %}
-      </ul>
-    </nav>
+      {%- include lang-switch.html -%}
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation">
+        <span class="nav-toggle__bars" aria-hidden="true"></span>
+      </button>
+    </div>
   </div>
 </header>

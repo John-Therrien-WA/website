@@ -1,0 +1,23 @@
+{%- comment -%}
+  Language switcher (EN | DE). English lives at the site root; German lives
+  under /de/. Pages declare `lang` (en|de) and a shared `ref` key in their front
+  matter; this finds the counterpart page by matching `ref` across languages.
+  Pages without a `ref` (or with no translation yet) fall back to the language
+  home page.
+{%- endcomment -%}
+{%- assign curlang = page.lang | default: 'en' -%}
+{%- assign en_url = '/index.html' -%}
+{%- assign de_url = '/de/index.html' -%}
+{%- if page.ref -%}
+  {%- for p in site.pages -%}
+    {%- if p.ref == page.ref -%}
+      {%- if p.lang == 'de' -%}{%- assign de_url = p.url -%}{%- endif -%}
+      {%- if p.lang == 'en' or p.lang == nil -%}{%- assign en_url = p.url -%}{%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+<div class="lang-switch" role="group" aria-label="Language / Sprache">
+  <a class="lang-switch__link" lang="en" hreflang="en" href="{{ en_url | relative_url }}"{% if curlang == 'en' %} aria-current="true"{% endif %}>EN</a>
+  <span class="lang-switch__sep" aria-hidden="true">/</span>
+  <a class="lang-switch__link" lang="de" hreflang="de" href="{{ de_url | relative_url }}"{% if curlang == 'de' %} aria-current="true"{% endif %}>DE</a>
+</div>
