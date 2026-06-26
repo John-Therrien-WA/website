@@ -780,6 +780,34 @@ button {
   color: var(--color-text);
 }
 
+/* Sibling ads (Authentique / Vernac) sit side by side at desktop widths and
+   stack into one column below. The pair carries its own divider in place of the
+   horizontal rule that separates the other ads: a centred vertical rule between
+   the columns on wide screens, a horizontal rule between the stacked cards on
+   narrow ones. */
+.ad-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: var(--space-6) 0;
+}
+.ad-pair__col + .ad-pair__col {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-rule);
+}
+@media (min-width: 769px) {
+  .ad-pair { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .ad-pair__col { padding: 0 var(--space-6); }
+  .ad-pair__col:first-child { padding-left: 0; }
+  .ad-pair__col + .ad-pair__col {
+    margin-top: 0;
+    padding-top: 0;
+    padding-right: 0;
+    border-top: 0;
+    border-left: 1px solid var(--color-rule);
+  }
+}
+
 /* Two-voice dialogue: speaker label hangs, wrapped lines indent under it. */
 .dialogue__turn {
   margin: 0 0 var(--space-4);
