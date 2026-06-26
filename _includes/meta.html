@@ -1,0 +1,47 @@
+{%- comment -%}
+  Open Graph + Twitter Card + canonical tags, so a wildanimalmusic.com link
+  previews with an image, title, and blurb when pasted into LinkedIn, Slack,
+  iMessage, Facebook, Discord, X, WhatsApp, etc. Hand-rolled plain Liquid so it
+  builds identically on local Jekyll 4.x and GitHub Pages' 3.10. Pulled into the
+  <head> by _layouts/default.html, after head.html (which owns <title> and the
+  meta description and hreflang links).
+
+  Every page gets a valid card with zero per-page setup. Resolution order for the
+  share image: page front matter `image:` -> _data/og_images.yml keyed by page
+  `ref` -> site.og_image_default. All cards are 1200x630 (build-og-cards.js), so
+  the dimensions below are fixed. Optional front matter: image, image_alt, og_type.
+{%- endcomment -%}
+{%- if page.title -%}
+  {%- assign meta_title = page.title | append: ' — Wild Animal' -%}
+{%- else -%}
+  {%- assign meta_title = 'Wild Animal — Indie-Pop-Rock for Philosophical Souls' -%}
+{%- endif -%}
+{%- assign meta_desc = page.description | default: site.description -%}
+{%- assign ref_image = site.data.og_images[page.ref] -%}
+{%- assign meta_image = page.image | default: ref_image | default: site.og_image_default | absolute_url -%}
+{%- assign meta_alt = page.image_alt | default: site.title -%}
+{%- assign meta_type = page.og_type | default: 'website' -%}
+{%- if page.lang == 'de' -%}
+  {%- assign meta_locale = 'de_DE' -%}{%- assign meta_locale_alt = 'en_US' -%}
+{%- else -%}
+  {%- assign meta_locale = 'en_US' -%}{%- assign meta_locale_alt = 'de_DE' -%}
+{%- endif -%}
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:type" content="{{ meta_type }}">
+<meta property="og:title" content="{{ meta_title | xml_escape }}">
+<meta property="og:description" content="{{ meta_desc | xml_escape }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:image" content="{{ meta_image }}">
+<meta property="og:image:secure_url" content="{{ meta_image }}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ meta_alt | xml_escape }}">
+<meta property="og:locale" content="{{ meta_locale }}">
+<meta property="og:locale:alternate" content="{{ meta_locale_alt }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ meta_title | xml_escape }}">
+<meta name="twitter:description" content="{{ meta_desc | xml_escape }}">
+<meta name="twitter:image" content="{{ meta_image }}">
+<meta name="twitter:image:alt" content="{{ meta_alt | xml_escape }}">

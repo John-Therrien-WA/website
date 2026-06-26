@@ -65,9 +65,10 @@ against the verb-to-file map below — that map is the contract.
 
 ```
 _layouts/default.html      Page scaffolding (head, header, footer, script)
-_includes/                 head, header, footer, script — iterate _data/nav.yml
+_includes/                 head, meta, header, footer, script — iterate _data/nav.yml
 _data/nav.yml              Primary nav (label, href, key) — single source of truth
 _data/musings.yml          Musings index records — category drives the label + CTA
+_data/og_images.yml        Page ref -> 1200x630 social share card (see Social previews)
 *.html                     EN page: front matter + <main> body, or a thin {% include %} wrapper
 lyrics/, musings/          EN lyric/essay pages — bodies live in _includes/content/ (see Bilingual content)
 _includes/content/         Shared lyric/essay bodies, included by the EN and de/ wrappers alike
@@ -75,7 +76,8 @@ de/                        German site: lyric/musing wrappers + standalone twins
 styles/main.css            Design system; :root token block at top, then page styles
 assets/images/             Generated responsive variants — do not hand-edit
 _originals/                Source images, committed; never linked from HTML
-scripts/build-images.js    Generates assets/images/ from _originals/ (idempotent)
+scripts/build-images.js    Generates assets/images/ responsive variants from _originals/
+scripts/build-og-cards.js  Generates assets/images/og-*.jpg share cards from _originals/
 README.md                  Human-facing setup and conventions
 Research/                  Background research; excluded from Jekyll build
 ```
@@ -84,9 +86,15 @@ Research/                  Background research; excluded from Jekyll build
 
 - `bundle exec jekyll serve` — local preview at http://localhost:4000
 - `bundle exec jekyll build --safe` — full build; catches Liquid syntax errors
-- `node scripts/build-images.js` — regenerate `assets/images/` from `_originals/`
+- `node scripts/build-images.js` — regenerate `assets/images/` responsive variants
+- `node scripts/build-og-cards.js` — regenerate the 1200×630 Open Graph share cards
 - Push to `main` → GitHub Pages auto-deploys, live within ~1 minute.
   No GitHub Actions, no CI, no plugins beyond the GH Pages allowlist.
+- GitHub Pages builds with the `github-pages` gem (**Jekyll 3.10**); local is
+  **Jekyll 4.x** (`Gemfile`). A clean local build does not guarantee the deploy —
+  keep Liquid to the version-common subset. `.md` docs are excluded from the build
+  on purpose: `jekyll-optional-front-matter` runs every Markdown file through
+  Liquid, and these docs hold literal tag examples that Jekyll 3.10 would execute.
 
 ## Editor verb → file map
 
@@ -105,6 +113,8 @@ one of these files. If a request doesn't fit, ask which entry to extend.
 | Change site title or description | `_config.yml` |
 | Change a color, font size, spacing, layout token | `styles/main.css` `:root` block |
 | Add or replace an image | drop file in `_originals/`, run `node scripts/build-images.js`, update `assets/images/MANIFEST.md`, reference variants from HTML |
+| Change a page's social-share image | `_data/og_images.yml` (map the page's `ref`), or set `image:` in its front matter |
+| Add or restyle a share card | `scripts/build-og-cards.js` (`CARDS` list), then run it; record it in `assets/images/MANIFEST.md` |
 
 ## Bilingual content (EN / DE)
 
@@ -127,6 +137,18 @@ parallel collides at merge time):
 Never put body content back into a lyrics/musings wrapper: a change to the wrapper
 while the include is edited elsewhere is precisely the conflict that collides on
 merge.
+
+## Social previews (Open Graph)
+
+Every page emits Open Graph, Twitter Card, and canonical tags via
+`_includes/meta.html` (pulled into the head after `head.html`); no page needs
+setup to get a valid card. The share image resolves in order: a page's own
+`image:` front matter → `_data/og_images.yml` keyed by the page `ref` (one entry
+covers the EN page and its DE twin) → `site.og_image_default`. Cards are fixed
+1200×630 JPEGs built by `scripts/build-og-cards.js` from `_originals/` (photo
+cover-crop or album composite). The tags use absolute URLs, which is why
+`_config.yml` sets `url:`. Optional per-page front matter: `image`, `image_alt`,
+`og_type`.
 
 ## Front matter
 
