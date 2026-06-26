@@ -13,8 +13,13 @@
       <header class="essay__header">
         <p class="essay__category">{% include i18n-category.html category="Advertisement" %}</p>
         <h1 class="essay__title">Sponsored Product Offerings</h1>
-        <p class="essay__dateline">{% include i18n-date.html value="Berlin, May 2026" %} &middot; <span class="essay__read-time">{% include i18n-readtime.html value="5 min read" %}</span></p>
+        <p class="essay__dateline">{% include i18n-date.html value="Berlin, April&ndash;June 2026" %} &middot; <span class="essay__read-time">{% include i18n-readtime.html value="4 min read" %}</span></p>
       </header>
+
+      <div class="ad-pair">
+      <div class="ad-pair__col">
+
+      <p class="essay__dateline">{% if page.lang == 'de' %}Veröffentlicht{% else %}Posted{% endif %}: 2026-05-08</p>
 
       <p>LLMs don’t just write sentences.<br>
       They write sentences.</p>
@@ -53,7 +58,10 @@
       Join the waitlist — link in comments.<br>
       #Authenticity #Leadership #AI #H37P</p>
 
-      <hr>
+      </div>
+      <div class="ad-pair__col">
+
+      <p class="essay__dateline">{% if page.lang == 'de' %}Veröffentlicht{% else %}Posted{% endif %}: 2026-06-26</p>
 
       <p>You said you wanted to understand.<br>
       Now we just have to hope the thing you’re standing under supports itself.</p>
@@ -88,7 +96,12 @@
       Join the waitlist — link in comments.<br>
       #Clarity #Leadership #AI #H37P. I understand now. I would like that to stop.</p>
 
+      </div>
+      </div>
+
       <hr>
+
+      <p class="essay__dateline">{% if page.lang == 'de' %}Veröffentlicht{% else %}Posted{% endif %}: 2026-04-17</p>
 
       <p>Proud to introduce the GridSink™ Pro: the world’s first smart resistive load appliance designed to help German households and businesses monetize negative electricity prices.<br>
       When wholesale prices drop below zero, the GridSink™ Pro app activates automatically, converting surplus grid electricity into heat at an industry-leading efficiency of 0%. No energy is stored. No useful work is performed. The electricity simply ceases to exist, and you get paid for it.</p>
