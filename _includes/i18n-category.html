@@ -1,0 +1,13 @@
+{%- comment -%}
+  Localizes a musing category label. Input: include.category (e.g. "Dialogue").
+  English passes through unchanged; German maps the known categories.
+{%- endcomment -%}
+{%- assign c = include.category -%}
+{%- if page.lang == 'de' -%}
+  {%- case c -%}
+  {%- when 'Advertisement' -%}Werbung
+  {%- when 'Dialogue' -%}Dialog
+  {%- when 'Zen Story' -%}Zen-Geschichte
+  {%- else -%}{{ c }}
+  {%- endcase -%}
+{%- else -%}{{ c }}{%- endif -%}

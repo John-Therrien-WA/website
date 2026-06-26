@@ -1,0 +1,41 @@
+{%- assign langroot = '' -%}{%- if page.lang == 'de' -%}{%- assign langroot = '/de' -%}{%- endif -%}
+
+<main id="main">
+  {% include wallpaper.html name=page.wallpaper %}
+
+  <parallax-layout class="wallpaper-host wallpaper-host--opaque" data-wallpaper=".{{ page.wallpaper }}-wallpaper">
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
+    <p class="essay-back"><a href="{{ langroot | append: '/musings.html' | relative_url }}">&larr; {% if page.lang == 'de' %}Zurück zu Musings{% else %}Back to Musings{% endif %}</a></p>
+
+    <article class="essay">
+      <header class="essay__header">
+        <p class="essay__category">{% include i18n-category.html category="Essay" %}</p>
+        <h1 class="essay__title">The Coherence of Craft and Taste</h1>
+        <p class="essay__dateline">{% include i18n-date.html value="Berlin, February 2026" %} &middot; <span class="essay__read-time">{% include i18n-readtime.html value="3 min read" %}</span></p>
+      </header>
+
+      <h2 class="essay__subtitle">On craft, perception, and the prompt genius</h2>
+
+      <p>I recently watched a fantastic and relatively comprehensive take on AI gen in music by Adam Neely: <a href="https://www.youtube.com/watch?v=U8dcFhF0Dlk"><em>Suno, AI Music, and the Bad Future</em></a>. What felt most absent from his discussion of AI music is the role of craft in forming taste. Historically, refined musical judgment has not emerged from detached curation alone, but from long, immersive engagement with making music; hours inside instruments, arrangements, mixes, and revisions. The call of craft beckons beyond being merely a means of production: it is an end in itself, and <em>a process of perceptual refinement</em>.</p>
+
+      <p>It being an end in itself, the joy of making music, the beauty of the struggle, the wonder of delayed gratification, were discussed in the video. Let&rsquo;s focus on adding the layer of perceptual refinement. We will leave it as an exercise to the reader to generalize these arguments/perspectives to other forms of generative AI. Perhaps it&rsquo;s relatively easy to map to other art forms, but is it also applicable to prickly pursuits like writing code?</p>
+
+      <p>After many years of producing music, the listening experience has undergone a drastic, dare I say, topological transition. I hear structure, balance, flow, detail, and intentional as well as non-intentional expression in a way that simply wasn&rsquo;t available to me as a young listener. This difference is not an elitism; it&rsquo;s <em>a state of being, a state of awareness</em>. Deep practice sharpens perception, which by the way, brings joy and depth of feeling. The same is true for instruments: if you&rsquo;ve never tried to solo on a guitar, you hear someone like Hendrix very differently than if you&rsquo;ve spent years grappling the instrument&rsquo;s constraints and mysteries; expanding your understanding of its expressive range. I would argue that style is irrelevant here, and if you did your homework, potentially modality as well.</p>
+
+      <p>Therefore, the concern with generative AI flows beyond floods of mediocre or derivative music. The deeper risk is that it allows people to bypass the slow formation of perceptual sensitivity altogether. If music creation no longer requires prolonged attention, struggle, and constraint, then fewer people will develop the sensory salience needed to recognize coherence, depth, and excellence when they hear it.</p>
+
+      <blockquote class="essay__quote">Taste without training becomes shallow and unstable, and over time those perceptual muscles atrophy.</blockquote>
+
+      <p>That said, reactionary rejection overlooks a more interesting possibility. A generous interpretation of the &ldquo;prompt genius&rdquo; would not be someone who avoids craft, but someone who is forced into <em>a new kind of craft</em> by the tool itself. Imagine AI-assisted music that is structurally ambitious, deeply coherent, and fluently genre-bending in ways that would be extremely difficult even for a DAW producer of the highest caliber. Sonic landscapes that have not been discovered on other types of auditory expedition. Such works would require intense iterative listening, constraint-setting, and aesthetic judgment to hold together at a high level.</p>
+
+      <p>If that frontier exists, it may resemble a new wave of classical music; <em>not in style, but in spirit</em>. Music that demands long-form attention from both its creators and its listeners, and that resists casual generation precisely because of the difficulties of coherence at that scale. In that future, rather than eliminating craft, gen AI would help elevate it up a level of the specificity hierarchy and truly take the next step following the transformation from electronic production and sampling. We may ask ourselves whether our cultural incentives will push toward that frontier, or if slop slogging will domineer perspicacious perceptual pursuits.</p>
+    </article>
+
+    <p class="essay-back"><a href="{{ langroot | append: '/musings.html' | relative_url }}">&larr; {% if page.lang == 'de' %}Zurück zu Musings{% else %}Back to Musings{% endif %}</a></p>
+        </div>
+      </div>
+    </section>
+  </parallax-layout>
+</main>

@@ -1,16 +1,5 @@
----
-layout: default
-ref: musings-sponsored-product-offerings
-title: "Musings — Sponsored Product Offerings"
-description: "Wild Animal musings: Sponsored Product Offerings."
-permalink: "/musings/sponsored-product-offerings.html"
-nav_active: musings
-wallpaper: musings
----
+{%- assign langroot = '' -%}{%- if page.lang == 'de' -%}{%- assign langroot = '/de' -%}{%- endif -%}
 
-<<<<<<< de-translation
-{% include content/musings-sponsored-product-offerings.html %}
-=======
 <main id="main">
   {% include wallpaper.html name=page.wallpaper %}
 
@@ -18,19 +7,14 @@ wallpaper: musings
     <section class="section">
       <div class="container container--narrow">
         <div class="wallpaper-card">
-    <p class="essay-back"><a href="{{ '/musings.html' | relative_url }}">&larr; Back to Musings</a></p>
+    <p class="essay-back"><a href="{{ langroot | append: '/musings.html' | relative_url }}">&larr; {% if page.lang == 'de' %}Zurück zu Musings{% else %}Back to Musings{% endif %}</a></p>
 
     <article class="essay">
       <header class="essay__header">
-        <p class="essay__category">Advertisement</p>
+        <p class="essay__category">{% include i18n-category.html category="Advertisement" %}</p>
         <h1 class="essay__title">Sponsored Product Offerings</h1>
-        <p class="essay__dateline">Berlin, April&ndash;June 2026 &middot; <span class="essay__read-time">4 min read</span></p>
+        <p class="essay__dateline">{% include i18n-date.html value="Berlin, May 2026" %} &middot; <span class="essay__read-time">{% include i18n-readtime.html value="5 min read" %}</span></p>
       </header>
-
-      <div class="ad-pair">
-      <div class="ad-pair__col">
-
-      <p class="essay__dateline">Posted: 2026-05-08</p>
 
       <p>LLMs don’t just write sentences.<br>
       They write sentences.</p>
@@ -69,10 +53,7 @@ wallpaper: musings
       Join the waitlist — link in comments.<br>
       #Authenticity #Leadership #AI #H37P</p>
 
-      </div>
-      <div class="ad-pair__col">
-
-      <p class="essay__dateline">Posted: 2026-06-26</p>
+      <hr>
 
       <p>You said you wanted to understand.<br>
       Now we just have to hope the thing you’re standing under supports itself.</p>
@@ -107,12 +88,7 @@ wallpaper: musings
       Join the waitlist — link in comments.<br>
       #Clarity #Leadership #AI #H37P. I understand now. I would like that to stop.</p>
 
-      </div>
-      </div>
-
       <hr>
-
-      <p class="essay__dateline">Posted: 2026-04-17</p>
 
       <p>Proud to introduce the GridSink™ Pro: the world’s first smart resistive load appliance designed to help German households and businesses monetize negative electricity prices.<br>
       When wholesale prices drop below zero, the GridSink™ Pro app activates automatically, converting surplus grid electricity into heat at an industry-leading efficiency of 0%. No energy is stored. No useful work is performed. The electricity simply ceases to exist, and you get paid for it.</p>
@@ -134,10 +110,9 @@ wallpaper: musings
       🔌</p>
     </article>
 
-    <p class="essay-back"><a href="{{ '/musings.html' | relative_url }}">&larr; Back to Musings</a></p>
+    <p class="essay-back"><a href="{{ langroot | append: '/musings.html' | relative_url }}">&larr; {% if page.lang == 'de' %}Zurück zu Musings{% else %}Back to Musings{% endif %}</a></p>
         </div>
       </div>
     </section>
   </parallax-layout>
 </main>
->>>>>>> main

@@ -1,0 +1,5 @@
+{%- comment -%}
+  Localizes an English "Month Year" string. Input: include.value (e.g. "May 2026").
+  English passes through; German swaps the month name. Place names are untouched.
+{%- endcomment -%}
+{%- if page.lang == 'de' -%}{{ include.value | replace: 'January', 'Januar' | replace: 'February', 'Februar' | replace: 'March', 'März' | replace: 'April', 'April' | replace: 'May', 'Mai' | replace: 'June', 'Juni' | replace: 'July', 'Juli' | replace: 'August', 'August' | replace: 'September', 'September' | replace: 'October', 'Oktober' | replace: 'November', 'November' | replace: 'December', 'Dezember' }}{%- else -%}{{ include.value }}{%- endif -%}
