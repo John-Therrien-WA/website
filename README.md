@@ -3,18 +3,22 @@
 The static website for Wild Animal — an indie pop-rock band based in Berlin.
 Plain HTML and CSS, served by GitHub Pages. Shared markup is centralized via
 Jekyll layouts and includes (Jekyll is the GitHub Pages default — no separate
-build step, no GitHub Actions, no extra tooling).
+site build step and no CI; the only local tooling is Node scripts that
+pre-generate images). The site is bilingual: English at the root, German under
+`/de/`.
 
 ## Project layout
 
 ```
 index.html, about.html, ...     One file per page: front matter + <main> body
+de/                             German mirror of the site, served under /de/
 _layouts/default.html           Page scaffolding (doctype, head, header, footer, script)
 _includes/head.html             <head> contents (title, description, font, CSS)
 _includes/header.html           Site header with logo + primary nav
 _includes/footer.html           Social row, footer nav, legal line
 _includes/script.html           Mobile-menu toggle (one place, used everywhere)
 _includes/meta.html             Open Graph / Twitter / canonical tags (link previews)
+_includes/content/              Shared lyric & essay bodies, rendered by EN and de/ pages
 _data/nav.yml                   Primary nav items (label, href, key) — looped in header/footer
 _data/og_images.yml             Page ref -> social share card (link previews)
 _config.yml                     Site title/description + Jekyll exclude list
@@ -57,19 +61,38 @@ own only their `<main>` body plus a small front-matter block.
    page in both places. The page's `nav_active` front-matter value must equal
    the `key` of its `nav.yml` entry for the active-link styling to apply.
 
+4. For a German version, add a `de/<slug>.html` twin — see **Bilingual** below.
+
+## Bilingual (EN / DE)
+
+The site is mirrored in German under `de/`. Lyric and musing **bodies** are
+shared: the content lives in `_includes/content/<page>.html`, and both the
+English page (`musings/<slug>.html`) and its German twin
+(`de/musings/<slug>.html`) are thin wrappers that include it — so edit the
+include, not the wrapper, and one change updates both languages. Every other
+page (`about`, `music`, …) has a standalone German twin at `de/<name>.html` that
+must be edited alongside the English one. UI strings localize via the `i18n-*`
+includes off each page's `lang`; body prose is shared (English today).
+
 ## Develop locally
 
 **Option A — push and view the live URL.** GitHub Pages rebuilds in under a
 minute. For small content edits this is often the fastest loop.
 
-**Option B — run Jekyll locally** so Liquid tags and includes resolve exactly
-like in production:
+**Option B — run Jekyll locally** so Liquid tags and includes resolve:
 
 ```sh
-gem install bundler jekyll
+bundle install                 # first time only
 bundle exec jekyll serve
 # then visit http://localhost:4000
 ```
+
+Local uses the Jekyll pinned in the `Gemfile` (4.x); GitHub Pages builds with an
+older Jekyll (3.10) via the `github-pages` gem. They're close but not identical,
+so a clean local build isn't a guarantee — keep Liquid to widely-supported
+features, and note that Markdown docs (`README.md`, `CLAUDE.md`) are excluded
+from the build because that older Jekyll would try to execute Liquid examples in
+them.
 
 You can also open a built page directly in a browser, but Liquid tags
 (`{% include %}`, `{{ page.title }}`) won't render — you'll see raw template
@@ -133,7 +156,9 @@ configure. The new commit is live within a minute or two.
   header and footer iterate over it with a Liquid `for` loop. Reach for a data
   file when the same list would otherwise be hand-maintained in two places.
   No plugins.
-- **No JS** beyond a tiny mobile-menu toggle in `_includes/script.html`.
+- **JS is light and progressive.** Page-scoped vanilla includes: the mobile-menu
+  toggle (`_includes/script.html`), page-load animations (Motion), background
+  audio (Howler), and the music page's discography carousel. No SPA frameworks.
 - **Self-host fonts.** Never link the Google Fonts CDN (GDPR risk after the
   2022 Munich ruling — relevant for a Berlin-based site).
 - **Design tokens** live as CSS variables at the top of `styles/main.css`.
