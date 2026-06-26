@@ -14,14 +14,17 @@ _includes/head.html             <head> contents (title, description, font, CSS)
 _includes/header.html           Site header with logo + primary nav
 _includes/footer.html           Social row, footer nav, legal line
 _includes/script.html           Mobile-menu toggle (one place, used everywhere)
+_includes/meta.html             Open Graph / Twitter / canonical tags (link previews)
 _data/nav.yml                   Primary nav items (label, href, key) — looped in header/footer
+_data/og_images.yml             Page ref -> social share card (link previews)
 _config.yml                     Site title/description + Jekyll exclude list
 styles/main.css                 Design system + page styles
 assets/fonts/                   Self-hosted Oswald (variable woff2)
-assets/images/                  Generated responsive image variants
-assets/images/MANIFEST.md       Source -> variants mapping
+assets/images/                  Generated responsive variants + og-*.jpg share cards
+assets/images/MANIFEST.md       Source -> variants mapping + share-card list
 _originals/                     Source images (committed; never linked from HTML)
 scripts/build-images.js         Generates assets/images/ from _originals/
+scripts/build-og-cards.js       Generates assets/images/og-*.jpg share cards from _originals/
 ```
 
 Source-of-truth for shared HTML lives in `_layouts/` and `_includes/`. Pages
@@ -91,6 +94,30 @@ syntax. Use Jekyll for any structural work.
    examples in `index.html`). Always set explicit integer `width` and `height`
    on the `<img>` to reserve layout and prevent CLS.
 5. Commit both the original and the generated variants.
+
+## Social preview cards (Open Graph)
+
+When a link is shared on LinkedIn, Slack, iMessage, Facebook, etc., the site
+shows a 1200×630 preview card with an image, title, and blurb. This is
+automatic: every page emits the right tags via `_includes/meta.html` and falls
+back to a default card, so a new page needs no setup. The tags rely on `url:`
+in `_config.yml` to be absolute.
+
+To change which card a page uses:
+
+- **Pick an existing card** — map the page's `ref` in `_data/og_images.yml`
+  (one entry covers the English page and its German twin), or set
+  `image: /assets/images/<card>.jpg` in the page's front matter.
+- **Add or restyle a card** — edit the `CARDS` list in
+  `scripts/build-og-cards.js`, then run:
+
+  ```sh
+  node scripts/build-og-cards.js
+  ```
+
+  Cards are built from `_originals/`: band photos and wallpapers get a
+  cropped fill, album covers get centered on a blurred backdrop. Record new
+  cards in `assets/images/MANIFEST.md` and commit them.
 
 ## Deploy
 
