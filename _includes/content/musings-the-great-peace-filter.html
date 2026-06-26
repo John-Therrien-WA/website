@@ -1,0 +1,113 @@
+{%- assign langroot = '' -%}{%- if page.lang == 'de' -%}{%- assign langroot = '/de' -%}{%- endif -%}
+
+<main id="main">
+  {% include wallpaper.html name=page.wallpaper %}
+
+  <parallax-layout class="wallpaper-host wallpaper-host--opaque" data-wallpaper=".{{ page.wallpaper }}-wallpaper">
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
+    <p class="essay-back"><a href="{{ langroot | append: '/musings.html' | relative_url }}">&larr; {% if page.lang == 'de' %}Zurück zu Musings{% else %}Back to Musings{% endif %}</a></p>
+
+    <article class="essay">
+      <header class="essay__header">
+        <p class="essay__category">{% include i18n-category.html category="Essay" %}</p>
+        <h1 class="essay__title">The Great Peace Filter</h1>
+        <p class="essay__dateline">{% include i18n-date.html value="Berlin, January 2026" %} &middot; <span class="essay__read-time">{% include i18n-readtime.html value="8 min read" %}</span></p>
+      </header>
+
+      <h2 class="essay__subtitle">Where is everybody?</h2>
+
+      <p>Scientific culture has given a name and a structure to the age-old question of whether or not we find ourselves cosmically lonely. The Fermi Paradox may be read as follows:</p>
+
+      <blockquote class="essay__quote">Given the age and size of the universe, why do we see no evidence of extraterrestrial civilizations?</blockquote>
+
+      <p>There is no shortage of proposed answers. Some argue that life itself is extraordinarily rare, as in the <a href="https://en.wikipedia.org/wiki/Rare_Earth_hypothesis">Rare Earth hypothesis</a>. Others that intelligence is rare, or that civilizations tend to destroy themselves early, ideas often grouped under the <a href="https://en.wikipedia.org/wiki/Great_Filter">Great Filter</a>. Still others suggest that advanced civilizations deliberately hide, either out of fear, as in the <a href="https://en.wikipedia.org/wiki/Dark_forest_hypothesis">Dark Forest hypothesis</a>, or out of restraint or indifference, as in the <a href="https://en.wikipedia.org/wiki/Zoo_hypothesis">Zoo hypothesis</a>. These explanations invoke physical bottlenecks, astronomical coincidence, and strategic silence.</p>
+
+      <p>I want to sketch a different possibility. Depending on one&rsquo;s inclination, it may comfort through implications of where survival leads, or conversely, it may disquiet those who dub the described transition dubious. Either way, it functions as a strong constraint on what long-lived technological civilizations culturally contain.</p>
+
+      <p>The core idea is this: a powerful selection pressure favoring civilizations that eliminate internal violence and domination at a physiocultural level, down to the individual, because any civilization that fails to do so eventually destroys itself once its technology becomes powerful enough.</p>
+
+      <p>We take this task not through a lens of moral progress, benevolence, or enlightenment; this is a stability analysis.</p>
+
+      <h2>The central intuition</h2>
+
+      <p>As technology advances, the balance between destruction and defense shifts.</p>
+
+      <p>Early in a civilization&rsquo;s history, large-scale destruction requires large-scale coordination. Violence is costly and visible. Over time, destructive power tends to become cheaper, more compact, and more accessible. Knowledge diffuses, tools miniaturize, and entry barriers fall.</p>
+
+      <p>This dynamic is most poignant with energy. The arc of technological development may be seen through the arc of harnessing increasingly concentrated energy sources: fire, coal, petroleum, fission, and presumably beyond. Each step unlocks new capabilities; each step implies new destructive potential. In order to express those capabilities in the world, the destructive potential must be contended with. In particular, concentrated energy release is fundamentally difficult to defend against. Other threats admit countermeasures, at least in principle. Sufficient energy, delivered at proximity, does not.</p>
+
+      <p>It&rsquo;s very tempting to become trapped in our physics and technology tree, thinking it inevitable, but a broadened view implies that we have had luck in the specifics. Our first energy source (nuclear power) capable of ending civilizations happened to require rare materials, extensive infrastructure, and processes that produce detectable signatures. Plutonium is scarce, enrichment difficult, and radiation is visible to instruments. These are contingent facts of fission, not necessary features of civilization-threatening power. Future energy technologies need not be beholden to them.</p>
+
+      <p>The trajectory apparently tends towards higher energy density, simpler pathways, and smaller apparatus. Any stage of this progression which creates adjacency of peaceful use and catastrophic capability provides particularly high selection pressure. Eventually, and long before astronomical timescales, a civilization reaches a point where small groups, or even individuals, can cause civilization-ending damage.</p>
+
+      <p>Precisely at that point is a seismic shift of stability.</p>
+
+      <p>The danger posed by fission was not merely its magnitude, but its asymmetry: a small quantity of matter could release enormous energy faster than any defense could respond. The same asymmetry emerges when technological amplification meets unresolved aggression. A small psychological impulse, paired with sufficient technological leverage, can release consequences beyond collective containment. The civilizational problem is therefore structurally identical to the physical one.</p>
+
+      <p>A civilization that still contains persistent impulses towards violence, domination, or coercion is no longer merely dangerous; it is unstable. The only way to survive immense technological power is to be inherently responsible and non-violent in its use.</p>
+
+      <p>I reiterate that we focus here not on moral judgment; but on the long term statistics.</p>
+
+      <h2>Why deterrence is not enough</h2>
+
+      <p>It is tempting to think this problem can be solved by deterrence: mutually assured destruction, enforcement, surveillance, or permanent policing. These, however, are brittle equilibria. They rely on perfect coordination, flawless institutions, and eternal vigilance; precisely things that tend to fail over long timescales.</p>
+
+      <p>A civilization that survives for millions or billions of years cannot rest on unstable game-theoretic standoffs. Given enough time, someone defects, the institutions decay, or a rare event occurs. If violence remains psychologically or culturally available as an option, eventual catastrophe is overwhelmingly likely.</p>
+
+      <p>The claim here is therefore stronger, and more demanding:</p>
+
+      <blockquote class="essay__quote"><em>long-term survival requires not merely suppressing violence, but making it obsolete.</em></blockquote>
+
+      <p>Not forbidden, not punitively pruned, but unthinkable.</p>
+
+      <p>We already possess analogies for this. Most people do not refrain from cannibalism because of law enforcement or deterrence. They refrain because the act does not register as a live option. It does not feel tempting, strategic, or imaginable; it sits outside the space of consideration.</p>
+
+      <p>Earlier I introduced the term physiocultural without definition. What I mean is not merely norm or law, but an embodiment that extends the mechanisms by which individuals are bound into collectives: a great world wide web of layered neurological, biochemical, cybernetic, and otherwise interwoven interpenetration. The proposal is that this transformational weaving must occur at the civilizational scale with respect to violence and domination. I am not claiming here to know specific forms this would take or how it may happen; only that, if it does not, the civilization perishes.</p>
+
+      <h2>A selection argument</h2>
+
+      <p>This idea is best understood as a behavioral variant of the Great Filter.</p>
+
+      <p>Most civilizations may fail; not because life or intelligence is rare, but because the combination of advanced technology and unresolved internal aggression is lethal. Civilizations that fail this transition disappear quickly on cosmic timescales. Those that succeed persist.</p>
+
+      <p>Seen this way, the silence of the universe is not surprising. Aggressive civilizations are short-lived. Peaceful civilizations may be initially rare, but dominate over a long time scale through their stability.</p>
+
+      <p>Crucially, the survivors are not peaceful because they are weak; they are peaceful because they are strong and wise enough to have passed through this filter.</p>
+
+      <h2>Cooperation as a recurrent solution</h2>
+
+      <p>It is worth noting that this proposed filter would not be an anomaly in the history of complex systems. As emphasized in Cosmosapiens, and more broadly within certain branches of evolutionary biology, competition alone does not account for the emergence of higher-order organization. Again and again, increases in complexity have depended on the development of new forms of cooperation that suppress destructive conflict. Genes form genomes; cells form multicellular organisms; individuals form societies. Each transition requires mechanisms that constrain destructive competition within the new unit strongly enough for the larger structure to remain coherent.</p>
+
+      <p>Genes forming genomes suppressed internal competition because rogue replication inside a cell destroys the whole. Cancer is the biological equivalent of miniaturized destructive capacity. A single cell, if allowed unregulated replication power, can kill the organism. The situation we are describing is even worse than cancer for the civilization seen as a multi cellular organism. It is structurally similar, but it&rsquo;s as if all cells, and thus any potential rogue cell has instant access to death. In nature, these kinds of diseases don&rsquo;t survive because they can&rsquo;t be spread. This only further illustrates our point: all the civilizations that didn&rsquo;t develop immunity died before they could spread their misuse of power.</p>
+
+      <p>In this light, the great peace filter can be understood as the next iteration of a familiar pattern. As power scales, so too does the cost of internal conflict. The once-tolerable becomes an existential threat. At each major transition, entities that fail to resolve internal sabotage do not merely perform poorly; they cease to exist as stable units. Cooperation is not selected because it is morally preferable, but because it is structurally necessary for persistence.</p>
+
+      <p>If this framing is correct, then the challenge facing technological civilizations is not unprecedented in kind, only in scale. When civilization-ending power becomes accessible, the relevant unit of selection expands once again. It is no longer the organism or the society that must achieve internal coherence, but the civilization itself. The forms of cooperation required to pass this threshold will necessarily be stronger, deeper, and more comprehensive than anything that came before. Whatever carries a civilization through the filter does not abandon evolutionary history, it continues it.</p>
+
+      <h2>What this does, and does not, imply</h2>
+
+      <p>This view does not imply that advanced post-filter civilizations are na&iuml;ve, passive, or incapable of defense. On the contrary, they should be assumed to be vastly more capable than we are. Their relationship to violence, however, is fundamentally different. They do not rely on fear-based restraint or permanent standoffs; those are transitional strategies, not stable ones.</p>
+
+      <p>It also does not imply that such civilizations must intervene in, guide, or protect younger ones. Indifference, avoidance, or minimal interaction are all consistent outcomes. As civilizations age, their space of interests may expand faster than any connection they have to us. From their perspective, we may simply not matter yet.</p>
+
+      <p>Nor does this argument claim that humanity will succeed. It claims something narrower and more demanding: survival under extreme technological power imposes non-negotiable physiocultural requirements.</p>
+
+      <h2>Why this matters now</h2>
+
+      <p>This framing shifts the question from &ldquo;Where is everybody?&rdquo; to a more urgent one: &ldquo;which responsibilities follow from great power?&rdquo;</p>
+
+      <p>If this constraint is even approximately correct, then the long-term fate of intelligent life is not decided primarily by physics or biology, but by conscious cultural cultivation culminating in embodied peace. Not peace as temporary d&eacute;tente or enforced order, but peace as a stable physiocultural condition that remains intact under immense power.</p>
+
+      <p>We appear to be approaching precisely this transition. The tools that amplify individual agency are advancing rapidly; the cultural mechanisms required to safely absorb that power are currently dangerously subpar.</p>
+
+      <blockquote class="essay__quote"><strong>To draw a lesson from the silence of the universe: The canonical problem facing technological civilizations is not how to become powerful, but how to persist under the pressures of that power.</strong></blockquote>
+    </article>
+
+    <p class="essay-back"><a href="{{ langroot | append: '/musings.html' | relative_url }}">&larr; {% if page.lang == 'de' %}Zurück zu Musings{% else %}Back to Musings{% endif %}</a></p>
+        </div>
+      </div>
+    </section>
+  </parallax-layout>
+</main>

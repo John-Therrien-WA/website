@@ -1,0 +1,5 @@
+{%- comment -%}
+  Localizes a read-time label. Input: include.value (e.g. "7 min read").
+  English passes through; German rewrites the unit to "Min. Lesezeit".
+{%- endcomment -%}
+{%- if page.lang == 'de' -%}{{ include.value | replace: 'min read', 'Min. Lesezeit' }}{%- else -%}{{ include.value }}{%- endif -%}

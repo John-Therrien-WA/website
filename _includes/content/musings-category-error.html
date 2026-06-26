@@ -1,0 +1,60 @@
+{%- assign langroot = '' -%}{%- if page.lang == 'de' -%}{%- assign langroot = '/de' -%}{%- endif -%}
+
+<main id="main">
+  {% include wallpaper.html name=page.wallpaper %}
+
+  <parallax-layout class="wallpaper-host wallpaper-host--opaque" data-wallpaper=".{{ page.wallpaper }}-wallpaper">
+    <section class="section">
+      <div class="container container--narrow">
+        <div class="wallpaper-card">
+    <p class="essay-back"><a href="{{ langroot | append: '/musings.html' | relative_url }}">&larr; {% if page.lang == 'de' %}Zurück zu Musings{% else %}Back to Musings{% endif %}</a></p>
+
+    <article class="essay">
+      <header class="essay__header">
+        <p class="essay__category">{% include i18n-category.html category="Zen Story" %}</p>
+        <h1 class="essay__title">Category Error</h1>
+        <p class="essay__dateline">{% include i18n-date.html value="Berlin, March 2026" %} &middot; <span class="essay__read-time">{% include i18n-readtime.html value="1 min read" %}</span></p>
+      </header>
+
+      <p>Jane, a philosopher, had spent a sleepless night.<br>
+      By morning she felt sure she had solved something fundamental about the nature of being.</p>
+
+      <p>She went to see Anna: a physicist who practices meditation.</p>
+
+      <p>They drank tea.</p>
+
+      <p>Jane spoke carefully.<br>
+      She defined her terms.<br>
+      She explicated and implicated.</p>
+
+      <p>Anna listened.</p>
+
+      <p>Before Jane’s culmination, Anna invited stillness.</p>
+
+      <p>“That is all very clever,” she said.<br>
+      “You may well write celebrated papers.”</p>
+
+      <p>She sipped her tea.</p>
+
+      <p>“But honestly, I cannot take it very seriously. The answers and the questions are equally confused.”</p>
+
+      <p>Jane stiffened.</p>
+
+      <p>Anna smiled faintly.</p>
+
+      <p>“It’s all one big category error.”</p>
+
+      <p>Jane felt a flash of anger.<br>
+      She breathed in, reaching for the depths of her being, hoping to find peace there.</p>
+
+      <p>Instead, she ejaculated:</p>
+
+      <p>“You’re a category error!”</p>
+    </article>
+
+    <p class="essay-back"><a href="{{ langroot | append: '/musings.html' | relative_url }}">&larr; {% if page.lang == 'de' %}Zurück zu Musings{% else %}Back to Musings{% endif %}</a></p>
+        </div>
+      </div>
+    </section>
+  </parallax-layout>
+</main>
