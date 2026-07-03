@@ -189,13 +189,10 @@
       cvs.width = cvs.height = 2 * R * dpr;
       var c = cvs.getContext('2d');
       c.setTransform(dpr, 0, 0, dpr, R * dpr, R * dpr);
-      if (typeof c.filter === 'string') {                // soft, trodden edges
-        c.filter = 'blur(' + (s * 0.045).toFixed(2) + 'px)';
-      }
       // faint rim of displaced ground catching light on the lower-right lip
       c.save();
-      c.translate(1.4, 1.6);
-      c.globalAlpha = 0.3;
+      c.translate(1.2, 1.4);
+      c.globalAlpha = 0.25;
       c.fillStyle = GOLD_LIGHT;
       c.fill(full);
       c.restore();
@@ -212,9 +209,9 @@
       // inner walls: shadowed toward the light, lit on the far side
       c.save();
       c.clip(full);
-      innerEdge(c, full, R, 1.6, 2.0, '#000', 0.5);
-      innerEdge(c, full, R, 3.0, 3.6, '#000', 0.22);
-      innerEdge(c, full, R, -1.4, -1.6, GOLD_LIGHT, 0.5);
+      innerEdge(c, full, R, 1.2, 1.5, '#000', 0.5);
+      innerEdge(c, full, R, 2.4, 2.8, '#000', 0.18);
+      innerEdge(c, full, R, -1.2, -1.4, GOLD_LIGHT, 0.55);
       c.restore();
       return { canvas: cvs, size: 2 * R };
     }
