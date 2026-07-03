@@ -181,26 +181,38 @@
       }
       return pads;
     }
-    function dinoPads(s) {   // theropod: bold bird-like track — three chunky
-      function blade(L, w) { // diamond toes, widest mid-length, talon-tipped
+    function dinoPads(s) {   // theropod: three fleshy segmented toes, curved
+      function talon(bend) { // talons printing free of the toe tips, long heel
         var t = new Path2D();
-        t.moveTo(0, 0.04 * s);
-        t.quadraticCurveTo(-w * 0.9 * s, -0.22 * L * s, -w * s, -0.50 * L * s);
-        t.quadraticCurveTo(-w * 0.75 * s, -0.78 * L * s, 0, -L * s);
-        t.quadraticCurveTo(w * 0.75 * s, -0.78 * L * s, w * s, -0.50 * L * s);
-        t.quadraticCurveTo(w * 0.9 * s, -0.22 * L * s, 0, 0.04 * s);
+        t.moveTo(-0.055 * s, 0);
+        t.quadraticCurveTo((-0.06 + bend * 0.2) * s, -0.16 * s, bend * s, -0.30 * s);
+        t.quadraticCurveTo((0.075 + bend * 0.5) * s, -0.14 * s, 0.055 * s, 0.015 * s);
         t.closePath();
         return t;
       }
-      var pads = [padEllipse(0, 0, 0.18, 0.18, s)];      // hub joining the toes
-      var arms = [{ a: -0.85, L: 0.80, w: 0.19 }, { a: 0, L: 1.05, w: 0.22 },
-                  { a: 0.85, L: 0.80, w: 0.19 }, { a: Math.PI, L: 0.45, w: 0.18 }];
-      for (var i = 0; i < arms.length; i++) {
-        var p = new Path2D();
-        p.addPath(blade(arms[i].L * rand(0.94, 1.04), arms[i].w),
-                  new DOMMatrix().rotate(arms[i].a * 180 / Math.PI + rand(-5, 5)));
-        pads.push(p);
+      var pads = [padEllipse(0, 0.10, 0.22, 0.20, s)];   // palm the toes grow from
+      var toes = [-0.80, 0, 0.80];
+      for (var i = 0; i < 3; i++) {
+        var r = toes[i] + rand(-0.04, 0.04);
+        var reach = i === 1 ? 1 : 0.82;                  // middle toe longest
+        var ux = Math.sin(r), uy = -Math.cos(r);
+        pads.push(padEllipse(ux * 0.28 * reach, uy * 0.28 * reach, 0.145, 0.26, s, r));
+        pads.push(padEllipse(ux * 0.60 * reach, uy * 0.60 * reach, 0.115, 0.23, s, r));
+        var cb = 0.87 * reach;                           // claw base sits a gap
+        var bend = (i - 1) * 0.14;                       // past the toe, hooked out
+        var claw = new Path2D();
+        claw.addPath(talon(bend), new DOMMatrix()
+          .translate(ux * cb * s, uy * cb * s)
+          .rotate(r * 180 / Math.PI + rand(-4, 4)));
+        pads.push(claw);
       }
+      var spur = new Path2D();                           // long pointed heel wedge
+      spur.moveTo(-0.13 * s, 0.36 * s);
+      spur.quadraticCurveTo(-0.10 * s, 0.62 * s, 0.02 * s, 0.95 * s);
+      spur.quadraticCurveTo(0.10 * s, 0.60 * s, 0.13 * s, 0.38 * s);
+      spur.quadraticCurveTo(0, 0.30 * s, -0.13 * s, 0.36 * s);
+      spur.closePath();
+      pads.push(blobPath(spur));
       return pads;
     }
     var builders = { wolf: wolfPads, bear: bearPads, dino: dinoPads };
