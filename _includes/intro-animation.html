@@ -146,44 +146,60 @@
       heel.bezierCurveTo(-0.34 * s, 0.36 * s, -0.24 * s, 0.16 * s, 0, 0.14 * s);
       heel.closePath();
       var pads = [blobPath(heel)];
-      var toes = [{ x: -0.40, y: -0.16, r: -0.30 }, { x: -0.15, y: -0.46, r: -0.08 },
-                  { x: 0.15, y: -0.46, r: 0.08 }, { x: 0.40, y: -0.16, r: 0.30 }];
-      for (var i = 0; i < 4; i++) {
-        var t = toes[i];
-        pads.push(padEllipse(t.x, t.y, 0.13, 0.21, s, t.r));
-        pads.push(clawMark(t.x + Math.sin(t.r) * 0.29, t.y - Math.cos(t.r) * 0.29,
-                           0.13, 0.030, t.r, s));
+      var toes = [{ x: -0.38, y: -0.12, ry: 0.22, r: -0.32, c: 0.09 },
+                  { x: -0.14, y: -0.52, ry: 0.30, r: -0.04, c: 0.12 },
+                  { x: 0.14, y: -0.52, ry: 0.30, r: 0.04, c: 0.12 },
+                  { x: 0.38, y: -0.12, ry: 0.22, r: 0.32, c: 0.09 }];
+      for (var i = 0; i < 4; i++) {                      // two long leading toes,
+        var t = toes[i];                                 // two low side toes
+        pads.push(padEllipse(t.x, t.y, 0.115, t.ry, s, t.r));
+        var gap = t.ry + 0.07;
+        pads.push(clawMark(t.x + Math.sin(t.r) * gap, t.y - Math.cos(t.r) * gap,
+                           t.c, 0.028, t.r, s));
       }
       return pads;
     }
-    function bearPads(s) {   // broad kidney pad, tight 5-toe arc, long claw marks
+    function bearPads(s) {   // big tilted pad, sloping 5-toe arc, long free claws
       var pl = new Path2D();
-      pl.moveTo(-0.70 * s, 0.30 * s);
-      pl.bezierCurveTo(-0.50 * s, 0.10 * s, 0.50 * s, 0.10 * s, 0.70 * s, 0.30 * s);
-      pl.bezierCurveTo(0.78 * s, 0.46 * s, 0.44 * s, 0.70 * s, 0, 0.70 * s);
-      pl.bezierCurveTo(-0.44 * s, 0.70 * s, -0.78 * s, 0.46 * s, -0.70 * s, 0.30 * s);
+      pl.moveTo(-0.55 * s, 0.10 * s);
+      pl.bezierCurveTo(-0.15 * s, -0.02 * s, 0.25 * s, 0.02 * s, 0.55 * s, 0.16 * s);
+      pl.bezierCurveTo(0.72 * s, 0.24 * s, 0.62 * s, 0.52 * s, 0.48 * s, 0.70 * s);
+      pl.bezierCurveTo(0.30 * s, 0.92 * s, -0.05 * s, 1.02 * s, -0.28 * s, 0.92 * s);
+      pl.bezierCurveTo(-0.55 * s, 0.80 * s, -0.68 * s, 0.45 * s, -0.55 * s, 0.10 * s);
       pl.closePath();
-      var pads = [blobPath(pl), padEllipse(0.16, 0.88, 0.13, 0.11, s)];
-      var tx = [-0.58, -0.30, 0, 0.30, 0.58];
-      var ty = [-0.10, -0.24, -0.30, -0.24, -0.10];
+      var pads = [blobPath(pl)];
+      var tx = [-0.62, -0.30, 0.04, 0.38, 0.62];
+      var ty = [-0.24, -0.44, -0.50, -0.38, -0.16];
+      var tr = [0.17, 0.16, 0.15, 0.135, 0.115];        // inner toes biggest
+      var cl = [0.28, 0.34, 0.34, 0.24, 0.16];          // matching claw lengths
       for (var i = 0; i < 5; i++) {
-        var r = tx[i] * 0.4;
-        pads.push(padEllipse(tx[i], ty[i], 0.145, 0.155, s, r));
-        pads.push(clawMark(tx[i] + Math.sin(r) * 0.24, ty[i] - Math.cos(r) * 0.24,
-                           0.22, 0.024, r, s));
+        var r = tx[i] * 0.35 + rand(-0.06, 0.06);
+        pads.push(padEllipse(tx[i], ty[i], tr[i], tr[i] * 1.35, s, r));
+        var gap = tr[i] * 1.35 + 0.10;                  // claws print free of the toes
+        pads.push(clawMark(tx[i] + Math.sin(r) * gap, ty[i] - Math.cos(r) * gap,
+                           cl[i], 0.045, r, s));
       }
       return pads;
     }
-    function dinoPads(s) {   // theropod: 3 knuckly toes, talon tips, round heel
-      var pads = [padEllipse(0, 0.34, 0.19, 0.23, s), padEllipse(0, 0.06, 0.14, 0.15, s)];
-      var toes = [-0.55, 0, 0.55];
-      for (var i = 0; i < 3; i++) {
-        var r = toes[i] + rand(-0.05, 0.05);
-        var ux = Math.sin(r), uy = -Math.cos(r);
-        var reach = i === 1 ? 1 : 0.88;                  // middle toe longest
-        pads.push(padEllipse(ux * 0.34 * reach, uy * 0.34 * reach, 0.125, 0.165, s, r));
-        pads.push(padEllipse(ux * 0.60 * reach, uy * 0.60 * reach, 0.105, 0.145, s, r));
-        pads.push(clawMark(ux * 0.76 * reach, uy * 0.76 * reach, 0.22, 0.035, r, s));
+    function dinoPads(s) {   // theropod: spiky bird-like star — three bladed
+      function blade(L, w) { // toes with talon tips and a short heel spur
+        var t = new Path2D();
+        t.moveTo(0, 0.06 * s);
+        t.quadraticCurveTo(-w * 1.1 * s, -0.30 * L * s, -w * s, -0.45 * L * s);
+        t.quadraticCurveTo(-w * 0.35 * s, -0.55 * L * s, 0, -L * s);
+        t.quadraticCurveTo(w * 0.35 * s, -0.55 * L * s, w * s, -0.45 * L * s);
+        t.quadraticCurveTo(w * 1.1 * s, -0.30 * L * s, 0, 0.06 * s);
+        t.closePath();
+        return t;
+      }
+      var pads = [padEllipse(0, 0, 0.13, 0.13, s)];      // hub joining the blades
+      var arms = [{ a: -0.85, L: 0.78, w: 0.14 }, { a: 0, L: 1.0, w: 0.16 },
+                  { a: 0.85, L: 0.78, w: 0.14 }, { a: Math.PI, L: 0.34, w: 0.12 }];
+      for (var i = 0; i < arms.length; i++) {
+        var p = new Path2D();
+        p.addPath(blade(arms[i].L * rand(0.92, 1.05), arms[i].w),
+                  new DOMMatrix().rotate(arms[i].a * 180 / Math.PI + rand(-5, 5)));
+        pads.push(p);
       }
       return pads;
     }
@@ -233,6 +249,15 @@
         c.fillStyle = g;
         c.fill(pads[i]);
       }
+      c.globalCompositeOperation = 'destination-out';    // worn, stamped-out flecks
+      for (i = 0; i < 12; i++) {
+        var fh = rand(0, Math.PI * 2), fr = s * rand(0.15, 0.85);
+        c.globalAlpha = rand(0.25, 0.6);
+        c.beginPath();
+        c.arc(Math.cos(fh) * fr, Math.sin(fh) * fr, s * rand(0.02, 0.05), 0, Math.PI * 2);
+        c.fill();
+      }
+      c.globalCompositeOperation = 'source-over';
       for (i = 0; i < 8; i++) {                          // grains of kicked-up ground,
         var th = rand(0, Math.PI * 2);                   // thrown mostly down-right
         var rr = s * rand(1.05, 1.55);
