@@ -349,6 +349,11 @@
           press: rand(0.85, 1)                             // uneven footfall weight
         });
       }
+      // hand back a walker so a trail can keep walking later
+      return { theta: theta, ux: ux, uy: uy, px: px, py: py, gait: gait,
+               i: steps - 1, d: d, start: start, span: span,
+               swayPhase: swayPhase, swayAmp: swayAmp,
+               stepLen: u * 0.13 * gait.stride };
     }
     // three directions ~120 degrees apart, with a random overall rotation. each
     // trail keeps to its own sector and stops short of the centre, so they fan
@@ -356,14 +361,26 @@
     var base = rand(0, Math.PI * 2);
     buildTrail('wolf', base);
     buildTrail('bear', base + 2 * Math.PI / 3);
-    buildTrail('dino', base + 4 * Math.PI / 3);
-    // a final dino paw steps into dead centre — the convergence point the
-    // curtain opens from
-    prints.push({
-      animal: 'dino', x: cx, y: cy,
-      angle: base + 4 * Math.PI / 3 + Math.PI + rand(-0.1, 0.1),
-      s: pawSize * gaits.dino.size + rand(-2, 2), alpha: 0   // same size as its trail
-    });
+    // the dino keeps walking once the title is gone, so keep its walker
+    var dinoWalker = buildTrail('dino', base + 4 * Math.PI / 3);
+    function nextDinoStep() {                            // one more stride along
+      var w = dinoWalker, gait = w.gait;                 // the dino's own trail
+      w.i++;
+      w.d -= w.stepLen * rand(0.95, 1.1);
+      var t = (w.start - w.d) / w.span;                  // extrapolates the sway
+      var side = (w.i % 2 ? 1 : -1);
+      var lat = side * straddleBase * gait.straddle
+              + Math.sin(t * Math.PI * 1.6 + w.swayPhase) * w.swayAmp;
+      return {
+        animal: 'dino',
+        x: cx + w.ux * w.d + w.px * lat + rand(-2, 2),
+        y: cy + w.uy * w.d + w.py * lat + rand(-2, 2),
+        angle: w.theta + Math.PI + side * gait.splay + rand(-0.08, 0.08),
+        s: pawSize * gait.size + rand(-2, 2),
+        alpha: 0,
+        press: rand(0.85, 1)
+      };
+    }
 
     // --- paw prints that follow the cursor (desktop pointers only) ---
     var cursorPrints = [];
@@ -372,7 +389,7 @@
     var lastCursor = null, cursorTick = 0;
     var cursorAnimals = ['wolf', 'bear', 'dino'];
     function onMove(e) {
-      if (revealed) return;
+      if (revealed || opening) return;
       var x = e.clientX, y = e.clientY;
       if (lastCursor) {
         var ddx = x - lastCursor.x, ddy = y - lastCursor.y;
@@ -394,7 +411,7 @@
     if (canHover) window.addEventListener('mousemove', onMove);
 
     // --- play ---
-    var revealed = false, timers = [], shown = 0;
+    var revealed = false, opening = false, timers = [], shown = 0;
     function later(fn, ms) { var id = setTimeout(fn, ms); timers.push(id); return id; }
 
     function drawCursorPrint(p) { drawPaw(p, 0.85); }
@@ -420,7 +437,7 @@
     }
     function step() {
       if (revealed) return;
-      if (shown < prints.length - 1) {                   // hold back the centre print
+      if (shown < prints.length) {
         shown++;
         var next = prints[shown];
         var slow = next && next.animal === 'dino';       // the dino walks slower
@@ -437,30 +454,46 @@
     function hideTitle() {
       if (revealed) return;
       overlay.classList.remove('is-titled');             // fade the text back out (900ms)
-      later(centreStep, 950);                            // once the text is gone...
+      later(dinoWalk, 950);                              // once the text is gone...
     }
-    function centreStep() {
+    var dinoSteps = 0, curtainX = null, curtainY = null;
+    function dinoWalk() {                                // ...the dino just keeps walking
       if (revealed) return;
-      shown++;                                           // ...the final paw lands dead centre
-      later(openCurtain, 750);                           // a beat, then the curtain opens
-    }
+      var p = nextDinoStep();
+      prints.push(p);
+      shown++;
+      dinoSteps++;
+      if (dinoSteps === 1) {                             // its first onward footfall
+        curtainX = p.x;                                  // opens the curtain from that
+        curtainY = p.y;                                  // very spot
+        later(openCurtain, 600);
+      }
+      if (dinoSteps < 4) later(dinoWalk, 340);           // and it strides on through
+    }                                                    // the opening curtain
     function openCurtain() {
-      if (revealed) return;
-      revealed = true;                                   // stop the cursor trail + main loop
-      window.removeEventListener('mousemove', onMove);
-      for (var i = 0; i < timers.length; i++) clearTimeout(timers[i]);
-      var maxR = Math.sqrt(W * W + H * H) / 2 + 40;      // centre -> far corner
+      if (revealed || opening) return;
+      opening = true;                                    // paws keep animating; only new
+      var ox = curtainX === null ? cx : curtainX;        // cursor prints stop
+      var oy = curtainY === null ? cy : curtainY;
+      function far(dx2, dy2) { return Math.sqrt(dx2 * dx2 + dy2 * dy2); }
+      var maxR = Math.max(far(ox, oy), far(W - ox, oy),  // origin -> farthest corner
+                          far(ox, H - oy), far(W - ox, H - oy)) + 40;
       var t0 = performance.now(), dur = 1400;            // curtain opens gently
       (function anim(now) {
+        if (revealed) return;                            // skip pressed mid-curtain
         var t = Math.min(1, (now - t0) / dur);
         var e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;  // ease in-out
         var r = e * maxR;
-        var g = 'radial-gradient(circle at ' + cx + 'px ' + cy + 'px, transparent ' +
+        var g = 'radial-gradient(circle at ' + ox + 'px ' + oy + 'px, transparent ' +
                 r + 'px, #000 ' + (r + 1) + 'px)';       // growing hole = page showing
         overlay.style.webkitMaskImage = g;
         overlay.style.maskImage = g;
         if (t < 1) requestAnimationFrame(anim);
-        else if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        else {
+          revealed = true;                               // now stop the paw loop
+          window.removeEventListener('mousemove', onMove);
+          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        }
       })(t0);
     }
     function reveal() {
