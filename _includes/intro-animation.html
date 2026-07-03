@@ -89,52 +89,12 @@
     }
     size();
 
-    // --- paw prints, drawn centred at (0,0) with "forward" pointing up ---
-    function ellipse(cx, cy, rx, ry) {
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    function drawWolf(s) {                 // canine: heel pad + four toes
-      ellipse(0, 0.45 * s, 0.50 * s, 0.58 * s);
-      ellipse(-0.46 * s, -0.22 * s, 0.17 * s, 0.27 * s);
-      ellipse(-0.16 * s, -0.50 * s, 0.17 * s, 0.29 * s);
-      ellipse(0.16 * s, -0.50 * s, 0.17 * s, 0.29 * s);
-      ellipse(0.46 * s, -0.22 * s, 0.17 * s, 0.27 * s);
-    }
-    function drawBear(s) {                 // broad plantar pad + five clawed toes
-      ellipse(0, 0.50 * s, 0.72 * s, 0.46 * s);
-      var tx = [-0.62, -0.32, 0, 0.32, 0.62];
-      var ty = [-0.18, -0.42, -0.52, -0.42, -0.18];
-      for (var i = 0; i < 5; i++) {
-        ellipse(tx[i] * s, ty[i] * s, 0.15 * s, 0.20 * s);
-        ctx.beginPath();
-        ctx.moveTo((tx[i] - 0.06) * s, (ty[i] - 0.16) * s);
-        ctx.lineTo((tx[i] + 0.06) * s, (ty[i] - 0.16) * s);
-        ctx.lineTo(tx[i] * s, (ty[i] - 0.34) * s);
-        ctx.closePath();
-        ctx.fill();
-      }
-    }
-    function drawDino(s) {                 // theropod: three long clawed toes
-      var toes = [-0.62, 0, 0.62];
-      for (var i = 0; i < 3; i++) {
-        ctx.save();
-        ctx.rotate(toes[i]);
-        ctx.beginPath();
-        ctx.moveTo(-0.13 * s, 0.35 * s);
-        ctx.quadraticCurveTo(-0.16 * s, -0.50 * s, 0, -0.95 * s);
-        ctx.quadraticCurveTo(0.16 * s, -0.50 * s, 0.13 * s, 0.35 * s);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      }
-      ellipse(0, 0.40 * s, 0.20 * s, 0.20 * s);
-    }
-    var drawers = { wolf: drawWolf, bear: drawBear, dino: drawDino };
-
-    // 3D shading colours derived from the gold token: a pale tint for the lit
-    // edge, a deep shade for the side facing away from the light
+    // --- paw prints, pressed INTO the surface like tracks in soft ground ---
+    // Each print bakes once into a small offscreen sprite: pads with slightly
+    // irregular shapes and uneven pressure (no two prints alike), an inner
+    // shadow on the wall facing the top-left light, a lit far wall, and a
+    // faint rim of displaced ground catching light on the lower-right lip.
+    // Per-frame drawing is then a single cheap drawImage per print.
     function hexRGB(c) {
       var m = /^#([0-9a-f]{6})$/i.exec(c);
       return m ? [parseInt(m[1].slice(0, 2), 16),
@@ -148,48 +108,127 @@
       }).join(',') + ')';
     }
     var goldRGB = hexRGB(GOLD);
-    var GOLD_LIGHT = mix(goldRGB, 255, 0.5);
-    var GOLD_DARK = mix(goldRGB, 0, 0.4);
+    var GOLD_LIGHT = mix(goldRGB, 255, 0.55);
+    var GOLD_DEEP = mix(goldRGB, 0, 0.45);
+    var GOLD_DIM = mix(goldRGB, 0, 0.15);
 
-    function pawPass(animal, x, y, angle, sc, s, alpha, fill) {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(angle + Math.PI / 2);
-      ctx.scale(sc, sc);
-      ctx.globalAlpha = alpha;
-      ctx.fillStyle = fill;
-      drawers[animal](s);
-      ctx.restore();
+    // pad builders, centred at (0,0) with "forward" pointing up; every shape
+    // carries a little random wobble, baked once per print so it holds still
+    function padEllipse(cx, cy, rx, ry, s) {
+      var p = new Path2D();
+      p.ellipse(cx * s + rand(-0.03, 0.03) * s, cy * s + rand(-0.03, 0.03) * s,
+                rx * s * rand(0.88, 1.12), ry * s * rand(0.88, 1.12),
+                rand(-0.2, 0.2), 0, Math.PI * 2);
+      return p;
     }
-    // gradient across the paw body, lit from the screen's top-left no matter
-    // how the paw is rotated (light direction counter-rotated into paw space)
-    function shadeFill(angle, s) {
-      var rot = angle + Math.PI / 2;
-      var c = Math.cos(-rot), n = Math.sin(-rot);
-      var lx = (n - c) * s, ly = (-n - c) * s;
-      var g = ctx.createLinearGradient(lx, ly, -lx, -ly);
-      g.addColorStop(0, GOLD_LIGHT);
-      g.addColorStop(0.45, GOLD);
-      g.addColorStop(1, GOLD_DARK);
-      return g;
+    function wolfPads(s) {                 // canine: heel pad + four toes
+      return [padEllipse(0, 0.45, 0.50, 0.58, s),
+              padEllipse(-0.46, -0.22, 0.17, 0.27, s),
+              padEllipse(-0.16, -0.50, 0.17, 0.29, s),
+              padEllipse(0.16, -0.50, 0.17, 0.29, s),
+              padEllipse(0.46, -0.22, 0.17, 0.27, s)];
     }
-    // draw one paw with depth: a soft drop shadow that trails wide while the
-    // paw is "in the air" and tightens as it stamps down, a pale rim where the
-    // top-left light catches the edge, and a shaded gold body
-    function drawPaw(animal, x, y, angle, s, alpha, dim) {
-      var a = Math.min(1, alpha);
-      var lift = 1 - a;                                  // 1 = airborne, 0 = landed
-      var sc = 1 + 0.28 * lift;                          // stamp down as it lands
-      var ox = 2.5 + 9 * lift, oy = 3.5 + 12 * lift;     // shadow follows the height
-      // two stacked shadow passes fake a soft blur
-      pawPass(animal, x + ox * 1.6, y + oy * 1.6, angle, sc * 1.12, s, a * 0.22 * dim, '#000');
-      pawPass(animal, x + ox, y + oy, angle, sc * 1.04, s, a * 0.4 * dim, '#000');
-      // lit rim peeking out toward the light
-      pawPass(animal, x - 1.5, y - 1.5, angle, sc, s, a * dim, GOLD_LIGHT);
-      // shaded body on top
-      pawPass(animal, x, y, angle, sc, s, a * dim, shadeFill(angle, s));
+    function bearPads(s) {                 // broad plantar pad + five clawed toes
+      var pads = [padEllipse(0, 0.50, 0.72, 0.46, s)];
+      var tx = [-0.62, -0.32, 0, 0.32, 0.62];
+      var ty = [-0.18, -0.42, -0.52, -0.42, -0.18];
+      for (var i = 0; i < 5; i++) {
+        var p = padEllipse(tx[i], ty[i], 0.15, 0.20, s);
+        var claw = new Path2D();
+        claw.moveTo((tx[i] - 0.06) * s, (ty[i] - 0.16) * s);
+        claw.lineTo((tx[i] + 0.06) * s, (ty[i] - 0.16) * s);
+        claw.lineTo((tx[i] + rand(-0.05, 0.05)) * s,
+                    (ty[i] - 0.34 + rand(-0.06, 0.03)) * s);
+        claw.closePath();
+        p.addPath(claw);
+        pads.push(p);
+      }
+      return pads;
     }
-    function drawPrint(p) { drawPaw(p.animal, p.x, p.y, p.angle, p.s, p.alpha, 1); }
+    function dinoPads(s) {                 // theropod: three long clawed toes
+      var pads = [], toes = [-0.62, 0, 0.62];
+      for (var i = 0; i < 3; i++) {
+        var toe = new Path2D();
+        toe.moveTo(-0.13 * s, 0.35 * s);
+        toe.quadraticCurveTo(-0.16 * s, -0.50 * s, rand(-0.04, 0.04) * s, -rand(0.88, 1.0) * s);
+        toe.quadraticCurveTo(0.16 * s, -0.50 * s, 0.13 * s, 0.35 * s);
+        toe.closePath();
+        var p = new Path2D();
+        p.addPath(toe, new DOMMatrix().rotate(toes[i] * 180 / Math.PI + rand(-7, 7)));
+        pads.push(p);
+      }
+      pads.push(padEllipse(0, 0.40, 0.20, 0.20, s));
+      return pads;
+    }
+    var builders = { wolf: wolfPads, bear: bearPads, dino: dinoPads };
+
+    // sliver just inside the shape's edge, on the side opposite the offset —
+    // the inner wall of the depression (evenodd: inside shape, outside copy)
+    function innerEdge(c, full, R, dx, dy, fill, alpha) {
+      var p = new Path2D();
+      p.rect(-R, -R, 2 * R, 2 * R);
+      p.addPath(full, new DOMMatrix().translate(dx, dy));
+      c.globalAlpha = alpha;
+      c.fillStyle = fill;
+      c.fill(p, 'evenodd');
+    }
+    function bakeSprite(animal, s, angle) {
+      // rotate the paths rather than the context, so the light offsets below
+      // stay in screen space and the sun keeps sitting top-left however the
+      // paw is turned
+      var m = new DOMMatrix().rotate((angle + Math.PI / 2) * 180 / Math.PI);
+      var raw = builders[animal](s), pads = [], full = new Path2D();
+      for (var i = 0; i < raw.length; i++) {
+        var p = new Path2D();
+        p.addPath(raw[i], m);
+        pads.push(p);
+        full.addPath(raw[i], m);
+      }
+      var R = Math.ceil(s * 2.2);
+      var cvs = document.createElement('canvas');
+      cvs.width = cvs.height = 2 * R * dpr;
+      var c = cvs.getContext('2d');
+      c.setTransform(dpr, 0, 0, dpr, R * dpr, R * dpr);
+      if (typeof c.filter === 'string') {                // soft, trodden edges
+        c.filter = 'blur(' + (s * 0.045).toFixed(2) + 'px)';
+      }
+      // faint rim of displaced ground catching light on the lower-right lip
+      c.save();
+      c.translate(1.4, 1.6);
+      c.globalAlpha = 0.3;
+      c.fillStyle = GOLD_LIGHT;
+      c.fill(full);
+      c.restore();
+      // the floor of the impression, darkest toward the light (concave), each
+      // pad pressed with its own weight
+      var g = c.createLinearGradient(-s, -s, s, s);
+      g.addColorStop(0, GOLD_DEEP);
+      g.addColorStop(1, GOLD_DIM);
+      for (i = 0; i < pads.length; i++) {
+        c.globalAlpha = rand(0.65, 1);
+        c.fillStyle = g;
+        c.fill(pads[i]);
+      }
+      // inner walls: shadowed toward the light, lit on the far side
+      c.save();
+      c.clip(full);
+      innerEdge(c, full, R, 1.6, 2.0, '#000', 0.5);
+      innerEdge(c, full, R, 3.0, 3.6, '#000', 0.22);
+      innerEdge(c, full, R, -1.4, -1.6, GOLD_LIGHT, 0.5);
+      c.restore();
+      return { canvas: cvs, size: 2 * R };
+    }
+
+    function drawPaw(p, dim) {
+      if (!p.sprite) p.sprite = bakeSprite(p.animal, p.s, p.angle);
+      var a = Math.min(1, p.alpha);
+      var sc = 1.1 - 0.1 * a;                            // settles as it presses in
+      var d = p.sprite.size * sc;
+      ctx.globalAlpha = a * dim * (p.press || 1);
+      ctx.drawImage(p.sprite.canvas, p.x - d / 2, p.y - d / 2, d, d);
+      ctx.globalAlpha = 1;
+    }
+    function drawPrint(p) { drawPaw(p, 1); }
 
     // --- three trails, each entering from a different direction ---
     function rand(a, b) { return a + Math.random() * (b - a); }
@@ -225,7 +264,8 @@
           y: cy + uy * d + py * lat + rand(-4, 4),
           angle: ang + rand(-0.12, 0.12),
           s: pawSize + rand(-3, 3),
-          alpha: 0
+          alpha: 0,
+          press: rand(0.78, 1)                           // uneven footfall weight
         });
       }
     }
@@ -276,7 +316,7 @@
     var revealed = false, timers = [], shown = 0;
     function later(fn, ms) { var id = setTimeout(fn, ms); timers.push(id); return id; }
 
-    function drawCursorPrint(p) { drawPaw(p.animal, p.x, p.y, p.angle, p.s, p.alpha, 0.85); }
+    function drawCursorPrint(p) { drawPaw(p, 0.85); }
     function redraw() {
       ctx.clearRect(0, 0, W, H);
       for (var i = 0; i < shown; i++) drawPrint(prints[i]);
