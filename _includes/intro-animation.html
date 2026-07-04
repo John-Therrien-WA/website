@@ -89,73 +89,213 @@
     }
     size();
 
-    // --- paw prints, drawn centred at (0,0) with "forward" pointing up ---
-    function ellipse(cx, cy, rx, ry) {
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-      ctx.fill();
+    // --- paw prints: raised gold, anatomical silhouettes, baked per print ---
+    // Every print bakes once into two offscreen sprites (gold body + soft
+    // shadow), so per-frame drawing is two cheap drawImage calls. The
+    // silhouettes follow real tracks — heart-pad wolf print with claw pricks,
+    // broad five-toed bear pad with long claw marks, three-toed theropod
+    // with knuckly phalangeal pads — and every pad carries a little random
+    // wobble, so no two prints are alike.
+    function hexRGB(c) {
+      var m = /^#([0-9a-f]{6})$/i.exec(c);
+      return m ? [parseInt(m[1].slice(0, 2), 16),
+                  parseInt(m[1].slice(2, 4), 16),
+                  parseInt(m[1].slice(4, 6), 16)]
+               : [168, 141, 46];                         // fallback: the site gold
     }
-    function drawWolf(s) {                 // canine: heel pad + four toes
-      ellipse(0, 0.45 * s, 0.50 * s, 0.58 * s);
-      ellipse(-0.46 * s, -0.22 * s, 0.17 * s, 0.27 * s);
-      ellipse(-0.16 * s, -0.50 * s, 0.17 * s, 0.29 * s);
-      ellipse(0.16 * s, -0.50 * s, 0.17 * s, 0.29 * s);
-      ellipse(0.46 * s, -0.22 * s, 0.17 * s, 0.27 * s);
+    function mix(rgb, target, t) {                       // blend toward white/black
+      return 'rgb(' + rgb.map(function (v) {
+        return Math.round(v + (target - v) * t);
+      }).join(',') + ')';
     }
-    function drawBear(s) {                 // broad plantar pad + five clawed toes
-      ellipse(0, 0.50 * s, 0.72 * s, 0.46 * s);
-      var tx = [-0.62, -0.32, 0, 0.32, 0.62];
-      var ty = [-0.18, -0.42, -0.52, -0.42, -0.18];
-      for (var i = 0; i < 5; i++) {
-        ellipse(tx[i] * s, ty[i] * s, 0.15 * s, 0.20 * s);
-        ctx.beginPath();
-        ctx.moveTo((tx[i] - 0.06) * s, (ty[i] - 0.16) * s);
-        ctx.lineTo((tx[i] + 0.06) * s, (ty[i] - 0.16) * s);
-        ctx.lineTo(tx[i] * s, (ty[i] - 0.34) * s);
-        ctx.closePath();
-        ctx.fill();
-      }
-    }
-    function drawDino(s) {                 // theropod: three long clawed toes
-      var toes = [-0.62, 0, 0.62];
-      for (var i = 0; i < 3; i++) {
-        ctx.save();
-        ctx.rotate(toes[i]);
-        ctx.beginPath();
-        ctx.moveTo(-0.13 * s, 0.35 * s);
-        ctx.quadraticCurveTo(-0.16 * s, -0.50 * s, 0, -0.95 * s);
-        ctx.quadraticCurveTo(0.16 * s, -0.50 * s, 0.13 * s, 0.35 * s);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      }
-      ellipse(0, 0.40 * s, 0.20 * s, 0.20 * s);
-    }
-    var drawers = { wolf: drawWolf, bear: drawBear, dino: drawDino };
+    var goldRGB = hexRGB(GOLD);
+    var GOLD_LIGHT = mix(goldRGB, 255, 0.5);
+    var GOLD_DARK = mix(goldRGB, 0, 0.4);
 
-    // draw one paw: a soft dark shadow (depth) beneath a gold top, plus a slight
-    // press-in scale as it appears — so it reads as stepping into the surface
-    function drawPaw(animal, x, y, angle, s, alpha, dim) {
-      var a = Math.min(1, alpha);
-      var sc = 1.18 - 0.18 * a;                          // stamp down as it lands
-      ctx.save();                                        // shadow (light from top-left)
-      ctx.translate(x + 2, y + 3);
-      ctx.rotate(angle + Math.PI / 2);
-      ctx.scale(sc, sc);
-      ctx.globalAlpha = a * 0.45 * dim;
-      ctx.fillStyle = '#000';
-      drawers[animal](s);
-      ctx.restore();
-      ctx.save();                                        // gold top
-      ctx.translate(x, y);
-      ctx.rotate(angle + Math.PI / 2);
-      ctx.scale(sc, sc);
-      ctx.globalAlpha = a * dim;
-      ctx.fillStyle = GOLD;
-      drawers[animal](s);
-      ctx.restore();
+    // pad builders, centred at (0,0) with "forward" pointing up; every shape
+    // carries a little random wobble, baked once per print so it holds still
+    function padEllipse(cx, cy, rx, ry, s, rot) {
+      var p = new Path2D();
+      p.ellipse(cx * s + rand(-0.02, 0.02) * s, cy * s + rand(-0.02, 0.02) * s,
+                rx * s * rand(0.92, 1.08), ry * s * rand(0.92, 1.08),
+                (rot || 0) + rand(-0.12, 0.12), 0, Math.PI * 2);
+      return p;
     }
-    function drawPrint(p) { drawPaw(p.animal, p.x, p.y, p.angle, p.s, p.alpha, 1); }
+    function clawMark(x, y, len, w, rot, s) {            // thin prick, base at (x,y)
+      var raw = new Path2D();
+      raw.moveTo(-w * s, 0);
+      raw.lineTo(w * s, 0);
+      raw.lineTo(rand(-0.015, 0.015) * s, -len * s * rand(0.85, 1.1));
+      raw.closePath();
+      var p = new Path2D();
+      p.addPath(raw, new DOMMatrix().translate(x * s, y * s)
+                                    .rotate(rot * 180 / Math.PI + rand(-4, 4)));
+      return p;
+    }
+    function blobPath(raw) {                             // jitter a curved pad
+      var p = new Path2D();
+      p.addPath(raw, new DOMMatrix().rotate(rand(-4, 4)).scale(rand(0.95, 1.05)));
+      return p;
+    }
+    function wolfPads(s) {   // canine: heart-shaped heel, 4 leaning toes, claw pricks
+      var heel = new Path2D();
+      heel.moveTo(0, 0.14 * s);
+      heel.bezierCurveTo(0.24 * s, 0.16 * s, 0.34 * s, 0.36 * s, 0.26 * s, 0.56 * s);
+      heel.bezierCurveTo(0.20 * s, 0.68 * s, 0.06 * s, 0.66 * s, 0, 0.58 * s);
+      heel.bezierCurveTo(-0.06 * s, 0.66 * s, -0.20 * s, 0.68 * s, -0.26 * s, 0.56 * s);
+      heel.bezierCurveTo(-0.34 * s, 0.36 * s, -0.24 * s, 0.16 * s, 0, 0.14 * s);
+      heel.closePath();
+      var pads = [blobPath(heel)];
+      var toes = [{ x: -0.38, y: -0.12, ry: 0.22, r: -0.32, c: 0.09 },
+                  { x: -0.14, y: -0.52, ry: 0.30, r: -0.04, c: 0.12 },
+                  { x: 0.14, y: -0.52, ry: 0.30, r: 0.04, c: 0.12 },
+                  { x: 0.38, y: -0.12, ry: 0.22, r: 0.32, c: 0.09 }];
+      for (var i = 0; i < 4; i++) {                      // two long leading toes,
+        var t = toes[i];                                 // two low side toes
+        pads.push(padEllipse(t.x, t.y, 0.115, t.ry, s, t.r));
+        var gap = t.ry + 0.07;
+        pads.push(clawMark(t.x + Math.sin(t.r) * gap, t.y - Math.cos(t.r) * gap,
+                           t.c, 0.028, t.r, s));
+      }
+      return pads;
+    }
+    function bearPads(s) {   // big tilted pad, sloping 5-toe arc, long free claws
+      var pl = new Path2D();
+      pl.moveTo(-0.55 * s, 0.10 * s);
+      pl.bezierCurveTo(-0.15 * s, -0.02 * s, 0.25 * s, 0.02 * s, 0.55 * s, 0.16 * s);
+      pl.bezierCurveTo(0.72 * s, 0.24 * s, 0.62 * s, 0.52 * s, 0.48 * s, 0.70 * s);
+      pl.bezierCurveTo(0.30 * s, 0.92 * s, -0.05 * s, 1.02 * s, -0.28 * s, 0.92 * s);
+      pl.bezierCurveTo(-0.55 * s, 0.80 * s, -0.68 * s, 0.45 * s, -0.55 * s, 0.10 * s);
+      pl.closePath();
+      var pads = [blobPath(pl)];
+      var tx = [-0.62, -0.30, 0.04, 0.38, 0.62];
+      var ty = [-0.24, -0.44, -0.50, -0.38, -0.16];
+      var tr = [0.17, 0.16, 0.15, 0.135, 0.115];        // inner toes biggest
+      var cl = [0.28, 0.34, 0.34, 0.24, 0.16];          // matching claw lengths
+      for (var i = 0; i < 5; i++) {
+        var r = tx[i] * 0.35 + rand(-0.06, 0.06);
+        pads.push(padEllipse(tx[i], ty[i], tr[i], tr[i] * 1.35, s, r));
+        var gap = tr[i] * 1.35 + 0.10;                  // claws print free of the toes
+        pads.push(clawMark(tx[i] + Math.sin(r) * gap, ty[i] - Math.cos(r) * gap,
+                           cl[i], 0.045, r, s));
+      }
+      return pads;
+    }
+    function dinoPads(s) {   // theropod: three fleshy segmented toes, curved
+      function talon(bend) { // talons printing free of the toe tips, long heel
+        var t = new Path2D();
+        t.moveTo(-0.055 * s, 0);
+        t.quadraticCurveTo((-0.06 + bend * 0.2) * s, -0.16 * s, bend * s, -0.30 * s);
+        t.quadraticCurveTo((0.075 + bend * 0.5) * s, -0.14 * s, 0.055 * s, 0.015 * s);
+        t.closePath();
+        return t;
+      }
+      var pads = [padEllipse(0, 0.10, 0.22, 0.20, s)];   // palm the toes grow from
+      var toes = [-0.80, 0, 0.80];
+      for (var i = 0; i < 3; i++) {
+        var r = toes[i] + rand(-0.04, 0.04);
+        var reach = i === 1 ? 1 : 0.82;                  // middle toe longest
+        var ux = Math.sin(r), uy = -Math.cos(r);
+        pads.push(padEllipse(ux * 0.28 * reach, uy * 0.28 * reach, 0.145, 0.26, s, r));
+        pads.push(padEllipse(ux * 0.60 * reach, uy * 0.60 * reach, 0.115, 0.23, s, r));
+        var cb = 0.87 * reach;                           // claw base sits a gap
+        var bend = (i - 1) * 0.14;                       // past the toe, hooked out
+        var claw = new Path2D();
+        claw.addPath(talon(bend), new DOMMatrix()
+          .translate(ux * cb * s, uy * cb * s)
+          .rotate(r * 180 / Math.PI + rand(-4, 4)));
+        pads.push(claw);
+      }
+      var spur = new Path2D();                           // long pointed heel wedge
+      spur.moveTo(-0.13 * s, 0.36 * s);
+      spur.quadraticCurveTo(-0.10 * s, 0.62 * s, 0.02 * s, 0.95 * s);
+      spur.quadraticCurveTo(0.10 * s, 0.60 * s, 0.13 * s, 0.38 * s);
+      spur.quadraticCurveTo(0, 0.30 * s, -0.13 * s, 0.36 * s);
+      spur.closePath();
+      pads.push(blobPath(spur));
+      return pads;
+    }
+    var builders = { wolf: wolfPads, bear: bearPads, dino: dinoPads };
+
+    function bakeSprite(animal, s, angle) {
+      // rotate the paths rather than the context, so the light offsets below
+      // stay in screen space and the sun keeps sitting top-left however the
+      // paw is turned
+      var m = new DOMMatrix().rotate((angle + Math.PI / 2) * 180 / Math.PI);
+      var raw = builders[animal](s), pads = [], full = new Path2D();
+      for (var i = 0; i < raw.length; i++) {
+        var p = new Path2D();
+        p.addPath(raw[i], m);
+        pads.push(p);
+        full.addPath(raw[i], m);
+      }
+      var R = Math.ceil(s * 1.75);
+      var size = 2 * R;
+
+      var shadow = document.createElement('canvas');     // soft drop shadow:
+      shadow.width = shadow.height = size * dpr;         // three concentric fills
+      var cs = shadow.getContext('2d');                  // fake a blur
+      cs.fillStyle = '#000';
+      var spread = [1, 1.06, 1.13], fade = [0.55, 0.25, 0.12];
+      for (i = 0; i < 3; i++) {
+        cs.setTransform(dpr * spread[i], 0, 0, dpr * spread[i], R * dpr, R * dpr);
+        cs.globalAlpha = fade[i];
+        cs.fill(full);
+      }
+
+      var body = document.createElement('canvas');       // raised gold body
+      body.width = body.height = size * dpr;
+      var c = body.getContext('2d');
+      c.setTransform(dpr, 0, 0, dpr, R * dpr, R * dpr);
+      c.save();                                          // lit rim toward the light
+      c.translate(-1.2, -1.2);
+      c.fillStyle = GOLD_LIGHT;
+      c.fill(full);
+      c.restore();
+      var g = c.createLinearGradient(-s, -s, s, s);      // domed shading
+      g.addColorStop(0, GOLD_LIGHT);
+      g.addColorStop(0.45, GOLD);
+      g.addColorStop(1, GOLD_DARK);
+      for (i = 0; i < pads.length; i++) {
+        c.globalAlpha = rand(0.88, 1);                   // uneven footfall pressure
+        c.fillStyle = g;
+        c.fill(pads[i]);
+      }
+      c.globalCompositeOperation = 'destination-out';    // worn, stamped-out flecks
+      for (i = 0; i < 12; i++) {
+        var fh = rand(0, Math.PI * 2), fr = s * rand(0.15, 0.85);
+        c.globalAlpha = rand(0.25, 0.6);
+        c.beginPath();
+        c.arc(Math.cos(fh) * fr, Math.sin(fh) * fr, s * rand(0.02, 0.05), 0, Math.PI * 2);
+        c.fill();
+      }
+      c.globalCompositeOperation = 'source-over';
+      for (i = 0; i < 8; i++) {                          // grains of kicked-up ground,
+        var th = rand(0, Math.PI * 2);                   // thrown mostly down-right
+        var rr = s * rand(1.05, 1.55);
+        c.globalAlpha = 0.08 + 0.3 * Math.max(0, Math.cos(th - Math.PI / 4));
+        c.fillStyle = GOLD;
+        c.beginPath();
+        c.arc(Math.cos(th) * rr, Math.sin(th) * rr, s * rand(0.015, 0.04), 0, Math.PI * 2);
+        c.fill();
+      }
+      return { body: body, shadow: shadow, size: size };
+    }
+
+    function drawPaw(p, dim) {
+      if (!p.sprite) p.sprite = bakeSprite(p.animal, p.s, p.angle);
+      var a = Math.min(1, p.alpha);
+      var lift = 1 - a;                                  // 1 = airborne, 0 = landed
+      var sc = 1 + 0.25 * lift;                          // stamps down as it lands
+      var d = p.sprite.size * sc;
+      var ox = 2 + 9 * lift, oy = 3 + 12 * lift;         // shadow follows the height
+      ctx.globalAlpha = a * 0.6 * dim;
+      ctx.drawImage(p.sprite.shadow, p.x + ox - d / 2, p.y + oy - d / 2, d, d);
+      ctx.globalAlpha = a * dim * (0.9 + 0.1 * (p.press || 1));
+      ctx.drawImage(p.sprite.body, p.x - d / 2, p.y - d / 2, d, d);
+      ctx.globalAlpha = 1;
+    }
+    function drawPrint(p) { drawPaw(p, 1); }
 
     // --- three trails, each entering from a different direction ---
     function rand(a, b) { return a + Math.random() * (b - a); }
@@ -171,29 +311,68 @@
     // crowd or overlap on small screens
     var u = Math.min(W, H);
     var pawSize = Math.max(15, Math.min(28, u * 0.034));   // per-print size
-    var stride = Math.max(6, u * 0.018);                   // lateral paw offset
+    var straddleBase = Math.max(6, u * 0.018);             // half track width
     var stopR = Math.max(34, Math.min(90, u * 0.12));      // trails stop this far
                                                            // short of centre
+    // each animal walks like itself: the wolf trots a near single-file line,
+    // the bear shuffles wide and toes-in, the dino struts long-strided and
+    // pigeon-toed — and every trail meanders a little instead of ruling a
+    // straight line to the centre
+    var gaits = {
+      wolf: { straddle: 0.5, stride: 1.0, splay: 0.06, sway: 0.5, size: 0.9 },
+      bear: { straddle: 1.9, stride: 0.75, splay: -0.16, sway: 1.0, size: 1.15 },
+      dino: { straddle: 0.8, stride: 1.35, splay: -0.10, sway: 0.7, size: 1.35 }
+    };
+    // never let one print stamp over another (trail or cursor): treat each as
+    // a disc a shade wider than its artwork and demand clear ground
+    function clearOf(x, y, s) {
+      var all = prints.concat(cursorPrints || []);
+      var r = s * 1.15;
+      for (var i = 0; i < all.length; i++) {
+        var q = all[i], dx = x - q.x, dy = y - q.y, rr = r + q.s * 1.15;
+        if (dx * dx + dy * dy < rr * rr) return false;
+      }
+      return true;
+    }
     function buildTrail(animal, theta) {
+      var gait = gaits[animal];
       var ux = Math.cos(theta), uy = Math.sin(theta);
       var px = -uy, py = ux;                               // perpendicular
       var start = edgeDist(theta) * 0.92;                  // just inside the edge
       var ang = theta + Math.PI;                           // walking toward centre
       var span = Math.max(1, start - stopR);
-      var steps = Math.max(3, Math.min(6, Math.round(span / (u * 0.13))));
+      var steps = Math.max(3, Math.min(7, Math.round(span / (u * 0.13 * gait.stride))));
+      var swayPhase = rand(0, Math.PI * 2);
+      var swayAmp = u * 0.02 * gait.sway;
       for (var i = 0; i < steps; i++) {
         var t = steps > 1 ? i / (steps - 1) : 1;           // 0 = edge .. 1 = stop
-        var d = start - span * t;                          // edge -> stopR
-        var lat = (i % 2 ? 1 : -1) * stride;               // alternate paw
+        var d = start - span * Math.min(1, Math.max(0, t + rand(-0.025, 0.025)));
+        var side = (i % 2 ? 1 : -1);                       // alternate paw
+        var ps = pawSize * gait.size + rand(-2, 2);
+        var placed = null;
+        for (var a = 0; a < 4 && !placed; a++) {           // taken ground: set the paw
+          var lat = side * straddleBase * gait.straddle * (1 + a * 0.5)   // down wider
+              + Math.sin(t * Math.PI * 1.6 + swayPhase) * swayAmp;
+          var x = cx + ux * d + px * lat + rand(-2, 2);
+          var y = cy + uy * d + py * lat + rand(-2, 2);
+          if (clearOf(x, y, ps)) placed = { x: x, y: y };
+        }
+        if (!placed) continue;                             // still no room: skip the step
         prints.push({
           animal: animal,
-          x: cx + ux * d + px * lat + rand(-4, 4),
-          y: cy + uy * d + py * lat + rand(-4, 4),
-          angle: ang + rand(-0.12, 0.12),
-          s: pawSize + rand(-3, 3),
-          alpha: 0
+          x: placed.x,
+          y: placed.y,
+          angle: ang + side * gait.splay + rand(-0.08, 0.08),
+          s: ps,
+          alpha: 0,
+          press: rand(0.85, 1)                             // uneven footfall weight
         });
       }
+      // hand back a walker so a trail can keep walking later
+      return { theta: theta, ux: ux, uy: uy, px: px, py: py, gait: gait,
+               i: steps - 1, d: d, start: start, span: span,
+               swayPhase: swayPhase, swayAmp: swayAmp,
+               stepLen: u * 0.13 * gait.stride };
     }
     // three directions ~120 degrees apart, with a random overall rotation. each
     // trail keeps to its own sector and stops short of the centre, so they fan
@@ -201,14 +380,34 @@
     var base = rand(0, Math.PI * 2);
     buildTrail('wolf', base);
     buildTrail('bear', base + 2 * Math.PI / 3);
-    buildTrail('dino', base + 4 * Math.PI / 3);
-    // a final dino paw steps into dead centre — the convergence point the
-    // curtain opens from
-    prints.push({
-      animal: 'dino', x: cx, y: cy,
-      angle: base + 4 * Math.PI / 3 + Math.PI + rand(-0.1, 0.1),
-      s: pawSize + rand(-3, 3), alpha: 0     // same size as the other prints
-    });
+    // the dino keeps walking once the title is gone, so keep its walker
+    var dinoWalker = buildTrail('dino', base + 4 * Math.PI / 3);
+    function nextDinoStep() {                            // one more stride along
+      var w = dinoWalker, gait = w.gait;                 // the dino's own trail
+      w.i++;
+      w.d -= w.stepLen * rand(0.95, 1.1);
+      var side = (w.i % 2 ? 1 : -1);
+      var ps = pawSize * gait.size + rand(-2, 2);
+      var x, y;
+      for (var a = 0; a < 5; a++) {                      // sidestep, or stride further,
+        var t = (w.start - w.d) / w.span;                // rather than tread on a print
+        var lat = side * straddleBase * gait.straddle * (1 + a * 0.4)
+                + Math.sin(t * Math.PI * 1.6 + w.swayPhase) * w.swayAmp;
+        x = cx + w.ux * w.d + w.px * lat + rand(-2, 2);
+        y = cy + w.uy * w.d + w.py * lat + rand(-2, 2);
+        if (clearOf(x, y, ps)) break;
+        if (a % 2) w.d -= w.stepLen * 0.35;
+      }
+      return {
+        animal: 'dino',
+        x: x,
+        y: y,
+        angle: w.theta + Math.PI + side * gait.splay + rand(-0.08, 0.08),
+        s: ps,
+        alpha: 0,
+        press: rand(0.85, 1)
+      };
+    }
 
     // --- paw prints that follow the cursor (desktop pointers only) ---
     var cursorPrints = [];
@@ -217,32 +416,36 @@
     var lastCursor = null, cursorTick = 0;
     var cursorAnimals = ['wolf', 'bear', 'dino'];
     function onMove(e) {
-      if (revealed) return;
+      if (revealed || opening) return;
       var x = e.clientX, y = e.clientY;
       if (lastCursor) {
         var ddx = x - lastCursor.x, ddy = y - lastCursor.y;
         if (ddx * ddx + ddy * ddy < 46 * 46) return;     // ~one print per 46px
         var ang = Math.atan2(ddy, ddx);
         var lat = (cursorTick % 2 ? 1 : -1) * 9;         // alternate paw
-        cursorPrints.push({
-          animal: cursorAnimals[cursorTick % 3],
-          x: x - Math.sin(ang) * lat,
-          y: y + Math.cos(ang) * lat,
-          angle: ang + rand(-0.1, 0.1),
-          s: rand(16, 20), alpha: 0, age: 0
-        });
-        if (cursorPrints.length > 40) cursorPrints.shift();
-        cursorTick++;
+        var cs = rand(16, 20);
+        var px2 = x - Math.sin(ang) * lat;
+        var py2 = y + Math.cos(ang) * lat;
+        if (clearOf(px2, py2, cs)) {                     // never stamp over a print
+          cursorPrints.push({
+            animal: cursorAnimals[cursorTick % 3],
+            x: px2, y: py2,
+            angle: ang + rand(-0.1, 0.1),
+            s: cs, alpha: 0, age: 0
+          });
+          if (cursorPrints.length > 40) cursorPrints.shift();
+          cursorTick++;
+        }
       }
       lastCursor = { x: x, y: y };
     }
     if (canHover) window.addEventListener('mousemove', onMove);
 
     // --- play ---
-    var revealed = false, timers = [], shown = 0;
+    var revealed = false, opening = false, timers = [], shown = 0;
     function later(fn, ms) { var id = setTimeout(fn, ms); timers.push(id); return id; }
 
-    function drawCursorPrint(p) { drawPaw(p.animal, p.x, p.y, p.angle, p.s, p.alpha, 0.85); }
+    function drawCursorPrint(p) { drawPaw(p, 0.85); }
     function redraw() {
       ctx.clearRect(0, 0, W, H);
       for (var i = 0; i < shown; i++) drawPrint(prints[i]);
@@ -265,7 +468,7 @@
     }
     function step() {
       if (revealed) return;
-      if (shown < prints.length - 1) {                   // hold back the centre print
+      if (shown < prints.length) {
         shown++;
         var next = prints[shown];
         var slow = next && next.animal === 'dino';       // the dino walks slower
@@ -282,30 +485,46 @@
     function hideTitle() {
       if (revealed) return;
       overlay.classList.remove('is-titled');             // fade the text back out (900ms)
-      later(centreStep, 950);                            // once the text is gone...
+      later(dinoWalk, 950);                              // once the text is gone...
     }
-    function centreStep() {
+    var dinoSteps = 0, curtainX = null, curtainY = null;
+    function dinoWalk() {                                // ...the dino just keeps walking
       if (revealed) return;
-      shown++;                                           // ...the final paw lands dead centre
-      later(openCurtain, 750);                           // a beat, then the curtain opens
-    }
+      var p = nextDinoStep();
+      prints.push(p);
+      shown++;
+      dinoSteps++;
+      if (dinoSteps === 1) {                             // its first onward footfall
+        curtainX = p.x;                                  // opens the curtain from that
+        curtainY = p.y;                                  // very spot
+        later(openCurtain, 600);
+      }
+      if (dinoSteps < 4) later(dinoWalk, 340);           // and it strides on through
+    }                                                    // the opening curtain
     function openCurtain() {
-      if (revealed) return;
-      revealed = true;                                   // stop the cursor trail + main loop
-      window.removeEventListener('mousemove', onMove);
-      for (var i = 0; i < timers.length; i++) clearTimeout(timers[i]);
-      var maxR = Math.sqrt(W * W + H * H) / 2 + 40;      // centre -> far corner
+      if (revealed || opening) return;
+      opening = true;                                    // paws keep animating; only new
+      var ox = curtainX === null ? cx : curtainX;        // cursor prints stop
+      var oy = curtainY === null ? cy : curtainY;
+      function far(dx2, dy2) { return Math.sqrt(dx2 * dx2 + dy2 * dy2); }
+      var maxR = Math.max(far(ox, oy), far(W - ox, oy),  // origin -> farthest corner
+                          far(ox, H - oy), far(W - ox, H - oy)) + 40;
       var t0 = performance.now(), dur = 1400;            // curtain opens gently
       (function anim(now) {
+        if (revealed) return;                            // skip pressed mid-curtain
         var t = Math.min(1, (now - t0) / dur);
         var e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;  // ease in-out
         var r = e * maxR;
-        var g = 'radial-gradient(circle at ' + cx + 'px ' + cy + 'px, transparent ' +
+        var g = 'radial-gradient(circle at ' + ox + 'px ' + oy + 'px, transparent ' +
                 r + 'px, #000 ' + (r + 1) + 'px)';       // growing hole = page showing
         overlay.style.webkitMaskImage = g;
         overlay.style.maskImage = g;
         if (t < 1) requestAnimationFrame(anim);
-        else if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        else {
+          revealed = true;                               // now stop the paw loop
+          window.removeEventListener('mousemove', onMove);
+          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        }
       })(t0);
     }
     function reveal() {
