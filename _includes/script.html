@@ -8,4 +8,15 @@
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
   })();
+
+  // Links that leave the site open in a new tab, so visitors keep their place here.
+  (function () {
+    var links = document.querySelectorAll('a[href^="http"]');
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i];
+      if (a.hostname === location.hostname) continue;
+      a.target = '_blank';
+      if (!/\bnoopener\b/.test(a.rel)) a.rel = (a.rel + ' noopener').trim();
+    }
+  })();
 </script>
