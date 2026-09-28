@@ -175,7 +175,8 @@ nav_active: about       # optional; must match a _data/nav.yml key
 
 ## JS posture
 
-JS today is the mobile-menu toggle in `_includes/script.html`, the
+JS today is the mobile-menu toggle and the external-links-open-in-a-new-tab
+rule in `_includes/script.html` (so page markup needs no `target="_blank"`), the
 animation web components in `_includes/animation.html`, and the
 discography carousel in `_includes/discography-carousel.html` (pulled in
 only by `music.html`, not the global layout). CSS-only is the default
